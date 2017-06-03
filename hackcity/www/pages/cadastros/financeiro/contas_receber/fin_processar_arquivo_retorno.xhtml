@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_processar_arquivo_retorno_title_label']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{bancoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finProcessaArquivoRetornoMB.state}" />
+
+
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa">
+
+									<p:dataTable id="dataTableFinProcessaArquivoRetorno" var="obj"
+										value="#{finProcessaArquivoRetornoMB.resultadoProcessamento}"
+										paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+										resizableColumns="true">
+
+										<f:facet name="header" >
+											<p:commandButton process="dataTableFinProcessaArquivoRetorno"
+												title="Processar arquivo retorno"
+												icon=" ui-icon-arrowthick-1-l"
+												styleClass="aEsquerda"
+												update=":formBody:dialogUploadArquivo"
+												oncomplete="PF('dialogUploadArquivo').show()" />
+
+										</f:facet>
+
+										<p:column headerText="Nosso Número">
+											<h:outputLabel value="#{obj.nossoNumero}" />
+										</p:column>
+										<p:column headerText="Resultado Processamento" width="60%">
+											<h:outputLabel value="#{obj.resultado}" />
+										</p:column>
+									</p:dataTable>
+
+									<p:dialog id="dialogUploadArquivo" header="Selecionar Arquivo"
+										widgetVar="dialogUploadArquivo" showEffect="slide"
+										hideEffect="slide" resizable="true" modal="true"
+										closable="false" width="800">
+										<p:outputPanel id="panelUploadArquivo">
+											<div class="t2ti-campo-100">
+												<p:fileUpload
+													fileUploadListener="#{finProcessaArquivoRetornoMB.processaRetorno}"
+													mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(ret)$/"
+													update=":mensagens,:formBody:dataTableFinProcessaArquivoRetorno"
+													oncomplete="PF('dialogUploadArquivo').hide()" />
+											</div>
+										</p:outputPanel>
+										<f:facet name="footer">
+											<p:commandButton value="Cancelar"
+												oncomplete="PF('dialogUploadArquivo').hide();"
+												process="@this" />
+										</f:facet>
+									</p:dialog>
+
+
+								</t:div>
+
+
+
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

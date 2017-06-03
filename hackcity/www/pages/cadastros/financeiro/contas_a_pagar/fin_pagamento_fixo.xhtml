@@ -1,0 +1,357 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_pagamento_fixo_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finPagamentoFixoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finPagamentoFixoMB.state}" />
+								<t:saveState value="#{finPagamentoFixoMB.finPagamentoFixo}" />
+								<t:saveState value="#{finPagamentoFixoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{finPagamentoFixoMB.pesquisando}">
+									<div class="row">
+										
+										
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{finPagamentoFixoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finPagamentoFixoMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{finPagamentoFixoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finPagamentoFixoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+										
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_documento_origem']}">
+											<p:outputLabel value="#{item.finDocumentoOrigem.descricao}"></p:outputLabel>
+											
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_fornecedor']}">
+											<p:outputLabel value="#{item.fornecedor.pessoa.nome}"></p:outputLabel>
+											
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_qtd_parcela']}">
+											<p:outputLabel value="#{item.quantidadeParcela}"></p:outputLabel>
+											
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_valor_a_pagar']}">
+											<p:outputLabel value="#{item.valorAPagar}">
+												<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+											</p:outputLabel>
+											
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_data_lancamento']}">
+											<p:outputLabel value="#{item.dataLancamento}">
+												<f:converter converterId="dataConverter"></f:converter>
+											</p:outputLabel>
+											
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fin_pagamento_fixo_label_primeiro_vencimento']}">
+											<p:outputLabel value="#{item.primeiroVencimento}">
+												<f:converter converterId="dataConverter"></f:converter>
+											</p:outputLabel>
+											
+										</p:column>
+										
+										
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{finPagamentoFixoMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{finPagamentoFixoMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{finPagamentoFixoMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finPagamentoFixoMB.pesquisando}">
+									
+									<div class="row">
+										<p:outputPanel  styleClass="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_fornecedor']}" />
+											<p:selectOneMenu 
+												disabled="#{finPagamentoFixoMB.visualizando}"
+												value="#{finPagamentoFixoMB.finPagamentoFixo.fornecedor}" tabindex="10"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_fornecedor']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{finPagamentoFixoMB.listaFornecedor}" var="item"
+													itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+												
+												<f:converter converterId="fornecedorConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+									</div>
+									
+									<div class="row">
+										<p:outputPanel  styleClass="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_documento_origem']}" />
+											<p:selectOneMenu 
+												disabled="#{finPagamentoFixoMB.visualizando}"
+												value="#{finPagamentoFixoMB.finPagamentoFixo.finDocumentoOrigem}" tabindex="11"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_documento_origem']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{finPagamentoFixoMB.listaDocumentoOrigem}" var="item"
+													itemLabel="#{item.descricao}" itemValue="#{item}" />
+												
+												<f:converter converterId="finDocumentoOrigemConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_numero_documento']}" />
+											<p:inputText value="#{finPagamentoFixoMB.finPagamentoFixo.numeroDocumento}"
+												disabled="#{finPagamentoFixoMB.visualizando}" tabindex="12"
+												label="#{text['cadastro_fin_pagamento_fixo_label_numero_documento']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_numero_documento']}"
+											 />
+										</div>
+										
+										
+										<p:outputPanel  styleClass="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado']}" />
+											<p:selectOneMenu 
+												disabled="#{finPagamentoFixoMB.visualizando}"
+												value="#{finPagamentoFixoMB.finPagamentoFixo.pagamentoCompartilhado}" tabindex="13"
+												styleClass="form-control "
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado']}"
+												filter="true">
+												<f:selectItem itemLabel="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado_nao']}"  itemValue="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado_nao']}"/>
+												<f:selectItem itemLabel="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado_sim']}"  itemValue="#{text['cadastro_fin_pagamento_fixo_label_pgto_compartilhado_sim']}"/> 
+												
+											</p:selectOneMenu>
+											
+											
+										</p:outputPanel>
+									</div>
+									
+									<div class="row">
+									
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_qtd_parcela']}" />
+											<p:inputText value="#{finPagamentoFixoMB.finPagamentoFixo.quantidadeParcela}"
+												disabled="#{finPagamentoFixoMB.visualizando}" tabindex="14"
+												label="#{text['cadastro_fin_pagamento_fixo_label_qtd_parcela']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_qtd_parcela']}"
+											 />
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_intervalo_parcela']}" />
+											<p:inputText value="#{finPagamentoFixoMB.finPagamentoFixo.intervaloEntreParcelas}"
+												disabled="#{finPagamentoFixoMB.visualizando}" tabindex="15"
+												label="#{text['cadastro_fin_pagamento_fixo_label_intervalo_parcela']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_intervalo_parcela']}"
+											 />
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_valor_total']}" />
+											<p:inputText value="#{finPagamentoFixoMB.finPagamentoFixo.valorTotal}"
+												disabled="#{finPagamentoFixoMB.visualizando}" tabindex="16"
+												label="#{text['cadastro_fin_pagamento_fixo_label_valor_total']}"
+												required="true" styleClass="form-control JSvalorMoeda"
+												converter="mascaraValorBigDecimalConverter"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_valor_total']}"
+											 />
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_pagamento_fixo_label_valor_a_pagar']}" />
+											<p:inputText value="#{finPagamentoFixoMB.finPagamentoFixo.valorAPagar}"
+												disabled="#{finPagamentoFixoMB.visualizando}" tabindex="17"
+												label="#{text['cadastro_fin_pagamento_fixo_label_valor_a_pagar']}"
+												required="true" styleClass="form-control JSvalorMoeda"
+												converter="mascaraValorBigDecimalConverter"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_valor_a_pagar']}"
+											 />
+										</div>
+									
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_pagamento_fixo_label_data_lancamento']}"></p:outputLabel>
+											<p:calendar   tabindex="18"	  
+												value="#{finPagamentoFixoMB.finPagamentoFixo.dataLancamento}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_pagamento_fixo_label_data_lancamento']}"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_data_lancamento']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_pagamento_fixo_label_primeiro_vencimento']}"></p:outputLabel>
+											<p:calendar   tabindex="18"	  
+												value="#{finPagamentoFixoMB.finPagamentoFixo.primeiroVencimento}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_pagamento_fixo_label_primeiro_vencimento']}"
+												requiredMessage="#{text['cadastro_fin_pagamento_fixo_label_primeiro_vencimento']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+									
+									</div>
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{finPagamentoFixoMB.adiciona}"
+														rendered="#{finPagamentoFixoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{finPagamentoFixoMB.alterar}"
+														rendered="#{finPagamentoFixoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{finPagamentoFixoMB.limpar}"
+														rendered="#{finPagamentoFixoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finPagamentoFixoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

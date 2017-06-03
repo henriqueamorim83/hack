@@ -1,0 +1,178 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_perfil_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{roleBean.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{roleBean.state}" />
+								<t:saveState value="#{roleBean.role}" />
+								<t:saveState value="#{roleBean.roles}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{roleBean.pesquisando}">
+									<div class="row"></div>
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{roleBean.preparaParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{roleBean.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{roleBean.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										
+										<p:column headerText="#{text['cadastro_perfil_label_descricao']}">
+											<h:outputText value="#{item.name}" />
+										</p:column>
+										
+										
+
+										<!-- <p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{roleBean.preparaParaAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 										        
+										        actionListener="#{roleBean.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>-->
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not roleBean.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-4">
+											<p:focus for="nome" />
+											<p:outputLabel styleClass="bLabel"  for="nome"
+												value="#{text['cadastro_perfil_label_descricao']}" />
+											<p:inputText id="nome"
+												value="#{roleBean.role.name}" tabindex="13"
+												label="#{text['cadastro_perfil_label_descricao']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_perfil_label_descricao']}"																	
+												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{roleBean.adiciona}"
+														rendered="#{roleBean.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="#{text['label.editar']}" tabindex="41"
+														action="#{roleBean.altera}"
+														rendered="#{roleBean.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{roleBean.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

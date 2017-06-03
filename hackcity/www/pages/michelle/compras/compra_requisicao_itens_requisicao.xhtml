@@ -1,0 +1,140 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<div class="row">
+	<div class="col-md-12">
+		<p:dataTable id="dataTableCompraRequisicaoDetalhe"
+			value="#{compraRequisicaoMB.compraRequisicao.listaCompraRequisicaoDetalhe}"
+			styleClass="ajusta_coluna" var="obj" paginator="true" lazy="true"
+			rows="10" scrollable="true"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+			<f:facet name="header">
+				<p:commandButton title="Novo" icon="ui-icon-plus"
+					styleClass="aEsquerda" ajax="true" process="dataTableCompraRequisicaoDetalhe"
+					actionListener="#{compraRequisicaoMB.incluirItemRequisicao()}"
+					oncomplete="PF('dialogCompraRequisicaoDetalhe').show()"
+					update="dataTableCompraRequisicaoDetalhe :formBody:dados:dialogCompraRequisicaoDetalhe" />
+			</f:facet>
+
+			<p:column headerText="Produto" width="250">
+				<p:outputLabel value="#{obj.produto.descricao}" />
+			</p:column>
+			<p:column headerText="Quantidade">
+				<p:outputLabel value="#{obj.quantidade} - #{obj.unidade.abreviatura}" />
+			</p:column>
+			<p:column headerText="Quantidade Cotada">
+				<p:outputLabel value="#{obj.quantidadeCotada}" />
+			</p:column>
+			<p:column headerText="Item Cotado">
+				<p:outputLabel value="#{obj.itemCotado}" /> 
+			</p:column>
+			<p:column headerText="Ações">
+				<div class="row col-md-12">
+					<div class="btn-group">
+						<p:menuButton value="#{text['label.opcao']}">						 
+							<p:menuitem value="#{text['label.remover']}" icon="ui-icon-trash"
+								actionListener="#{compraRequisicaoMB.excluirItemRequisicao(obj)}"
+								process="dataTableCompraRequisicaoDetalhe"
+								update="dataTableCompraRequisicaoDetalhe messages" />
+
+						</p:menuButton>
+					</div>
+				</div>
+			</p:column>
+		</p:dataTable>
+
+
+	</div>
+
+
+</div>
+
+<p:dialog id="dialogCompraRequisicaoDetalhe"
+	header="Inclusão/Alteração de Item"
+	rendered="#{not empty compraRequisicaoMB.compraRequisicao.id}"
+	widgetVar="dialogCompraRequisicaoDetalhe" showEffect="slide"
+	hideEffect="slide" resizable="true" modal="true" closable="false"
+	width="800">
+	
+
+	<p:outputPanel styleClass="row" id="compraRequisicaoDetalhe">
+
+		<p:outputPanel styleClass="form-group col-md-5">
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_compras_requisicao_label_inclusao_produto']}" />
+			<p:selectOneMenu styleClass="form-control width100"
+				disabled="#{compraRequisicaoMB.visualizando}" required="false"
+				value="#{compraRequisicaoMB.compraRequisicaoDetalhe.produto}"
+				tabindex="20" converter="produtoConverter"
+				requiredMessage="#{text['cadastro_compras_requisicao_label_inclusao_produto']}"
+				filter="true">
+				<f:selectItem itemLabel=""/>
+				<f:selectItems value="#{compraRequisicaoMB.listaProdutos}"
+					var="item" itemLabel="#{item.descricao.toUpperCase()}"
+					itemValue="#{item}" />
+
+				<p:ajax event="change" process="@this"
+					update=":formBody:dados:unidadeCompra"></p:ajax>
+			</p:selectOneMenu>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelCompraRequisicaoDetalhe"
+			styleClass="form-group col-md-2">
+
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_compras_requisicao_label_inclusao_quantidade']}" />
+			<p:inputText id="compraRequisicaoDetalheQuantidade"
+				value="#{compraRequisicaoMB.compraRequisicaoDetalhe.quantidade}"
+				tabindex="21"
+				label="#{text['cadastro_compras_requisicao_label_inclusao_quantidade']}"
+				required="false" styleClass="form-control JSsomenteNumeros"
+				converter="mascaraValorBigDecimalInteiroConverter"
+				requiredMessage="#{text['cadastro_compras_requisicao_label_inclusao_quantidade']}"
+				disabled="#{compraRequisicaoMB.visualizando}" maxlength="100" />
+		</p:outputPanel>
+
+		<div class="form-group col-md-3">
+
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_compras_requisicao_label_inclusao_unidade']}" />
+			<p:selectOneMenu disabled="#{compraRequisicaoMB.visualizando}"
+				value="#{compraRequisicaoMB.compraRequisicaoDetalhe.unidade}" tabindex="22"
+				styleClass="width100" required="false" id="unidadeCompra"
+				requiredMessage="#{text['cadastro_produto_label_entrada']}"
+				filter="true">
+					<f:selectItem itemLabel=""/>
+				<f:selectItems value="#{compraRequisicaoMB.listaUnidadesEntradaPorProduto}" var="item"
+					itemLabel="#{item.descricao.toUpperCase()} - #{item.abreviatura.toUpperCase()} "
+					itemValue="#{item}" />
+				<f:converter converterId="unidadeConverter" />
+				<p:ajax event="change" process="@this"	update="@this " ></p:ajax>
+			</p:selectOneMenu>
+
+		</div>
+		</p:outputPanel>
+
+		<f:facet name="footer">
+			<p:commandButton value="Salvar"
+				actionListener="#{compraRequisicaoMB.salvarItemRequisicao()}"
+				process="dialogCompraRequisicaoDetalhe"
+				update=":formBody:dados:dataTableCompraRequisicaoDetalhe compraRequisicaoDetalhe panelCompraRequisicaoDetalhe :mensagens"
+				tabindex="22" ajax="true"
+				onsuccess="PF('dialogCompraRequisicaoDetalhe').hide();" />
+			<p:commandButton value="Cancelar" tabindex="23"
+				update=":formBody:dados:dataTableCompraRequisicaoDetalhe  dialogCompraRequisicaoDetalhe" process="@this"				 
+				oncomplete="PF('dialogCompraRequisicaoDetalhe').hide();" />
+
+
+		</f:facet>
+
+	
+</p:dialog>
+
+
+</html>

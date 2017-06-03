@@ -1,0 +1,104 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_usuario_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{usuarioBean.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{usuarioBean.state}" />
+								<t:saveState value="#{usuarioBean.usuario}" />
+								
+								<t:div id="blocoDeEdicao"
+									rendered="true">
+									
+									<div class="row">
+										<div class="form-group col-md-4">
+											<p:focus for="nome" />
+											<p:outputLabel styleClass="bLabel"  for="nome"
+												value="#{text['cadastro_usuario_nome']}" />
+											<p:inputText  id="nome"
+												value="#{usuarioBean.loginAtual}" tabindex="14"
+												label="#{text['cadastro_usuario_login']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_usuario_login']}"
+																								
+												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.redefinir_senha']}"
+														tabindex="40" 
+														action="#{usuarioBean.resetPassword}"														
+														styleClass="btn btn-success " process="@form"
+														update="@form :mensagens" />
+													</div>
+												
+												
+												
+											</div>
+										</div>
+									
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

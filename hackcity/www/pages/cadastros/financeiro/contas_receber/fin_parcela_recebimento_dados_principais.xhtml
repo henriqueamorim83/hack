@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+	
+	
+<div class="row">
+
+	<div class="form-group col-md-4">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_recebimento']}" />
+		<p:selectOneMenu tabindex="20" converter="finTipoRecebimentoConverter"
+			required="true"
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finTipoRecebimento}"
+			disabled="#{finParcelaRecebimentoMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_recebimento']}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_recebimento']}"
+			filter="true">
+			 
+			<f:selectItems value="#{finParcelaRecebimentoMB.listaFinTipoRecebimento}"
+				var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_conta_caixa']}" />
+		<p:selectOneMenu tabindex="21" converter="contaCaixaConverter"
+			required="true"
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.contaCaixa}"
+			disabled="#{finParcelaRecebimentoMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_conta_caixa']}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_conta_caixa']}"
+			filter="true">
+			 
+			<f:selectItems value="#{finParcelaRecebimentoMB.listaContaCaixa}"
+				var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_baixa']}" />
+		<p:selectOneMenu tabindex="22"  
+			required="true"
+			value="#{finParcelaRecebimentoMB.strTipoBaixa}"
+			disabled="#{finParcelaRecebimentoMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_baixa']}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_baixa']}"
+			filter="true">
+			<f:selectItem
+				itemLabel="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_baixa_total']}"	itemValue="T" />
+			<f:selectItem
+				itemLabel="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_tipo_baixa_parcial']}"	itemValue="P" />
+		</p:selectOneMenu>
+	</div>
+</div>
+
+<div class="row">
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_vencimento']}" />
+		<p:calendar tabindex="23"
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.dataVencimento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			disabled="#{finParcelaRecebimentoMB.visualizando}"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_vencimento']}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_vencimento']}"
+			required="true">
+		</p:calendar>
+
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_recebimento']}" />
+		<p:calendar tabindex="24"
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.dataRecebimento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			disabled="#{finParcelaRecebimentoMB.visualizando}"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_recebimento']}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_recebimento']}"
+			required="true">
+		</p:calendar>
+
+	</div>
+	
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_valor_parcela']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.valor}"
+			tabindex="25"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_valor_parcela']}"
+			required="false" converter="mascaraValorBigDecimalConverter"
+			styleClass="form-control JSvalorMoeda" disabled="true"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_valor_parcela']}" />
+
+	</div>
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_pago']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.valorPago}"
+			tabindex="26"
+			label="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_pago']}"
+			required="false" converter="mascaraValorBigDecimalConverter"
+			styleClass="form-control JSvalorMoeda" disabled="#{finParcelaRecebimentoMB.visualizando}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_pago']}" />
+
+	</div>
+	
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_juros']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.taxaJuro}"
+			tabindex="27"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_juros']}"
+			required="false" converter="mascaraValorBigDecimalConverter"
+			styleClass="form-control JSvalorMoeda" disabled="#{finParcelaRecebimentoMB.visualizando}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_juros']}" />
+
+	</div>
+	
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_multa']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.taxaMulta}"
+			tabindex="28"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_multa']}"
+			required="false" converter="mascaraValorBigDecimalConverter"
+			styleClass="form-control JSvalorMoeda" disabled="#{finParcelaRecebimentoMB.visualizando}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_multa']}" />
+
+	</div>
+</div>
+ 
+ <div class="row">
+ 
+ <div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_desconto']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.finParcelaReceber.taxaDesconto}"
+			tabindex="29"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_desconto']}"
+			required="false" converter="mascaraValorBigDecimalConverter"
+			styleClass="form-control JSvalorMoeda" disabled="#{finParcelaRecebimentoMB.visualizando}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_taxa_desconto']}" />
+
+	</div>
+	
+	<div class="form-group col-md-10">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_historico']}" />
+		<p:inputText
+			value="#{finParcelaRecebimentoMB.finParcelaRecebimento.historico}"
+			tabindex="30" maxlength="244"
+			label="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_historico']}"
+			required="false"  
+			styleClass="form-control" disabled="#{finParcelaRecebimentoMB.visualizando}"
+			requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_historico']}" />
+
+	</div>
+ 
+ </div>
+
+</html>	

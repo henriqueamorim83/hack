@@ -1,0 +1,111 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<div class="row">
+	<div class="col-md-12">
+		<p:dataTable id="dataTableCompraFornecedorCotacao" var="obj"
+			value="#{compraMapaComparativoMB.compraCotacao.listaCompraFornecedorCotacao}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			resizableColumns="true">
+
+			<p:column headerText="Fornecedor">
+				<h:outputLabel value="#{obj.fornecedor.pessoa.nome}" />
+			</p:column>
+			<p:column headerText="Prazo Entrega">
+				<h:outputLabel value="#{obj.prazoEntrega}" />
+			</p:column>
+			<p:column headerText="Condicoes Pagamento">
+				<h:outputLabel value="#{obj.condicoesPagamento}" />
+			</p:column>
+			<p:column headerText="Valor Subtotal">
+				<h:outputLabel value="#{obj.valorSubtotal}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+			<p:column headerText="Valor Desconto">
+				<h:outputLabel value="#{obj.valorDesconto}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+			<p:column headerText="Total">
+				<h:outputLabel value="#{obj.total}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+		</p:dataTable>
+
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<p:outputLabel
+			value="#{text['cadastro_compras_confirmar_cotacao_label_itens']}"></p:outputLabel>
+		<p:separator />
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<p:dataTable id="dataTableCompraCotacaoDetalhe" var="obj" 
+			value="#{compraMapaComparativoMB.listaCompraCotacaoDetalhe}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			resizableColumns="true" editable="true" editMode="cell"
+			emptyMessage="Nenhum fornecedor selecionado">
+
+			<p:ajax event="cellEdit"
+				listener="#{compraMapaComparativoMB.alteraItemFornecedor}"
+				update="dataTableCompraCotacaoDetalhe" />
+
+			<p:column headerText="Fornecedor" width="15%">
+				<h:outputLabel
+					value="#{obj.compraFornecedorCotacao.fornecedor.pessoa.nome}" />
+			</p:column>
+			<p:column headerText="Produto" width="25%">
+				<h:outputLabel value="#{obj.produto.descricao}" rendered="#{obj.produto!=null}" />
+				<h:outputLabel value="#{obj.pedidoProduto.itemPedido.descricaoItem.toUpperCase()}" rendered="#{obj.pedidoProduto!=null}" />
+				<h:outputLabel value="#{obj.itemPedido.descricaoItem.toUpperCase()}" rendered="#{obj.pedidoProduto==null}" />
+			</p:column>
+			<p:column headerText="Quantidade">
+				<h:outputLabel value="#{obj.quantidade.intValue()}">
+					<f:convertNumber pattern="0" />
+				</h:outputLabel>
+			</p:column>
+			<p:column headerText="Qtde Pedida">
+				<p:inputText value="#{obj.quantidadePedida}" tabindex="20"
+					label="Qtde Pedida" required="true"
+					converter="mascaraValorBigDecimalInteiroConverter"
+					styleClass="form-control JSsomenteNumeros"
+					requiredMessage="Qtde Pedida">
+					<p:ajax event="change" process="@this" update="@this" listener="#{compraMapaComparativoMB.alteraItemFornecedor(obj)}"></p:ajax>
+				</p:inputText>	
+			</p:column>
+			<p:column headerText="Vlr Unitario">
+				<h:outputLabel value="#{obj.valorUnitario}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+			<p:column headerText="Desconto">
+				<h:outputLabel value="#{obj.valorDesconto}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+			<p:column headerText="Total">
+				<h:outputLabel value="#{obj.valorTotal}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputLabel>
+			</p:column>
+		</p:dataTable>
+
+	</div>
+</div>
+
+
+</html>

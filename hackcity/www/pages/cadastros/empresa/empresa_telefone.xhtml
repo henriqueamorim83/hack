@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<p:outputPanel id="telefones">
+	
+<div class="row">
+	<p:outputPanel styleClass="form-group col-md-1" rendered="#{empresaMB.empresaTelefoneLista}" >
+	  
+		<p:commandButton value="#{text['label.adicionar']}" tabindex="39"
+				
+				 ajax="true" title="#{text['label.adicionar']}"	disabled="#{empresaMB.visualizando}" 
+				 process="@this"  action="#{empresaMB.adicionarEmpresaTelefone()}"
+				 update="@this :formBody:dados:telefones"
+				styleClass="botao-default">		
+		</p:commandButton>
+	
+	</p:outputPanel>
+</div>
+	
+	<p:outputPanel styleClass="row" rendered="#{empresaMB.empresaTelefoneEdicao}">
+			
+			<p:outputPanel styleClass="form-group col-md-3">
+				<p:focus for="tipo_telefone"></p:focus>
+				<p:outputLabel value="#{text['cadastro_empresa_label_empresa_telefone_tipo']}" for="tipo_telefone" />
+				<p:selectOneMenu value="#{empresaMB.empresaTelefone.tipo}"
+				 tabindex="40" styleClass="form-control" id="tipo_telefone"
+				disabled="#{empresaMB.visualizando}" required="false"
+				requiredMessage="#{text['cadastro_empresa_label_empresa_telefone_tipo']}">
+				<f:selectItem itemLabel="Celular" itemValue="1" />
+				<f:selectItem itemLabel="Outro" itemValue="2" />			
+				<f:selectItem itemLabel="Residêncial" itemValue="3" />
+				<f:selectItem itemLabel="Comercial" itemValue="4" />
+				
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+			<p:outputPanel  styleClass="form-group col-md-4">
+				<p:outputLabel value="#{text['cadastro_empresa_label_empresa_telefone_numero']}"  />
+				<p:inputText   tabindex="41"	
+					disabled="#{empresaMB.visualizando}" 
+					label="#{text['cadastro_empresa_label_empresa_telefone_numero']}" required="false" 
+					value="#{empresaMB.empresaTelefone.numero}" styleClass="form-control JSsomenteNumeros"			
+					requiredMessage="#{text['cadastro_empresa_label_empresa_telefone_numero']}"			
+					/>
+			</p:outputPanel>
+			
+			<p:outputPanel  styleClass="form-group col-md-8">
+				<p:outputLabel value="#{text['cadastro_empresa_label_empresa_telefone_observacao']}"  />
+				<p:inputText disabled="#{empresaMB.visualizando}" tabindex="42" value="#{empresaMB.empresaTelefone.observacao}"
+				required="false"
+				maxlength="244"/>
+			</p:outputPanel>
+			
+			
+	</p:outputPanel>	
+	
+<div class="row">
+
+	<div class="form-group col-md-1 ">
+		<p:commandButton value="#{text['label.adicionar']}" tabindex="44"
+				rendered="#{empresaMB.empresaTelefoneEdicao}" 
+				 ajax="true" title="#{text['label.adicionar']}"	disabled="#{empresaMB.visualizando}" 
+				 process=":formBody:dados:telefones"  action="#{empresaMB.adicionandoEmpresaTelefone()}"
+				update="@this :formBody:dados:telefones"
+				styleClass="botao-default">		
+		</p:commandButton>
+	</div>
+	<div class="form-group col-md-1 ">
+		<p:commandButton value="#{text['label.cancelar']}" tabindex="45"
+				rendered="#{empresaMB.empresaTelefoneEdicao}" 
+				 ajax="true" title="#{text['label.cancelar']}"	disabled="#{empresaMB.visualizando}" 
+				 process="@this"  actionListener="#{empresaMB.cancelarEmpresaTelefone()}"
+				 update=":formBody:dados:telefones"
+				styleClass="botao-default">		
+		</p:commandButton>
+	</div>
+</div>
+
+								
+<p:outputPanel styleClass="row" id="empresaTelefoneLista" rendered="#{empresaMB.empresaTelefoneLista}">
+	
+	
+	
+		<p:dataTable  value="#{empresaMB.empresa.empresaTelefones}" var="item"
+		paginator="true" lazy="true" rows="5"
+		paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+		currentPageReportTemplate="{currentPage} de {totalPages}" 
+		rowClasses="odd, even" emptyMessage="#{text['table.empty']}">	
+		
+		<p:column headerText="#{text['cadastro_empresa_label_empresa_telefone_tipo']}">
+			<p:outputLabel value="#{empresaMB.tipoTelefone(item.tipo)}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_empresa_label_empresa_telefone_numero']}">
+			<p:outputLabel value="#{item.numero}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_empresa_label_empresa_telefone_observacao']}">
+			<p:outputLabel value="#{item.observacao}"></p:outputLabel>
+		</p:column>
+		
+		
+		<p:column>
+			<p:menuButton value="#{text['label.opcao']}" >		        
+		        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+		        actionListener="#{empresaMB.prepararAlterarEmpresaTelefone(item)}" ajax="true"
+		         process="@this" update=":formBody:dados:telefones"/>
+		         <p:separator />
+		       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 		        
+		        actionListener="#{empresaMB.removerEmpresaTelefone(item)}" ajax="true"
+		         process="@this" update=":formBody:dados:telefones"/>       
+		       
+		    </p:menuButton>
+	    </p:column>
+		</p:dataTable>
+		
+</p:outputPanel>
+
+
+
+</p:outputPanel>
+
+
+</ui:composition>	

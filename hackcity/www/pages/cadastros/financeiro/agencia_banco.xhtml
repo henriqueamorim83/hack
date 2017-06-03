@@ -1,0 +1,379 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_agencia_banco_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{agenciaBancoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{agenciaBancoMB.state}" />
+								<t:saveState value="#{agenciaBancoMB.agenciaBanco}" />
+								<t:saveState value="#{agenciaBancoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{agenciaBancoMB.pesquisando}">
+									<div class="row">
+										
+										
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{agenciaBancoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{agenciaBancoMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{agenciaBancoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{agenciaBancoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column	headerText="#{text['cadastro_agencia_banco_label_codigo']}">
+											<p:outputLabel value="#{item.codigo}" />
+										</p:column>
+										
+										<p:column	headerText="#{text['cadastro_agencia_banco_label_nome']}">
+											<p:outputLabel value="#{item.nome}" />
+										</p:column>
+
+										
+										
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{agenciaBancoMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{agenciaBancoMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{agenciaBancoMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not agenciaBancoMB.pesquisando}">
+									
+									<div class="row">
+																			
+										<div class="form-group col-md-5">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_banco']}" />
+												<p:selectOneMenu tabindex="12"	
+													converter="bancoConverter"		
+													required="true"								
+													value="#{agenciaBancoMB.agenciaBanco.banco}"
+													disabled="#{clienteMB.visualizando}" styleClass="form-control"
+													label="#{text['cadastro_agencia_banco_label_banco']}"
+													requiredMessage="#{text['cadastro_agencia_banco_label_banco']}" 
+													 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{agenciaBancoMB.listaBanco}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>											
+										</div>
+									
+									
+										<div class="form-group col-md-5">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_nome']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.nome}" tabindex="13"
+												label="#{text['cadastro_agencia_banco_label_nome']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_nome']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_codigo']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.codigo}" tabindex="14"
+												label="#{text['cadastro_agencia_banco_label_codigo']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_agencia_banco_label_codigo']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_digito']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.digito}" tabindex="15"
+												label="#{text['cadastro_agencia_banco_label_digito']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_agencia_banco_label_digito']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										
+										<div class="form-group col-md-8">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_logradouro']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.logradouro}" tabindex="16"
+												label="#{text['cadastro_agencia_banco_label_logradouro']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_logradouro']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									
+									
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_numero']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.numero}" tabindex="17"
+												label="#{text['cadastro_agencia_banco_label_numero']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_numero']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										
+										<div class="form-group col-md-4">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_bairro']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.bairro}" tabindex="18"
+												label="#{text['cadastro_agencia_banco_label_bairro']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_bairro']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-4">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_municipio']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.municipio}" tabindex="19"
+												label="#{text['cadastro_agencia_banco_label_municipio']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_municipio']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									
+										<div class="form-group col-md-1">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_uf']}" />
+											<p:inputText 
+												value="#{agenciaBancoMB.agenciaBanco.uf}" tabindex="20"
+												label="#{text['cadastro_agencia_banco_label_uf']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_uf']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_cep']}" />
+											<p:inputMask mask="99999-999" 
+												value="#{agenciaBancoMB.agenciaBanco.cep}" tabindex="21"
+												label="#{text['cadastro_agencia_banco_label_cep']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_cep']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_telefone']}" />
+											<p:inputText
+												value="#{agenciaBancoMB.agenciaBanco.telefone}" tabindex="22"
+												label="#{text['cadastro_agencia_banco_label_telefone']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_agencia_banco_label_telefone']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-4">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_gerente']}" />
+											<p:inputText
+												value="#{agenciaBancoMB.agenciaBanco.gerente}" tabindex="23"
+												label="#{text['cadastro_agencia_banco_label_gerente']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_gerente']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-4">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_empresa_contato']}" />
+											<p:inputText
+												value="#{agenciaBancoMB.agenciaBanco.empresaContato}" tabindex="24"
+												label="#{text['cadastro_agencia_banco_label_empresa_contato']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_empresa_contato']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									
+									</div>									
+									
+									<div class="row">
+									
+										<div class="form-group col-md-12">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_agencia_banco_label_observacao']}" />
+											<p:inputTextarea
+												value="#{agenciaBancoMB.agenciaBanco.observacao}" tabindex="25"
+												label="#{text['cadastro_agencia_banco_label_observacao']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_agencia_banco_label_observacao']}"												
+												disabled="#{agenciaBancoMB.visualizando}"												
+												maxlength="244" />
+										</div>
+										
+										
+										
+									</div>
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{agenciaBancoMB.adiciona}"
+														rendered="#{agenciaBancoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{agenciaBancoMB.alterar}"
+														rendered="#{agenciaBancoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{agenciaBancoMB.limpar}"
+														rendered="#{agenciaBancoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{agenciaBancoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

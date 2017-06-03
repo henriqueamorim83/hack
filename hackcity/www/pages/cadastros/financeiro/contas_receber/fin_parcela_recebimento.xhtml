@@ -1,0 +1,527 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_parcela_recebimento_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finParcelaRecebimentoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finParcelaRecebimentoMB.state}" />
+								<t:saveState value="#{finParcelaRecebimentoMB.finParcelaReceber}" />
+								<t:saveState value="#{finParcelaRecebimentoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa"
+									rendered="#{finParcelaRecebimentoMB.pesquisando}">
+									<div class="row"></div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+
+												
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finParcelaRecebimentoMB.lista}" process="@form"
+														update="@form" tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela"
+										value="#{finParcelaRecebimentoMB.objetos}"
+										styleClass="ajusta_coluna" var="item" paginator="true"
+										lazy="true" rows="5"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finParcelaRecebimentoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_numero_parcela']}">
+											<p:outputLabel value="#{item.numeroParcela}">
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_data_emissao']}">
+											<p:outputLabel value="#{item.dataEmissao}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+										<p:outputLabel value="">
+										</p:outputLabel>
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_data_vencimento']}">
+											<p:outputLabel value="#{item.dataVencimento}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_desconto_ate']}">
+											<p:outputLabel value="#{item.descontoAte}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_valor']}">
+											<p:outputLabel value="#{item.valor}">
+												<f:converter converterId="mascaraValorBigDecimalConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_recebimento_label_status']}">
+											<p:outputLabel value="#{item.finStatusParcela.descricao}">
+											</p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														<p:menuitem value="#{text['label.detalhes']}"
+															actionListener="#{finParcelaRecebimentoMB.prepararDetalhe(item)}"
+															title="#{text['label.detalhes']}" icon="ui-icon-document"
+															process="tabela" update="@form messages" />
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+									<div class="col-md-4">
+										<p:commandButton value="Detalhes" tabindex="10"
+											rendered="#{finParcelaRecebimentoMB.pesquisando}"
+											styleClass="btn btn-primary width100" process="@this"
+											oncomplete="PF('dialogFinParcelaReceber').show()"
+											update="@form :mensagens" />
+									</div>
+
+								</t:div>
+								
+								
+									<p:dialog widgetVar="dialogFinParcelaReceberCheque"
+										id="dialogFinParcelaReceberCheque" showEffect="pop"
+										header="#{text['cadastro_fin_parcela_recebimento_label_cheque_title']}"
+										 
+										styleClass="width70" height="350" modal="true" closable="true"
+										closeOnEscape="true">
+
+
+										<div class="row">
+
+											<div class="form-group col-md-6">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_pessoa']}" />
+												<p:selectOneMenu tabindex="12" converter="pessoaClienteConverter"
+													required="true" id="pessoaCliente"
+													value="#{finParcelaRecebimentoMB.pessoaCliente}"
+													disabled="#{finParcelaRecebimentoMB.visualizando}"
+													styleClass="form-control"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_pessoa']}"
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_pessoa']}"
+													filter="true">
+													<f:selectItem itemLabel=""/>												 
+													<f:selectItems value="#{finParcelaRecebimentoMB.listaPessoa}"
+														var="item" itemLabel="#{item.nome}" itemValue="#{item}" />
+													<p:ajax event="itemSelect"
+								listener="#{finParcelaRecebimentoMB.onSelecionaPessoa}"
+								update=":formBody:cpfCnpj" />
+												</p:selectOneMenu>
+											</div>
+
+											<div class="form-group col-md-3">
+
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_cpfCnpj']}" />
+												 
+												 <p:inputText id="cpfCnpj"
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.cpfCnpj}"
+													tabindex="13"
+													label="#{text['cadastro_fin_parcela_pagar_label_nominal']}"
+													styleClass="form-control"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_nominal']}"
+													readonly="true"
+													maxlength="200" />
+											</div>
+										</div>
+										
+										<div class="row">
+											
+											<div class="form-group col-md-8">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta_caixa']}" />
+												<p:selectOneMenu tabindex="14" converter="contaCaixaConverter"
+													required="true"
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.contaCaixa}"
+													disabled="#{finParcelaRecebimentoMB.visualizando}"
+													styleClass="form-control"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta_caixa']}"
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta_caixa']}"
+													filter="true">
+												 
+													<f:selectItems value="#{finParcelaRecebimentoMB.listaContaCaixa}"
+														var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+												</p:selectOneMenu>
+											</div>
+										
+										</div>
+										
+										<div class="row">
+										
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_codigo_banco']}" />
+												<p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.codigoBanco}"
+													tabindex="15"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_codigo_banco']}"
+													required="false"													 
+													styleClass="form-control JSsomenteNumeros"  
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_codigo_banco']}" />
+											</p:outputPanel>
+											
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_agencia']}" />
+												<p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.codigoAgencia}"
+													tabindex="16"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_agencia']}"
+													required="false"													 
+													styleClass="form-control JSsomenteNumeros" 
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_agencia']}" />
+											</p:outputPanel>
+											
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta']}" />
+												<p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.conta}"
+													tabindex="17"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta']}"
+													required="false"													 
+													styleClass="form-control JSsomenteNumeros" 
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_conta']}" />
+											</p:outputPanel>
+											
+											
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_numero']}" />
+												<p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.numero}"
+													tabindex="18"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_numero']}"
+													required="false"													 
+													styleClass="form-control JSsomenteNumeros" 
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_numero']}" />
+											</p:outputPanel>
+											
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_valor']}" />
+												<p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.valor}"
+													tabindex="20"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_valor']}"
+													required="false" readonly="true"
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda"  
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_valor']}" />
+											</p:outputPanel>
+											
+										</div>
+									
+										<div class="row">
+
+											<div class="form-group col-md-2">
+												<p:outputLabel
+													value="#{text['cadastro_fin_parcela_recebimento_label_data_emissao']}"></p:outputLabel>
+												<p:calendar tabindex="21"
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.dataEmissao}"
+													converter="dataConverter" navigator="true"
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control"
+													label="#{text['cadastro_fin_parcela_recebimento_label_data_emissao']}"
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_data_emissao']}"
+													required="true">
+												</p:calendar>
+											</div>
+											
+											<div class="form-group col-md-2">
+												<p:outputLabel
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_bom_para']}"></p:outputLabel>
+												<p:calendar tabindex="22"
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.bomPara}"
+													converter="dataConverter" navigator="true"
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_bom_para']}"
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_bom_para']}"
+													required="true">
+												</p:calendar>
+											</div>
+											 
+
+											
+										</div>
+
+
+										<div class="row">
+
+											<p:outputPanel styleClass="form-group col-md-12">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_recebimento_label_cheque_historico']}" />
+												 <p:inputText
+													value="#{finParcelaRecebimentoMB.finChequeRecebido.historico}"
+													tabindex="23"
+													label="#{text['cadastro_fin_parcela_recebimento_label_cheque_historico']}"
+													required="false"												 
+													styleClass="form-control "  
+													requiredMessage="#{text['cadastro_fin_parcela_recebimento_label_cheque_historico']}" />
+												 
+												 </p:outputPanel>
+
+
+										</div>
+										
+										
+										<div class="row">
+											<div class="col-md-3 aDireita">
+												<p:commandButton
+													process="dialogFinParcelaReceberCheque"
+													title="#{text['label.salvar']}" icon="ui-icon-copy"
+													value="#{text['label.salvar']}" tabindex="26"
+													styleClass="btn btn-warning width100" 
+													actionListener="#{finParcelaRecebimentoMB.finalizaRecebimentoCheque()}"
+													onsuccess="PF('dialogFinParcelaReceberCheque').hide();"
+													update="@form :mensagens">
+
+												</p:commandButton>
+
+											</div>
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="27"
+													oncomplete="PF('dialogFinParcelaReceberCheque').hide();"
+													 
+													action="#{finParcelaRecebimentoMB.voltar()}"
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+											 
+										</div>
+
+									</p:dialog>
+
+
+
+									<p:dialog widgetVar="dialogFinParcelaReceber" showEffect="pop"
+										id="dialogFinParcelaReceber"
+										header="#{text['cadastro_fin_parcela_recebimento_label_title']}"
+										styleClass="width70" height="300" modal="true" closable="true"
+										closeOnEscape="true">
+
+										<div class="row">
+											<div class="col-md-12">
+
+												<p:dataTable id="FinParcelaReceberDataTable"
+													value="#{finParcelaRecebimentoMB.listagemFinParcelaReceberEmAberto}"
+													styleClass="ajusta_coluna " var="item" paginator="true"
+													lazy="true" rows="5" scrollable="true" rowKey="#{item.id}"
+													selection="#{finParcelaRecebimentoMB.parcelasSelecionadas}"
+													paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+													currentPageReportTemplate="{currentPage} de #{finLancamentoReceberMB.objetos.pageSize}"
+													rowClasses="odd, even"
+													emptyMessage="#{text['table.empty']}">
+
+
+
+
+													<p:column selectionMode="multiple" style="width: 30px;"></p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_numero_parcela']}">
+														<p:outputLabel value="#{item.numeroParcela}">
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_data_emissao']}">
+														<p:outputLabel value="#{item.dataEmissao}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+													<p:outputLabel value="">
+													</p:outputLabel>
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_data_vencimento']}">
+														<p:outputLabel value="#{item.dataVencimento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_desconto_ate']}">
+														<p:outputLabel value="#{item.descontoAte}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_valor']}">
+														<p:outputLabel value="#{item.valor}">
+															<f:converter
+																converterId="mascaraValorBigDecimalConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_recebimento_label_status']}">
+														<p:outputLabel value="#{item.finStatusParcela.descricao}">
+														</p:outputLabel>
+													</p:column>
+
+												</p:dataTable>
+
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-3 aDireita">
+												<p:commandButton
+													process="@this :formBody:FinParcelaReceberDataTable"
+													title="#{text['label.detalhes']}" icon="ui-icon-copy"
+													value="#{text['label.detalhes']}" 
+													actionListener="#{finParcelaRecebimentoMB.alterarParcelas}"
+													styleClass="btn btn-warning width100"  
+													onsuccess="PF('dialogFinParcelaReceber').hide();"
+													update="@form :mensagens">
+												</p:commandButton>
+
+											</div>
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="12"
+													oncomplete="PF('dialogFinParcelaReceber').hide();"
+													 
+													action="#{finParcelaRecebimentoMB.voltar()}"
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+										</div>
+									</p:dialog>
+								
+								
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finParcelaRecebimentoMB.pesquisando}">
+
+									<p:tabView id="dados">
+										<p:tab
+											title="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_title']}">
+										 
+											<ui:include src="fin_parcela_recebimento_dados_principais.xhtml"></ui:include>
+										</p:tab>
+
+										<p:tab
+											title="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_title']}">
+											<ui:include src="fin_parcela_recebimentos_efetuados.xhtml"></ui:include>
+										</p:tab>
+									</p:tabView>
+
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.editar']}"
+														tabindex="40" action="#{finParcelaRecebimentoMB.alterar()}"
+														rendered="#{finParcelaRecebimentoMB.editando}"
+														styleClass="btn btn-warning width100" process="@this :formBody:dados"
+														update="@form :mensagens" />
+												</div>
+
+
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.incluir']}"
+														tabindex="41"
+														action="#{finParcelaRecebimentoMB.iniciaRecebimento()}"
+														rendered="#{finParcelaRecebimentoMB.editando}"
+														styleClass="btn btn-warning width100" process="@this :formBody:dados"
+														update=":formBody:dados :formBody:dialogFinParcelaReceberCheque :mensagens" />
+												</div>
+
+
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finParcelaRecebimentoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100"
+														process="@this" update="@form :mensagens" />
+												</div>
+
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

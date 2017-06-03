@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_vendas_detalhado_parcela" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a8b06e10-a80e-4e29-b5bb-8d6482da369b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="vencimento" class="java.lang.String"/>
+	<field name="valor" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="parcela" class="java.lang.String"/>
+	<detail>
+		<band height="50">
+			<textField>
+				<reportElement x="53" y="26" width="403" height="20" uuid="ade21f0c-238e-4d79-b770-e62460f3262c"/>
+				<textFieldExpression><![CDATA["ola mundo"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

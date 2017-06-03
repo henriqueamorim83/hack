@@ -1,0 +1,298 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_movimento_caixa_banco_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finMovimentoCaixaBancoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finMovimentoCaixaBancoMB.state}" />
+
+
+
+								<p:outputPanel styleClass="clear" />
+								<hr />
+								<div class="row">
+
+									<div class="col-md-12">
+
+										<p:dataTable id="dataTableFinMovimentoCaixaBanco"
+											value="#{finMovimentoCaixaBancoMB.listaMovimentoCaixaBanco}"
+											
+											styleClass="ajusta_coluna" var="item" paginator="true"
+											lazy="true" rows="5" scrollable="true"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											currentPageReportTemplate="{currentPage} de #{finMovimentoCaixaBancoMB.objetos.pageSize}"
+											rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+											<f:facet name="header">
+												<p:commandButton title="#{text['label.editar']}" 
+													rendered="#{not finMovimentoCaixaBancoMB.editando}"
+													icon="ui-icon-refresh" styleClass="aEsquerda"
+													actionListener="#{finMovimentoCaixaBancoMB.buscaDados}"
+													update="@form :mensagens" />
+
+											</f:facet>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_operacao']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.operacao}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_conta_caixa']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.nomeContaCaixa}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_pessoa']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.nomePessoa}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_data_lancamento']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.dataLancamento}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_data_pago_recebido']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.dataPagoRecebido}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_historico']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.historico}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_valor']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.valor}">
+													<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_movimento_caixa_banco_label_doc_origem']}">
+												<p:outputLabel
+													value="#{item.viewFinMovimentoCaixaBanco.descricaoDocumentoOrigem}" />
+											</p:column>
+
+											<p:column headerText="Ações">
+												<div class="row col-md-12">
+													<div class="btn-group">
+														<p:menuButton value="#{text['label.opcao']}">
+															<p:menuitem value="#{text['label.detalhes']}"
+																icon="ui-icon-document"
+																actionListener="#{finMovimentoCaixaBancoMB.prepararAlterar(item)}"
+																process="@this" update="@form messages" />
+															<p:separator />
+
+														</p:menuButton>
+													</div>
+												</div>
+											</p:column>
+										</p:dataTable>
+									</div>
+
+								</div>
+
+								<div class="row">
+									<p:outputPanel
+										styleClass="form-group col-md-3 text-align-left14">
+										<p:outputLabel
+											value="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}" />
+										<p:calendar tabindex="8"
+											value="#{finMovimentoCaixaBancoMB.periodo}"
+											converter="dataConverter" navigator="true"
+											pattern="dd/MM/yyyy" locale="pt"
+											styleClass="JSData form-control"
+											label="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}"
+											requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}"
+											required="true">
+										</p:calendar>
+									</p:outputPanel>
+
+								</div>
+
+
+
+								<p:outputPanel id="outputPanelDetalhe"
+									rendered="#{finMovimentoCaixaBancoMB.editando}">
+
+									<div class="row">
+										<div class="col-md-12">
+											<p:outputLabel
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_title']}" />
+										</div>
+									</div>
+									<hr />
+									<div class="row">
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_anterior']}" />
+											<p:inputText
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.saldoAnterior}"
+												tabindex="20"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_anterior']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_anterior']}" />
+										</div>
+
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_recebimentos']}" />
+											<p:inputText
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.recebimentos}"
+												tabindex="21"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_recebimentos']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_recebimentos']}" />
+										</div>
+
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_pagamentos']}" />
+											<p:inputText
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.pagamentos}"
+												tabindex="22" disabled="true"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_pagamentos']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_pagamentos']}" />
+										</div>
+
+									</div>
+
+
+									<div class="row">
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_conta']}" />
+											<p:inputText  disabled="true"
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.saldoConta}"
+												tabindex="23"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_conta']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_conta']}" />
+										</div>
+
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_cheques_nao_compensados']}" />
+											<p:inputText disabled="true"
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.chequeNaoCompensado}"
+												tabindex="24"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_cheques_nao_compensados']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_cheques_nao_compensados']}" />
+										</div>
+
+										<div class="col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_disponivel']}" />
+											<p:inputText disabled="true"
+												value="#{finMovimentoCaixaBancoMB.fechamentoCaixaBanco.saldoDisponivel}"
+												tabindex="25"
+												label="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_disponivel']}"
+												required="false" converter="mascaraValorBigDecimalConverter"
+												styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_dados_fechamento_saldo_disponivel']}" />
+										</div>
+
+									</div>
+
+
+
+
+
+
+
+									<div class="row">
+										<div class="col-md-3">
+											<p:commandButton title="#{text['label.processar']}"
+												value="#{text['label.processar']}"
+												actionListener="#{finMovimentoCaixaBancoMB.processaFechamento()}"
+												process="@this" update="@form :mensagens" />
+										</div>
+
+										<div class="col-md-3">
+											<p:commandButton title="#{text['label.fechar']}"
+												value="#{text['label.fechar']}"
+												actionListener="#{finMovimentoCaixaBancoMB.voltar()}"
+												process="@this" update="@form :mensagens" />
+										</div>
+									</div>
+								</p:outputPanel>
+
+
+
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+ 
+ 
+			 
+								 
+								 
+							<p:tabView id="dados">
+								
+								<p:tab id="pessoaInformacoes" title="#{text['cadastro_pessoa_label_tabview_informacoes_pessoa']}">	
+										
+										<ui:include src="pessoa_informacoes.xhtml"></ui:include>	
+							
+								</p:tab>
+								
+								
+								<p:tab  id="pessoaContato"  title="#{text['cadastro_pessoa_label_tabview_contatos']}">
+									<ui:include src="pessoa_contato.xhtml"></ui:include>	
+								</p:tab>
+								<p:tab id="pessoaEndereco" title="#{text['cadastro_pessoa_label_tabview_enderecos']}">
+										<ui:include src="pessoa_endereco.xhtml"></ui:include>	
+								</p:tab>
+								<p:tab id="pessoaTelefone"  title="#{text['cadastro_pessoa_label_tabview_telefones']}">
+										<ui:include src="pessoa_telefone.xhtml"></ui:include>	
+								</p:tab>	
+							</p:tabView>			
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="100" action="#{produtoMB.salvarPessoa}"		ajax="true"												 
+														styleClass="btn btn-success width100" 
+														process=":formBody:cadastrarPessoa " 
+														update=":formBody:cadastrarPessoa :formBody:cadastrarFornecedor :mensagens" 
+													 onsuccess="PF('dialogPessoa').hide();"
+														 />															 
+																									 
+												</div>
+												<div class="col-md-4">
+												
+													<p:commandButton value="#{text['label.cancelar']}"
+														tabindex="101"  action="#{produtoMB.cancelarCadastroPessoa()}"													 
+														styleClass="btn btn-success width100" 
+														process="@this" ajax="true"	
+														update=":formBody:cadastrarPessoa :mensagens" 
+														onsuccess="PF('dialogPessoa').hide();"
+														 />					
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								
+							
+					 
+
+
+
+
+
+	 
+
+</html>

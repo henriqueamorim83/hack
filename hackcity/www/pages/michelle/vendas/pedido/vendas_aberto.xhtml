@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_michelle/template_michelle.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_venda_aberto_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{vendasAbertoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{vendasAbertoMB.state}" />
+								<t:saveState value="#{vendasAbertoMB.pedidoReceita}" />
+								<t:saveState value="#{vendasAbertoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa"
+									rendered="#{vendasAbertoMB.pesquisando}">
+
+									<div class="row" />
+
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{vendasAbertoMB.objetos}"
+											var="item" paginator="true" lazy="true" rows="10" 
+											filteredValue="#{vendasAbertoMB.clientes}"
+											 emptyMessage="#{text['table.empty']}">
+										<p:column headerText="#{text['cadastro_venda_aberto_label_numero_pedido']}">
+											<p:outputLabel value="#{item.pedido.numeroPedido}"></p:outputLabel>
+										</p:column>
+										<p:column  filterBy="#{vendasAbertoMB.cliente}"  headerText="#{text['cadastro_venda_aberto_label_receita_cliente']}">
+											<f:facet name="filter">
+									                <p:selectOneMenu 														 
+														value="#{vendasAbertoMB.cliente}" tabindex="6"
+														styleClass="form-control width100"
+														requiredMessage="#{text['cadastro_pedido_label_cliente']}"
+														filter="true">
+														<f:selectItem itemLabel=""  itemValue="#{null}" noSelectionOption="true" />
+														<f:selectItems value="#{vendasAbertoMB.listaClientes}" var="cliente" 
+															itemLabel="#{cliente.pessoa.nome}" itemValue="#{cliente}" />														
+														<f:converter converterId="clienteConverter" />
+														<p:ajax event="change" process="@this tabela" update="tabela"></p:ajax>
+													</p:selectOneMenu>
+								            </f:facet>
+											<p:outputLabel value="#{item.pedido.cliente.pessoa.nome}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_venda_aberto_label_receita_descricao']}">
+											<p:outputLabel value="#{item.receita.descricao}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_venda_aberto_label_receita_qtd']}">
+											<p:outputLabel value="#{item.quantidade}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_venda_aberto_label_receita_data_pedido']}">
+											<p:outputLabel value="#{item.pedido.dataVenda}">
+												<f:converter converterId="dataConverter"/>
+											</p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_venda_aberto_label_receita_situacao']}">
+											<p:outputLabel value="#{vendasAbertoMB.situacaoReceita(item.situacaoProducao)}"></p:outputLabel>
+										</p:column>
+										
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														 
+														<p:menuitem value="#{text['cadastro_venda_aberto_label_em_producao']}"
+															icon="ui-icon-document"
+															actionListener="#{vendasAbertoMB.alterarSituacaoEmProducao(item)}"
+															process="@form" update="@form messages" />
+														<p:separator />
+														<p:menuitem value="#{text['cadastro_venda_aberto_label_a_entregar']}"
+															icon="ui-icon-disk"
+															actionListener="#{vendasAbertoMB.alterarSituacaoAEntregar(item)}"
+															process="@form" update="@form messages" />
+														<p:separator />
+
+
+
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not vendasAbertoMB.pesquisando}">
+
+
+
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{vendasAbertoMB.adiciona}"
+														rendered="#{vendasAbertoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{vendasAbertoMB.alterar}"
+														rendered="#{vendasAbertoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{vendasAbertoMB.limpar}"
+														rendered="#{vendasAbertoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{vendasAbertoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100"
+														process="@form" update="@form :mensagens" />
+												</div>
+
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

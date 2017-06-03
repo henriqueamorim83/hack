@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:fieldset id="fieldsetFormaPagamento" styleClass="width98"
+		legend="#{text['cadastro_pedido_label_forma_pagamento_title']}">
+		
+		<div class="row">
+		
+			<p:outputPanel  styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_forma_pagamento_title']}" />
+				<p:selectOneMenu 
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.formaDePagamento}" tabindex="80"
+					styleClass="form-control width100" required="true"
+					requiredMessage="#{text['cadastro_pedido_label_forma_pagamento_title']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaFormaDePagamentos}" var="item"
+						itemLabel="#{item.descricao}" itemValue="#{item}" />					
+					<f:converter converterId="formaDePagamentoConverter" />
+					<p:ajax event="change" process="@this" update=":formBody:panelParcelamento :formBody:panelPagamento" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+			<p:outputPanel id="panelParcelamento"  styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_forma_pagamento_parcelamento']}" />
+				<p:selectOneMenu 
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.parcelamento}" tabindex="81"
+					styleClass="form-control width100" required="true"
+					requiredMessage="#{text['cadastro_pedido_label_forma_pagamento_parcelamento']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaParcelamento}" var="item"
+						itemLabel="#{item.descricao}" itemValue="#{item}" />					
+					<f:converter converterId="parcelamentoConverter" />
+					<p:ajax  event="change" process="@this :formBody:panelPagamento" 
+					update=":formBody:panelPagamento" listener="#{pedidoMB.calculoFormaPagamento}" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+		
+		</div>
+		<div class="row">
+			
+			<p:outputPanel id="panelPagamento" styleClass="form-group col-md-10">
+			
+				<p:dataTable id="tablePagamentos" value="#{pedidoMB.pedido.listaPagamentos}" var="item"
+										paginator="true" lazy="true" rows="5"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+										currentPageReportTemplate="{currentPage} de {totalPages}" 
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">			
+										
+										<p:column headerText="#{text['cadastro_pedido_label_forma_pagamento_Vencimento']}" styleClass="width15">
+											<p:calendar   tabindex="82"	 disabled="#{pedidoMB.visualizando}" 
+												value="#{item.vencimento}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_pedido_label_forma_pagamento_Vencimento']}"
+												requiredMessage="#{text['cadastro_pedido_label_forma_pagamento_Vencimento']}"
+												 required="true">						
+											</p:calendar>
+										</p:column>
+										<p:column headerText="#{text['cadastro_pedido_label_forma_pagamento_parcela']}" styleClass="width10">
+											<p:outputLabel value="#{item.numeroParcela}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_pedido_label_forma_pagamento_valor']}" styleClass="width15">
+														<p:inputText  tabindex="82"	disabled="#{pedidoMB.visualizando}" 
+															label="#{text['cadastro_pedido_label_forma_pagamento_valor']}"
+															required="true" 
+															value="#{item.valor}" 
+															converter="mascaraValorBigDecimalConverter"
+															styleClass="form-control JSvalorMoeda"																									
+															requiredMessage="#{text['cadastro_pedido_label_forma_pagamento_valor']}"												
+															>
+															
+														</p:inputText>	
+													</p:column>
+										<p:column headerText="#{text['cadastro_pedido_label_forma_pagamento_situacao']}" styleClass="width20">
+											<p:selectOneMenu disabled="#{pedidoMB.visualizando}"
+													value="#{item.situacaoPagamento}" tabindex="82"
+													styleClass="width100" required="true"		
+													converter="situacaoPagamentoConverter"															
+													requiredMessage="#{text['cadastro_pedido_label_forma_pagamento_situacao']}"
+													filter="true">
+													
+													<f:selectItems value="#{pedidoMB.listaSituacaoPagamentos}"
+													var="item" itemLabel="#{item.descricao}"
+													itemValue="#{item}" />																	
+														
+											</p:selectOneMenu>
+
+											</p:column>
+										<!-- 	<p:column headerText="Ações">																	
+												<div style="margin-left: 10px; float: left;">
+													<p:commandButton value="#{text['label.remover']}"
+														action="#{pedidoMB.removerPagamento(item)}"
+														update=":formBody:tablePagamentos"
+														ajax="true"
+														tabindex="82"
+														process=":formBody:tablePagamentos"	disabled="#{pedidoMB.visualizando}" 														
+														styleClass="botao-default">
+														<f:ajax render="tablePagamentos :mensagens" />														
+													</p:commandButton>
+												</div>
+											</p:column>-->
+										
+									</p:dataTable>
+			</p:outputPanel>
+			
+		</div>
+	</p:fieldset>
+
+</ui:composition>	

@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<div class="row">
+	<div class="col-md-12">
+		<p:dataTable id="dataTableFinParcelaReceber" var="item"
+			value="#{finCobrancaMB.parcelasVencidas}" paginator="true" rows="10"
+			rowsPerPageTemplate="5,10,15,20" resizableColumns="true"
+			editable="true" editMode="row">
+
+			<f:facet name="header">
+				<p:commandButton styleClass="aEsquerda"
+					title="#{text['cadastro_fin_cobranca_label_button']}"
+					icon="ui-icon-zoomin" process="@this"
+					actionListener="#{finCobrancaMB.buscaParcelaVencida()}"
+					update="dataTableFinParcelaReceber" />
+			</f:facet>
+
+			<p:ajax event="rowEdit"
+				listener="#{finCobrancaMB.alteraParcelaVencida}"
+				update="dataTableFinParcelaReceber" />
+
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_numero_parcela']}">
+				<p:outputLabel value="#{item.numeroParcela}"></p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_data_emissao']}">
+				<p:outputLabel value="#{item.dataEmissao}">
+					<f:converter converterId="dataConverter" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_data_vencimento']}">
+				<p:outputLabel value="#{item.dataVencimento}">
+					<f:converter converterId="dataConverter" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_valor']}">
+				<p:outputLabel value="#{item.valor}">
+					<f:converter converterId="mascaraValorBigDecimalConverter" />
+				</p:outputLabel>
+			</p:column>
+
+
+
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_taxa_juros']}">
+
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{item.taxaJuro}">
+							<f:converter  converterId="mascaraValorBigDecimalConverter"/>
+						</p:outputLabel>	
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{item.taxaJuro}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_taxa_multa']}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{item.taxaMulta}">
+							<f:converter  converterId="mascaraValorBigDecimalConverter"/>
+						</p:outputLabel>	
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{item.taxaMulta}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_cobranca_label_parcela_status_parcela']}">
+				<p:outputLabel value="#{item.finStatusParcela.descricao}">
+
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				 <p:rowEditor />
+			</p:column>
+
+		</p:dataTable>
+	</div>
+</div>
+
+</html>

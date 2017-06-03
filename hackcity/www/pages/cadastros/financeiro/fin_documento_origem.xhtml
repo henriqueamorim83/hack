@@ -1,0 +1,225 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_documento_origem_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finDocumentoOrigemMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finDocumentoOrigemMB.state}" />
+								<t:saveState value="#{finDocumentoOrigemMB.finDocumentoOrigem}" />
+								<t:saveState value="#{finDocumentoOrigemMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{finDocumentoOrigemMB.pesquisando}">
+									<div class="row">
+										
+										
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{finDocumentoOrigemMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finDocumentoOrigemMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{finDocumentoOrigemMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finDocumentoOrigemMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_documento_origem_label_codigo']}">
+											<p:outputLabel value="#{item.codigo}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_documento_origem_label_sigla_documento']}">
+											<p:outputLabel value="#{item.siglaDocumento}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_documento_origem_label_descricao']}">
+											<p:outputLabel value="#{item.descricao}"></p:outputLabel>
+										</p:column>
+										
+																				 
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{finDocumentoOrigemMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{finDocumentoOrigemMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{finDocumentoOrigemMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finDocumentoOrigemMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-3">
+											<p:focus for="codigo" />
+											<p:outputLabel styleClass="bLabel"  for="codigo"
+												value="#{text['cadastro_documento_origem_label_codigo']}" />
+											<p:inputText id="codigo"
+												value="#{finDocumentoOrigemMB.finDocumentoOrigem.codigo}" tabindex="10"
+												label="#{text['cadastro_documento_origem_label_codigo']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_documento_origem_label_codigo']}"												
+												disabled="#{finDocumentoOrigemMB.visualizando}"												
+												maxlength="3" />
+										</div>	
+										
+										<div class="form-group col-md-3">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_documento_origem_label_sigla_documento']}" />
+											<p:inputText 
+												value="#{finDocumentoOrigemMB.finDocumentoOrigem.siglaDocumento}" tabindex="11"
+												label="#{text['cadastro_documento_origem_label_sigla_documento']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_documento_origem_label_sigla_documento']}"												
+												disabled="#{finDocumentoOrigemMB.visualizando}"												
+												maxlength="10" />
+										</div>	
+										
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-12">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_documento_origem_label_descricao']}" />
+											<p:inputTextarea 
+												value="#{finDocumentoOrigemMB.finDocumentoOrigem.descricao}" tabindex="12"
+												label="#{text['cadastro_documento_origem_label_descricao']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_documento_origem_label_descricao']}"												
+												disabled="#{finDocumentoOrigemMB.visualizando}"												
+												maxlength="244" />
+										</div>	
+									</div>
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{finDocumentoOrigemMB.adiciona}"
+														rendered="#{finDocumentoOrigemMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{finDocumentoOrigemMB.alterar}"
+														rendered="#{finDocumentoOrigemMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{finDocumentoOrigemMB.limpar}"
+														rendered="#{finDocumentoOrigemMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finDocumentoOrigemMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

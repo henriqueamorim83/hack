@@ -1,0 +1,466 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_michelle/template_michelle.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_cliente_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{clienteMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{clienteMB.state}" />
+								<t:saveState value="#{clienteMB.cliente}" />
+								<t:saveState value="#{clienteMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{clienteMB.pesquisando}">
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="2"  
+												converter="clienteConverter" 
+												value="#{clienteMB.cliente}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_pessoa']}"
+												requiredMessage="#{text['cadastro_cliente_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaClientes}" var="item" 
+												 itemLabel="#{item.pessoa.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_atividade']}"  />
+											<p:selectOneMenu tabindex="3"  
+												converter="atividadeForCliConverter" 
+												value="#{clienteMB.cliente.atividadeForCli}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_atividade']}"
+												requiredMessage="#{text['cadastro_cliente_label_atividade']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaAtividadeForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_situacao']}"  />
+											<p:selectOneMenu tabindex="4"  
+												converter="situacaoForCliConverter" 
+												value="#{clienteMB.cliente.situacaoForCli}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_situacao']}"
+												requiredMessage="#{text['cadastro_cliente_label_situacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaSituacaoForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{clienteMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{clienteMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{clienteMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{clienteMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_cliente_label_pessoa']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.pessoa.nome}"/>
+										</p:column>
+										<p:column headerText="#{text['cadastro_cliente_label_atividade']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.atividadeForCli.nome}"/>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_cliente_label_situacao']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.situacaoForCli.nome}"/>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_cliente_label_contabil_conta']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.contabilConta.descricao}"/>
+										</p:column>
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{clienteMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{clienteMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{clienteMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not clienteMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="10"  
+												converter="pessoaConverter" 
+												value="#{clienteMB.cliente.pessoa}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_pessoa']}"
+												requiredMessage="#{text['cadastro_cliente_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaPessoas}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_atividade']}"  />
+											<p:selectOneMenu tabindex="11"  
+												converter="atividadeForCliConverter" 
+												value="#{clienteMB.cliente.atividadeForCli}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_atividade']}"
+												requiredMessage="#{text['cadastro_cliente_label_atividade']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaAtividadeForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_situacao']}"  />
+											<p:selectOneMenu tabindex="12"  
+												converter="situacaoForCliConverter" 
+												value="#{clienteMB.cliente.situacaoForCli}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_situacao']}"
+												requiredMessage="#{text['cadastro_cliente_label_situacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaSituacaoForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_contabil_conta']}"  />
+											<p:selectOneMenu tabindex="13"  
+												converter="contabilContaConverter" 
+												value="#{clienteMB.cliente.contabilConta}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_contabil_conta']}"
+												requiredMessage="#{text['cadastro_cliente_label_contabil_conta']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaContabilConta}" var="item" 
+												 itemLabel="#{item.descricao}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_operacao_fiscal']}"  />
+											<p:selectOneMenu tabindex="14"  
+												converter="tributOperacaoFiscalConverter" 
+												value="#{clienteMB.cliente.tributOperacaoFiscal}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_operacao_fiscal']}"
+												requiredMessage="#{text['cadastro_cliente_label_operacao_fiscal']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{clienteMB.listaTributOperacaoFiscal}" var="item" 
+												 itemLabel="#{item.descricao}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_desde']}"  />
+											<p:calendar   tabindex="15"	disabled="#{clienteMB.visualizando}" 
+												value="#{clienteMB.cliente.desde}"
+												converter="dataConverter"
+											 	navigator="true" 
+												pattern="dd/MM/yyyy" locale="pt"
+												 styleClass="JSData form-control" 											
+												label="#{text['cadastro_cliente_label_desde']}"
+												requiredMessage="#{text['cadastro_cliente_label_desde']}"
+												 required="false">											
+											</p:calendar>									
+										
+										</div>		
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_gerar_financeiro']}"  />
+											<p:selectOneMenu tabindex="16"  												
+												value="#{clienteMB.cliente.geraFinanceiro}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_gerar_financeiro']}"
+												requiredMessage="#{text['cadastro_cliente_label_gerar_financeiro']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Não" itemValue="Não"/>
+												  <f:selectItem itemLabel="Sim" itemValue="Sim"/>												
+											</p:selectOneMenu>							
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_indicador_preco']}"  />
+											<p:selectOneMenu tabindex="17"  												
+												value="#{clienteMB.cliente.indicadorPreco}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_indicador_preco']}"
+												requiredMessage="#{text['cadastro_cliente_label_indicador_preco']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Último Pedido" itemValue="1"/>
+												  <f:selectItem itemLabel="Tabela" itemValue="2"/>												
+											</p:selectOneMenu>							
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_tipo_frete']}"  />
+											<p:selectOneMenu tabindex="18"  												
+												value="#{clienteMB.cliente.tipoFrete}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_tipo_frete']}"
+												requiredMessage="#{text['cadastro_cliente_label_tipo_frete']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Terceiros" itemValue="Terceiros"/>
+												 <f:selectItem itemLabel="Destinatário" itemValue="Destinatário"/>	
+												 <f:selectItem itemLabel="Emitente" itemValue="Emitente"/>	
+												 <f:selectItem itemLabel="Sem frete" itemValue="Sem frete"/>												
+											</p:selectOneMenu>							
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_cliente_label_forma_desconto']}"  />
+											<p:selectOneMenu tabindex="19"  												
+												value="#{clienteMB.cliente.formaDesconto}"
+												disabled="#{clienteMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_cliente_label_forma_desconto']}"
+												requiredMessage="#{text['cadastro_cliente_label_forma_desconto']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Fim do Pedido" itemValue="Fim do Pedido"/>
+												 <f:selectItem itemLabel="Produto" itemValue="Produto"/>	
+																					
+											</p:selectOneMenu>							
+										</div>
+									
+									
+										<!-- <div class="form-group col-md-2">
+										<p:outputLabel styleClass="bLabel" 
+												value="#{text['cadastro_cliente_label_conta_tomador']}"  />
+												
+											<p:inputText 
+												value="#{clienteMB.cliente.contaTomador}" tabindex="20"
+												label="#{text['cadastro_cliente_label_conta_tomador']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_cliente_label_conta_tomador']}"												
+												disabled="#{clienteMB.visualizando}"
+												
+												maxlength="100" />
+										</div>-->
+										
+									</div>								
+									
+									<div class="row">
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_cliente_label_percentual_desconto']}"  />													
+												<p:inputMask mask="99?.99" 
+													value="#{clienteMB.cliente.porcentoDesconto}" tabindex="21"
+													label="#{text['cadastro_cliente_label_percentual_desconto']}"
+													required="false" styleClass="form-control"
+													requiredMessage="#{text['cadastro_cliente_label_percentual_desconto']}"												
+													disabled="#{clienteMB.visualizando}"
+													
+													maxlength="100" />
+											</div>
+											
+											<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_cliente_label_limite_credito']}"  />													
+												<p:inputText converter="mascaraValorBigDecimalConverter"
+													value="#{clienteMB.cliente.limiteCredito}" tabindex="22"
+													label="#{text['cadastro_cliente_label_limite_credito']}"
+													required="false" styleClass="form-control JSvalorMoeda"
+													requiredMessage="#{text['cadastro_cliente_label_limite_credito']}"												
+													disabled="#{clienteMB.visualizando}"
+													
+													maxlength="100" />
+											</div>
+												<div class="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_cliente_label_data_validade']}"  />													
+												<p:calendar   tabindex="23"	  
+												value="#{clienteMB.cliente.validade}"
+												converter="dataConverter"
+												navigator="true"  disabled="#{clienteMB.visualizando}"
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_cliente_label_data_cadastro']}"
+												requiredMessage="#{text['cadastro_cliente_label_data_cadastro']}"
+												required="false">						
+											</p:calendar>		
+											</div>
+											
+											<div class="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_cliente_label_data_cadastro']}"  />													
+												<p:calendar   tabindex="24"	  
+												value="#{clienteMB.cliente.dataCadastro}"
+												converter="dataConverter"
+												navigator="true"  disabled="true"
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_cliente_label_data_cadastro']}"
+												requiredMessage="#{text['cadastro_cliente_label_data_cadastro']}"
+												required="false">						
+											</p:calendar>		
+											</div>
+									
+									</div>
+									
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{clienteMB.adiciona}"
+														rendered="#{clienteMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{clienteMB.alterar}"
+														rendered="#{clienteMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{clienteMB.limpar}"
+														rendered="#{clienteMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{clienteMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

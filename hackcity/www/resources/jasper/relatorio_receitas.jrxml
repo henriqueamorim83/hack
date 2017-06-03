@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_receitas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82a7c8b0-ccc6-40b0-91a7-c3cecd99b95d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="preco_unitario" class="java.lang.String"/>
+	<field name="preco_venda" class="java.lang.String"/>
+	<field name="dias_vencimento" class="java.lang.Integer"/>
+	<field name="valor_total_insumos" class="java.lang.String"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="lista" class="java.util.List"/>
+	<field name="margem" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<title>
+		<band height="80">
+			<image>
+				<reportElement x="419" y="0" width="135" height="59" uuid="cadcb753-af7f-486c-b21c-242aaa674ca9"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="64" y="21" width="355" height="38" uuid="bd82d481-fe29-4672-a34f-b24b01cf194c"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Receitas"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="60" width="164" height="20" uuid="cc4f1f42-956c-487d-bf73-d1561d23eb19"/>
+				<textElement>
+					<font isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Usuário : "+$F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="60" width="164" height="20" uuid="ce990955-9cdb-4572-8e35-0ff06451d06a"/>
+				<textElement textAlignment="Right">
+					<font isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="126" splitType="Prevent">
+			<textField>
+				<reportElement x="109" y="18" width="445" height="20" uuid="c1136538-716f-45c5-bce0-4613d6d5286c"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="18" width="100" height="20" uuid="3ed3e4f5-128d-453e-9f6f-f477db2664a1"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Receita de : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="51" width="100" height="20" uuid="96f2ef98-c0b4-4963-b472-5ea932d2ffce"/>
+				<textElement>
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Preço de Unitário : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="100" height="20" uuid="73735849-b32c-4a35-a016-38be5c1b4494"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["R$ "+$F{preco_unitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="109" y="51" width="72" height="20" uuid="13994b00-d5cc-4de0-813e-bb766e826df9"/>
+				<textElement textAlignment="Right">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Margem : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="109" y="71" width="72" height="20" uuid="0f6e3fcb-e203-4e34-b621-02e8557bc525"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{margem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="51" width="107" height="20" uuid="de461aa5-7582-46e6-88e2-cd05bffb23fb"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Preço de Venda : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="71" width="107" height="20" uuid="0c05e378-61aa-42de-9322-a0a2eaac2e09"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["R$ "+$F{preco_venda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="51" width="126" height="20" uuid="25b61c0e-3eeb-400c-9ff8-3babc642bc80"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dias para Vencimento: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="71" width="126" height="20" uuid="0f2c8e96-e0cd-4458-81a4-f828454f3720"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias_vencimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="51" width="103" height="20" uuid="cb232fb8-c8da-47f2-b57d-2d9e9041d777"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Total Insumos: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="71" width="103" height="20" uuid="049e9010-3f09-4d5b-9cd5-2da92c7b4b80"/>
+				<textElement textAlignment="Center">
+					<font isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["R$ "+$F{valor_total_insumos}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="107" width="555" height="18" uuid="598cabb9-5922-4f21-a943-da809758c5d6">
+					<printWhenExpression><![CDATA[$F{lista}!=null]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lista})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_receitas_insumos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="433" y="0" width="80" height="20" uuid="a3198c6e-0768-4deb-8f39-35f798866925"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="20" uuid="8b3bb2db-e895-4dc3-ab1b-9ec9edb44b82"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_vendas_aberto_produto_ripe" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="081a18dd-dc6d-4bf8-845a-f6abd9724954">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="data" class="java.lang.String"/>
+	<field name="produto" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="unidade" class="java.lang.String"/>
+	<pageHeader>
+		<band height="21">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="368c0a90-b296-4cca-a560-113d372ded4c"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PRODUTO RIPE"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="1" width="194" height="20" uuid="6ff7d861-c28e-4019-aaa0-bd749bafffa9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["PRODUTO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="1" width="100" height="20" uuid="2c59df7c-7b84-42a6-9009-612594e9e9ba"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["DATA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="1" width="78" height="20" uuid="a7dae087-227e-4450-a469-cd9edf60aaee"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["QTD"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="1" width="183" height="20" uuid="938cb36a-83dc-4e57-8a59-3911852ae4b4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["UNIDADE"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="372" y="0" width="183" height="20" uuid="9afd3261-67e5-4084-8269-86549ad6dfef"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="19e1c6cb-950b-4c45-b551-8738ef44083f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="194" height="20" uuid="7f64ab43-59d4-46a2-b8a3-9480c4ac511d"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{produto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="0" width="78" height="20" uuid="6029edef-26bb-4e10-9029-289dacc56145"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

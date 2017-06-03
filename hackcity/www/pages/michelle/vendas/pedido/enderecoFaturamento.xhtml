@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:fieldset id="enderecoFieldFaturamento" styleClass="width98"
+		legend="#{text['cadastro_pedido_label_endereco_fieldset_faturamento_title']}">
+		<div class="row">
+			<p:outputPanel id="idCepFaturamento" styleClass="form-group col-md-3">
+				<p:outputLabel
+					value="#{text['cadastro_pedido_label_endereco_faturamento_cep']}"
+					styleClass="bLabel" />
+				<p:inputMask mask="99999?-999" placeholder=""
+					styleClass="form-control" disabled="#{pedidoMB.visualizando}"
+					id="cepFaturamento" tabindex="30"
+					value="#{pedidoMB.pedido.enderecoFaturamento.logradouro.cep}"
+					label="#{text['cadastro_pedido_label_endereco_faturamento_cep']}"
+					required="true"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_cep']}">
+					<p:ajax process="enderecoFieldFaturamento"
+						update="iDEstadoFaturamento enderecoFieldFaturamento :formBody:iDEstadoFaturamento :formBody:iDCidadeFaturamento :formBody:iDBairroFaturamento :formBody:iDLogradouroFaturamento messages"
+						listener="#{pedidoMB.buscarCEPFaturamento}"></p:ajax>
+				</p:inputMask>
+			</p:outputPanel>
+			<p:outputPanel id="iDEstadoFaturamento" styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_estado']}" />
+				<p:selectOneMenu id="iDUfFaturamento" maxlength="2"
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.enderecoFaturamento.estado}" tabindex="31"
+					styleClass="form-control width100"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_estado']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaEstados}" var="item"
+						itemLabel="#{item.sigla}" itemValue="#{item}" />
+					<p:ajax event="change" update="iDCidadeFaturamento" process="@this" />
+					<f:converter converterId="estadoConverter" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+			<p:outputPanel id="iDCidadeFaturamento" styleClass="form-group col-md-6">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_cidade']}" />
+				<p:selectOneMenu id="cidadeFaturamento" tabindex="32" maxlength="2"
+					converter="cidadeConverter" styleClass="form-control width100"
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.enderecoFaturamento.cidade}"
+					label="#{text['cadastro_pedido_label_endereco_faturamento_cidade']}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_cidade']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaCidadesPorEstadoFaturamento}"
+						var="item" itemLabel="#{item.descricao.toUpperCase()}"
+						itemValue="#{item}" />
+					<p:ajax event="change" update="iDBairroFaturamento" process="@this" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+		</div>
+		<div class="row">
+			<p:outputPanel id="iDBairroFaturamento" styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_bairro']}" />
+				<p:selectOneMenu id="bairroFaturamento" tabindex="33" maxlength="2"
+					converter="bairroConverter" styleClass="form-control width100"
+					disabled="#{pedidoMB.visualizando}" 
+					value="#{pedidoMB.pedido.enderecoFaturamento.bairro}"
+					label="#{text['cadastro_pedido_label_endereco_faturamento_bairro']}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_bairro']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaBairrosPorcidadeFaturamento}"
+						var="item" itemLabel="#{item.descricao.toUpperCase()}"
+						itemValue="#{item}" />
+					<p:ajax event="change" update="iDLogradouroFaturamento" process="@this" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+			<p:outputPanel id="iDLogradouroFaturamento" styleClass="form-group col-md-7">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_logradouro']}"
+					for="logradouro"  />
+				<p:autoComplete id="logradouroFaturamento" dropdown="true" scrollHeight="150"
+					disabled="#{pedidoMB.visualizando}" 
+					value="#{pedidoMB.pedido.enderecoFaturamento.logradouro.descricao}"
+					tabindex="34" var="item" itemLabel="#{item}" itemValue="#{item}"				
+					styleClass="width96"
+					completeMethod="#{pedidoMB.completeFaturamento}" minQueryLength="5"
+					process="@this" />
+			
+				
+			</p:outputPanel>
+			<p:outputPanel styleClass="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_numero']}" />
+				<p:inputText id="numeroFaturamento"
+					value="#{pedidoMB.pedido.enderecoFaturamento.numero}" tabindex="35"
+					label="#{text['cadastro_pedido_label_endereco_faturamento_numero']}"
+					required="false" styleClass="form-control"
+					
+					disabled="#{pedidoMB.visualizando}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_numero']}"
+					 />
+			</p:outputPanel>
+		</div>
+		<div class="row">
+			<p:outputPanel styleClass="form-group col-md-12">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_faturamento_complemento']}" />
+				<p:inputText id="complementoFaturamento"
+					value="#{pedidoMB.pedido.enderecoFaturamento.complemento}" tabindex="36"
+					label="#{text['cadastro_pedido_label_endereco_faturamento_complemento']}"
+					required="false" 
+					styleClass="form-control" disabled="#{pedidoMB.visualizando}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_faturamento_complemento']}"
+					 />
+			</p:outputPanel>
+		</div>
+	</p:fieldset>
+
+</ui:composition>

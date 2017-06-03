@@ -1,0 +1,219 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<p:panel id="panelFinLancamentoPagarDadosPessoais">
+
+<div class="row">
+
+	<div class="form-group col-md-5">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fornecedor']}" />
+		<p:selectOneMenu tabindex="15" converter="fornecedorConverter"
+			required="true"
+			value="#{finLancamentoPagarMB.finLancamentoPagar.fornecedor}"
+			disabled="#{finLancamentoPagarMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fornecedor']}"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fornecedor']}"
+			filter="true">
+			
+			<f:selectItems value="#{finLancamentoPagarMB.listaFornecedor}"
+				var="item" itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-4">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fin_documento_origem']}" />
+		<p:selectOneMenu tabindex="16" converter="finDocumentoOrigemConverter"
+			required="true"
+			value="#{finLancamentoPagarMB.finLancamentoPagar.finDocumentoOrigem}"
+			disabled="#{finLancamentoPagarMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fin_documento_origem']}"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fin_documento_origem']}"
+			filter="true">
+			
+			<f:selectItems value="#{finLancamentoPagarMB.listaDocumentoOrigem}"
+				var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_numero_documento']}" />
+		<p:inputText
+			value="#{finLancamentoPagarMB.finLancamentoPagar.numeroDocumento}"
+			tabindex="17"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_numero_documento']}"
+			required="true" styleClass="form-control"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_numero_documento']}"
+			disabled="#{finLancamentoPagarMB.visualizando}" maxlength="10" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado']}" />
+		<p:selectOneMenu tabindex="18" required="true"
+			value="#{finLancamentoPagarMB.finLancamentoPagar.pagamentoCompartilhado}"
+			disabled="#{finLancamentoPagarMB.visualizando}"
+			styleClass="form-control"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado']}"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado']}"
+			filter="true">
+			<f:selectItem
+				itemLabel="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado_nao']}"
+				itemValue="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado_nao']}" />
+
+			<f:selectItem
+				itemLabel="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado_sim']}"
+				itemValue="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_pgto_compartilhado_sim']}" />
+
+		</p:selectOneMenu>
+	</div>
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-2">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_qtd_parcela']}" />
+		<p:inputText
+			value="#{finLancamentoPagarMB.finLancamentoPagar.quantidadeParcela}"
+			tabindex="19"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_qtd_parcela']}"
+			required="true" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_qtd_parcela']}"
+			disabled="#{finLancamentoPagarMB.visualizando}" maxlength="3" />
+	</div>
+
+	<div class="form-group col-md-2">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_intervalo_parcelas']}" />
+		<p:inputText
+			value="#{finLancamentoPagarMB.finLancamentoPagar.intervaloEntreParcelas}"
+			tabindex="20"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_intervalo_parcelas']}"
+			required="true" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_intervalo_parcelas']}"
+			disabled="#{finLancamentoPagarMB.visualizando}" maxlength="3" />
+	</div>
+
+
+	<div class="form-group col-md-2">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_total']}" />
+		<p:inputText
+			value="#{finLancamentoPagarMB.finLancamentoPagar.valorTotal}"
+			tabindex="21"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_total']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_total']}"
+			disabled="#{finLancamentoPagarMB.visualizando}" />
+	</div>
+
+	<div class="form-group col-md-2">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_pagar']}" />
+		<p:inputText
+			value="#{finLancamentoPagarMB.finLancamentoPagar.valorAPagar}"
+			tabindex="22"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_pagar']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_pagar']}"
+			disabled="#{finLancamentoPagarMB.visualizando}" />
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_data_lancamento']}" />
+		<p:calendar tabindex="23"
+			value="#{finLancamentoPagarMB.finLancamentoPagar.dataLancamento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_data_lancamento']}"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_data_lancamento']}"
+			required="true">
+		</p:calendar>
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_primeiro_vencimento']}" />
+		<p:calendar tabindex="24"
+			value="#{finLancamentoPagarMB.finLancamentoPagar.primeiroVencimento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_primeiro_vencimento']}"
+			requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_primeiro_vencimento']}"
+			required="true">
+		</p:calendar>
+	</div>
+</div>
+
+<div class="row">
+	<p:fieldset
+		legend="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas']}">
+
+		<div class="form-group col-md-4">
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_conta_caixa']}" />
+			<p:selectOneMenu tabindex="25" converter="contaCaixaConverter"
+				required="false" value="#{finLancamentoPagarMB.contaCaixa}"
+				disabled="#{finLancamentoPagarMB.visualizando}"
+				styleClass="form-control"
+				label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_conta_caixa']}"
+				requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_conta_caixa']}"
+				filter="true">
+				
+				<f:selectItems value="#{finLancamentoPagarMB.listaContaCaixa}"
+					var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+			</p:selectOneMenu>
+		</div>
+
+
+		<div class="form-group col-md-4">
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_natureza_financeira']}" />
+			<p:selectOneMenu tabindex="25"
+				converter="naturezaFinanceiraConverter" required="false"
+				value="#{finLancamentoPagarMB.naturezaFinanceira}"
+				disabled="#{finLancamentoPagarMB.visualizando}"
+				styleClass="form-control"
+				label="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_natureza_financeira']}"
+				requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fieldset_geracao_parcelas_natureza_financeira']}"
+				filter="true">
+				
+				<f:selectItems
+					value="#{finLancamentoPagarMB.listaNaturezaFinanceira}" var="item"
+					itemLabel="#{item.descricao}" itemValue="#{item}" />
+			</p:selectOneMenu>
+		</div>
+
+	</p:fieldset>
+
+</div>
+
+
+</p:panel>
+</html>

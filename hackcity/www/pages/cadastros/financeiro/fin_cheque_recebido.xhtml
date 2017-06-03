@@ -1,0 +1,456 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_custodia_cheque_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finChequeRecebidoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finChequeRecebidoMB.state}" />
+								<t:saveState value="#{finChequeRecebidoMB.finChequeRecebido}" />
+								<t:saveState value="#{finChequeRecebidoMB.objetos}" />
+
+								<p:outputPanel styleClass="clear" />
+								<hr />
+								<div class="row">
+
+									<div class="col-md-12">
+
+										<p:dataTable id="dataTableFinFluxoCaixaBanco"
+											value="#{finChequeRecebidoMB.objetos}"		
+											rendered="#{not finChequeRecebidoMB.editando}"									
+											styleClass="ajusta_coluna" var="item" paginator="true"
+											lazy="true" rows="5" scrollable="true"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+											<f:facet name="header">
+												<p:commandButton title="#{text['label.editar']}" 
+													rendered="#{not finChequeRecebidoMB.editando}"
+													icon="ui-icon-refresh" styleClass="aEsquerda"
+													actionListener="#{finChequeRecebidoMB.listar()}"
+													update="@form :mensagens" />
+
+											</f:facet>
+
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_conta_caixa']}">
+												<p:outputLabel
+													value="#{item.contaCaixa.descricao}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_cpf_cnpj']}">
+												<p:outputLabel
+													value="#{item.cpfCnpj}" />
+											</p:column>
+											
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_nome']}">
+												<p:outputLabel
+													value="#{item.nome}" />
+											</p:column>
+											
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_numero']}">
+												<p:outputLabel
+													value="#{item.numero}" />
+											</p:column>
+											
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_data_emissao']}">
+												<p:outputLabel
+													value="#{item.dataEmissao}" >
+														<f:converter converterId="dataConverter"/>
+													</p:outputLabel>
+											</p:column>
+											
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_valor']}">
+												<p:outputLabel
+													value="#{item.valor}" >
+														<f:converter converterId="mascaraValorBigDecimalConverter"/>
+													</p:outputLabel>
+											</p:column>
+											
+											<p:column
+												headerText="#{text['cadastro_fin_custodia_cheque_label_valor_recebido']}">
+												<p:outputLabel
+													value="#{item.valorRecebido}" >
+														<f:converter converterId="mascaraValorBigDecimalConverter"/>
+													</p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Ações">
+												<div class="row col-md-12">
+													<div class="btn-group">
+														<p:menuButton value="#{text['label.opcao']}">
+															<p:menuitem value="#{text['label.detalhes']}"
+																icon="ui-icon-document"
+																actionListener="#{finChequeRecebidoMB.prepararEditar(item)}"
+																process="@this" update="@form messages" />
+															<p:separator />
+
+														</p:menuButton>
+													</div>
+												</div>
+											</p:column>
+										</p:dataTable>
+									</div>
+
+								</div>
+
+								 
+								<p:outputPanel id="outputPanelDetalhe"
+									rendered="#{finChequeRecebidoMB.editando}">
+
+									<div class="row">
+											<div class="form-group col-md-8">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_conta_caixa']}" />
+												<p:selectOneMenu tabindex="10"	
+													converter="contaCaixaConverter"		
+													required="false"								
+													value="#{finChequeRecebidoMB.finChequeRecebido.contaCaixa}"
+													disabled="#{finChequeRecebidoMB.visualizando}"
+													styleClass="form-control"
+													label="#{text['cadastro_fin_custodia_cheque_label_conta_caixa']}"
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_conta_caixa']}" 
+													 filter="true">													
+												 <f:selectItems value="#{finChequeRecebidoMB.listaContaCaixas}" var="item" 
+												 itemLabel="#{item.descricao} - #{item.codigo} - #{item.digito}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>											
+										</div>
+										<div class="form-group col-md-3">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_cpf_cnpj']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.cpfCnpj}" tabindex="11"
+												label="#{text['cadastro_fin_custodia_cheque_label_cpf_cnpj']}"
+												required="false" styleClass="form-control" readonly="true"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_cpf_cnpj']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-3">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_nome']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.nome}" tabindex="12"
+												label="#{text['cadastro_fin_custodia_cheque_label_nome']}"
+												required="false" styleClass="form-control" readonly="true"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_nome']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>	
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_codigo_banco']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.codigoBanco}" tabindex="13"
+												label="#{text['cadastro_fin_custodia_cheque_label_codigo_banco']}"
+												required="false" styleClass="form-control" readonly="true"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_codigo_banco']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_codigo_agencia']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.codigoAgencia}" tabindex="14"
+												label="#{text['cadastro_fin_custodia_cheque_label_codigo_agencia']}"
+												required="false" styleClass="form-control" readonly="true"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_codigo_agencia']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_conta']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.conta}" tabindex="15"
+												label="#{text['cadastro_fin_custodia_cheque_label_conta']}"
+												required="false" styleClass="form-control" readonly="true"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_conta']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_fin_custodia_cheque_label_numero']}" />
+											<p:inputText 
+												value="#{finChequeRecebidoMB.finChequeRecebido.numero}" tabindex="16"
+												label="#{text['cadastro_fin_custodia_cheque_label_numero']}"
+												required="false" styleClass="form-control"  
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_numero']}"												
+												disabled="#{finChequeRecebidoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_custodia_cheque_label_data_emissao']}" styleClass="bLabel"  ></p:outputLabel>
+											<p:calendar   tabindex="17"	  
+												value="#{finChequeRecebidoMB.finChequeRecebido.dataEmissao}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_custodia_cheque_label_data_emissao']}"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_data_emissao']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_custodia_cheque_label_bom_para']}" styleClass="bLabel"  ></p:outputLabel>
+											<p:calendar   tabindex="18"	  
+												value="#{finChequeRecebidoMB.finChequeRecebido.bomPara}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_custodia_cheque_label_bom_para']}"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_bom_para']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_custodia_cheque_label_data_compensacao']}" styleClass="bLabel"  ></p:outputLabel>
+											<p:calendar   tabindex="19"	  
+												value="#{finChequeRecebidoMB.finChequeRecebido.dataCompensacao}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_custodia_cheque_label_data_compensacao']}"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_data_compensacao']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_valor']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.valor}" tabindex="20"
+													label="#{text['cadastro_fin_custodia_cheque_label_valor']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_valor']}"
+													/>		 
+										</p:outputPanel>
+									</div>
+									 							
+									<div class="row">
+										<div class="col-md-12">
+										<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_custodia']}" />
+										<p:separator style="height:1px" styleClass="col-md-11"/>	
+										</div>
+									</div>
+									<div class="row">
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_custodia_cheque_label_custodia_data']}" styleClass="bLabel"  ></p:outputLabel>
+											<p:calendar   tabindex="21"	  
+												value="#{finChequeRecebidoMB.finChequeRecebido.custodiaData}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_custodia_cheque_label_custodia_data']}"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_custodia_data']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_custodia_tarifa']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.custodiaTarifa}" tabindex="22"
+													label="#{text['cadastro_fin_custodia_cheque_label_custodia_tarifa']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_custodia_tarifa']}"
+													/>		 
+										</p:outputPanel>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_custodia_comissao']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.custodiaComissao}" tabindex="23"
+													label="#{text['cadastro_fin_custodia_cheque_label_custodia_comissao']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_custodia_comissao']}"
+													/>		 
+										</p:outputPanel>
+									
+									</div>
+									
+										<div class="row">
+											<div class="col-md-12">
+											<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_fin_custodia_cheque_label_desconto']}" />
+											<p:separator style="height:1px" styleClass="col-md-11"/>	
+											</div>
+										</div>
+									<div class="row">
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_fin_custodia_cheque_label_desconto_data']}" styleClass="bLabel"  ></p:outputLabel>
+											<p:calendar   tabindex="24"	  
+												value="#{finChequeRecebidoMB.finChequeRecebido.descontoData}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fin_custodia_cheque_label_desconto_data']}"
+												requiredMessage="#{text['cadastro_fin_custodia_cheque_label_desconto_data']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_desconto_tarifa']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.descontoTarifa}" tabindex="25"
+													label="#{text['cadastro_fin_custodia_cheque_label_desconto_tarifa']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_desconto_tarifa']}"
+													/>		 
+										</p:outputPanel>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_desconto_comissao']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.descontoComissao}" tabindex="26"
+													label="#{text['cadastro_fin_custodia_cheque_label_desconto_comissao']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_desconto_comissao']}"
+													/>		 
+										</p:outputPanel>
+									
+									</div>
+									
+									<div class="row">
+											<div class="col-md-12">
+											<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_fin_custodia_cheque_label_total_recebido']}" />
+											<p:separator style="height:1px" styleClass="col-md-11"/>	
+											</div>
+									</div>
+									
+									<div class="row">
+										<p:outputPanel styleClass="form-group col-md-4">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_custodia_cheque_label_valor_recebido']}" />
+												<p:inputText  
+													value="#{finChequeRecebidoMB.finChequeRecebido.valorRecebido}" tabindex="27"
+													label="#{text['cadastro_fin_custodia_cheque_label_valor_recebido']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													requiredMessage="#{text['cadastro_fin_custodia_cheque_label_valor_recebido']}"
+													/>		 
+										</p:outputPanel>
+									</div>	
+									
+									<div class="row">
+										 
+
+										<div class="col-md-3">
+										<p:commandButton title="#{text['label.editar']}"
+												value="#{text['label.editar']}" 
+												actionListener="#{finChequeRecebidoMB.alterar()}"
+												process="@form" update="@form :mensagens" />
+										 
+											<p:commandButton title="#{text['label.fechar']}"
+												value="#{text['label.fechar']}"
+												actionListener="#{finChequeRecebidoMB.voltar()}"
+												process="@this" update="@form :mensagens" />
+										</div>
+									</div>
+								</p:outputPanel>
+
+
+
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

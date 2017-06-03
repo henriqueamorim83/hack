@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendas_aberto" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e052d989-0b0c-4bcf-a7fe-4c2b015ff99c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="35"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<field name="dataPedido" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="valorDesconto" class="java.lang.String"/>
+	<field name="usuarioDesconto" class="java.lang.String"/>
+	<field name="frete" class="java.lang.String"/>
+	<field name="localEntrega" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<field name="formaPagamento" class="java.lang.String"/>
+	<field name="fornecedor" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<field name="previsaoEntrega" class="java.lang.String"/>
+	<field name="previsaoPagamento" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="listaProdutos" class="java.util.List"/>
+	<field name="localCobranca" class="java.lang.String"/>
+	<field name="contato" class="java.lang.String"/>
+	<field name="taxaDesconto" class="java.lang.String"/>
+	<field name="subTotal" class="java.lang.String"/>
+	<title>
+		<band height="162">
+			<image>
+				<reportElement x="664" y="0" width="138" height="71" uuid="2c8e53d0-3122-47e7-9845-e8b8960d5d76"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="153" y="11" width="481" height="47" uuid="01a570fc-735c-425f-b2d4-3afb69620740"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Compras"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="581" y="71" width="221" height="20" uuid="3a9ee232-15d8-4881-ba23-5a6d6da1928b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="111" width="153" height="20" uuid="324e3697-0c48-4005-8b33-80be4a335719"/>
+				<textFieldExpression><![CDATA["Data Pedido: "+$F{dataPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="235" height="20" uuid="512de610-89b5-4595-a083-cf5277722767"/>
+				<textFieldExpression><![CDATA["Usuário : "+ $F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="223" y="91" width="298" height="20" uuid="58a248db-294d-4f74-bcfd-0e262fbae55e"/>
+				<textFieldExpression><![CDATA["Cliente : "+ $F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="521" y="91" width="281" height="20" uuid="839a57ee-d40b-4d4d-bfa1-24eb803e3c15"/>
+				<textFieldExpression><![CDATA["Fornecedor : "+ $F{fornecedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="91" width="223" height="20" uuid="ac65bec7-bfec-4348-9b6d-4c93b8471afe"/>
+				<textFieldExpression><![CDATA["Tipo : "+ $F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="153" y="111" width="153" height="20" uuid="6c70a8f8-8503-4155-afcc-d92b8882d9cb"/>
+				<textFieldExpression><![CDATA["Prev. Entrega: "+$F{previsaoEntrega}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="306" y="111" width="153" height="20" uuid="4f576a80-ea92-47e2-9b81-a1be3e170c7e"/>
+				<textFieldExpression><![CDATA["Prev. Pagto: "+$F{previsaoPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="111" width="190" height="20" uuid="b2cdbcca-9c9e-4cea-a07e-6a8f4da6b9aa"/>
+				<textFieldExpression><![CDATA["Forma Pagto: "+$F{formaPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="649" y="111" width="153" height="20" uuid="a15d2732-67c4-4798-961f-602c57a68017"/>
+				<textFieldExpression><![CDATA["Tipo Frete: "+$F{frete}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="131" width="306" height="20" uuid="c20ff323-e3c5-40b5-9097-3eb8dc06406c"/>
+				<textFieldExpression><![CDATA["Local Entrega: "+$F{localEntrega}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="306" y="131" width="275" height="20" uuid="8700ed4a-f0ce-4e9d-8a3f-f2c0ce08c7a8"/>
+				<textFieldExpression><![CDATA["Local Cobrança: "+$F{localCobranca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="581" y="131" width="221" height="20" uuid="5616ea21-0d9d-49d9-9394-b8b44280d79b"/>
+				<textFieldExpression><![CDATA["Contato: "+$F{contato}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="62">
+			<textField>
+				<reportElement x="0" y="35" width="802" height="20" uuid="c61ad79f-b454-44dd-9f29-326a0c94f086"/>
+				<textElement textAlignment="Center" markup="html">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Produtos"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="193" y="0" width="176" height="20" uuid="04bafff0-8ee6-4613-9ae8-ea09ac3e5351"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Taxa Desconto : <b>"+ $F{taxaDesconto}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="168" height="20" uuid="04c0d70c-c3fb-4b9a-8cd5-b6d3cb828121"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Desconto : <b>"+ $F{valorDesconto}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="202" height="20" uuid="a8d1e37b-4195-45dd-822a-fc6c306120cc"/>
+				<textElement textAlignment="Left" markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Total : <b>"+ $F{valorTotal}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="162" height="20" uuid="d99e2ca9-442a-40f5-ad81-9ca79573f269"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SubTotal : <b>"+ $F{subTotal}+"</b>"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="2" y="55" width="800" height="5" uuid="c2582f3c-6ded-4081-8917-1c9eda3e02bc"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaProdutos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_compras_pedido_produtos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="682" y="0" width="80" height="20" uuid="d4a69876-0dc0-4df9-972d-2c0b85723795"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="0" width="40" height="20" uuid="46f00131-29f4-4bd4-bcca-e1be5f0440e7"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

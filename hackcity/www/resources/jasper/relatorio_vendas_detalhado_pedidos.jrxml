@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_vendas_detalhado_pedidos" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8f133f08-0c8b-421e-b4a3-578c5174fd00">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="valorUnitario" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="valorVenda" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20">
+			<textField>
+				<reportElement positionType="Float" x="275" y="0" width="246" height="20" uuid="65fb2e9d-9d35-4404-a0b7-22cd56af4bc8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Descrição"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="521" y="0" width="82" height="20" uuid="7024ccca-8ef3-48d7-9d9e-1ef6432bcf76"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Unitário"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="687" y="0" width="115" height="20" uuid="b7087887-8919-45fb-a77a-4ab0729b9874"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor da Venda"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="603" y="0" width="84" height="20" uuid="492e2c4c-0a20-4d73-a172-244befadefa5"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Quantidade "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="0" width="144" height="20" uuid="b2e7aade-34db-436a-9cf8-438d2f114c2a"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Grupo"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="144" y="0" width="131" height="20" uuid="9d7b9384-fa53-45bf-9a0b-b74bdc12a708"/>
+				<textElement textAlignment="Center">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Categoria"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" x="144" y="0" width="131" height="20" uuid="0eb3c62b-cf65-483f-850f-102186beb5c6"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="521" y="0" width="82" height="20" uuid="51685abe-6484-493d-aedc-d7bb62e3856c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valorUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="0" width="144" height="20" uuid="8df6e877-99d5-46b4-88ac-a5bd72df5dc5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{grupo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="603" y="0" width="84" height="20" uuid="ecf2228e-be50-4589-9ab3-a1c061f9d78f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="687" y="0" width="115" height="20" uuid="4951b145-8bad-4435-90bc-5adfedba1487"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorVenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="275" y="0" width="246" height="20" uuid="94328930-788d-4ada-bd53-5b94810bde95"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

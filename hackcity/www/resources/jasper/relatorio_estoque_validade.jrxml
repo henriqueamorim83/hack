@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_estoque" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82a7c8b0-ccc6-40b0-91a7-c3cecd99b95d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="codigoProduto" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="ean" class="java.lang.String"/>
+	<field name="fornecedor" class="java.lang.String"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="listaEntradas" class="java.util.List"/>
+	<field name="margem" class="java.lang.String"/>
+	<field name="subcategoria" class="java.lang.String"/>
+	<field name="precoCompra" class="java.lang.String"/>
+	<field name="precoVenda" class="java.lang.String"/>
+	<field name="qtdMinima" class="java.lang.String"/>
+	<field name="qtdMaxima" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<title>
+		<band height="84">
+			<image>
+				<reportElement x="667" y="0" width="135" height="59" uuid="cadcb753-af7f-486c-b21c-242aaa674ca9"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="199" y="21" width="384" height="38" uuid="bd82d481-fe29-4672-a34f-b24b01cf194c"/>
+				<textElement textAlignment="Center">
+					<font size="30" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Estoque"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="603" y="63" width="199" height="20" uuid="d6f9e671-423e-4b9f-b166-4a9840ff2ecf"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="63" width="276" height="20" uuid="28757ce6-c5b9-4009-b6c8-1dfb51d14e57"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Usuário: "+$F{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="150">
+			<textField>
+				<reportElement x="0" y="48" width="148" height="20" uuid="55a252d8-b58d-446d-81ed-df511bc3caf1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cod.Produto: "+$F{codigoProduto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="76" width="234" height="20" uuid="8d0c5d92-df92-4e32-b40b-195deecb21f2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fornecedor: "+$F{fornecedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="76" width="199" height="20" uuid="5397fdc5-00a9-4c74-a29f-ad25e40a9d91"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Grupo: "+$F{grupo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="76" width="185" height="20" uuid="68894da0-364a-4aba-8404-e2b8acfc3712"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Categoria: "+$F{categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="618" y="76" width="184" height="20" uuid="1d799b38-0a5c-4f73-bf84-569bf0ff07fc"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sub Categoria: "+$F{subcategoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="107" width="127" height="20" uuid="90322933-59b3-426f-869d-4e937a93b811"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Qtd. Minima: "+$F{qtdMinima}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="48" width="170" height="20" uuid="c5be58fe-46df-469d-b069-bafc372b2e98"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cod. Barras: "+$F{ean}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="107" width="127" height="20" uuid="28465cd2-22bc-4cb4-962b-12bac7b6b6ec"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Qtd. Máxima: "+$F{qtdMaxima}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="107" width="208" height="20" uuid="60e5f5c1-cfda-439c-91e3-43c1b3643c34"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Preço de Compra: "+" R$ "+$F{precoCompra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="618" y="107" width="184" height="20" uuid="be035373-22d3-441c-bdf6-536efab5c884"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Preço de Venda: "+" R$ "+$F{precoVenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="107" width="156" height="20" uuid="9d077583-0196-4f5c-9077-44a9a6eba964"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Margem : "+$F{margem}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="134" width="802" height="15" uuid="6b3934f4-db7b-4614-bbbd-86152a0321ba">
+					<printWhenExpression><![CDATA[$F{listaEntradas}!=null]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaEntradas})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_estoque_entradas.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="0" y="15" width="445" height="20" uuid="5b06b5ee-b30e-49ba-bdc7-c90a4f3b230e"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Descrição: "+$F{descricao}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="680" y="0" width="80" height="20" uuid="a3198c6e-0768-4deb-8f39-35f798866925"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="0" width="40" height="20" uuid="8b3bb2db-e895-4dc3-ab1b-9ec9edb44b82"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

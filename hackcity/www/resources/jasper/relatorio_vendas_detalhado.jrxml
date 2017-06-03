@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendas_aberto" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e052d989-0b0c-4bcf-a7fe-4c2b015ff99c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<field name="numeroPedido" class="java.lang.String"/>
+	<field name="dataVenda" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="desconto" class="java.lang.String"/>
+	<field name="usuarioDesconto" class="java.lang.String"/>
+	<field name="frete" class="java.lang.String"/>
+	<field name="outros" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<field name="formaPagamento" class="java.lang.String"/>
+	<field name="parcelamento" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<field name="dataInicio" class="java.lang.String"/>
+	<field name="dataFinal" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="listaProdutos" class="java.util.List"/>
+	<field name="listaParcelamentos" class="java.util.List"/>
+	<title>
+		<band height="91">
+			<image>
+				<reportElement x="664" y="0" width="138" height="71" uuid="2c8e53d0-3122-47e7-9845-e8b8960d5d76"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="153" y="11" width="481" height="47" uuid="01a570fc-735c-425f-b2d4-3afb69620740"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Vendas"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="555" y="71" width="247" height="20" uuid="3a9ee232-15d8-4881-ba23-5a6d6da1928b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="71" width="242" height="20" uuid="324e3697-0c48-4005-8b33-80be4a335719"/>
+				<textFieldExpression><![CDATA["Período: "+$F{dataInicio}+" à "+$F{dataFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="242" height="20" uuid="512de610-89b5-4595-a083-cf5277722767"/>
+				<textFieldExpression><![CDATA["Usuário : "+ $F{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="50">
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="43" width="802" height="6" uuid="05a3c545-d4e0-429c-b9d1-66095f822c6e"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaProdutos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_vendas_detalhado_pedidos.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="275" y="22" width="242" height="20" uuid="c61ad79f-b454-44dd-9f29-326a0c94f086"/>
+				<textElement textAlignment="Center" markup="html">
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Produtos"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="165" y="0" width="253" height="20" uuid="04bafff0-8ee6-4613-9ae8-ea09ac3e5351"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cliente : <b>"+ $F{cliente}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="207" height="20" uuid="04c0d70c-c3fb-4b9a-8cd5-b6d3cb828121"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data Venda : <b>"+ $F{dataVenda}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="202" height="20" uuid="a8d1e37b-4195-45dd-822a-fc6c306120cc"/>
+				<textElement textAlignment="Left" markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Situação : <b>"+ $F{situacao}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="162" height="20" uuid="d99e2ca9-442a-40f5-ad81-9ca79573f269"/>
+				<textElement markup="html">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº Pedido : <b>"+ $F{numeroPedido}+"</b>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="682" y="0" width="80" height="20" uuid="d4a69876-0dc0-4df9-972d-2c0b85723795"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="0" width="40" height="20" uuid="46f00131-29f4-4bd4-bcca-e1be5f0440e7"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

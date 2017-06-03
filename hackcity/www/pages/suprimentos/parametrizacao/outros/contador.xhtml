@@ -1,0 +1,399 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="true">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_contador_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{contadorMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{contadorMB.state}" />
+								<t:saveState value="#{contadorMB.contador}" />
+								<t:saveState value="#{contadorMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{contadorMB.pesquisando}">
+									<div class="row">
+									
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{contadorMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{contadorMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{contadorMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{contadorMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_contador_label_nome']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.nome}" />
+										</p:column>
+										 <p:column headerText="#{text['cadastro_contador_label_cpf']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.cpf}" />
+										</p:column>
+										<p:column headerText="#{text['cadastro_contador_label_cnpj']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.cnpj}" />
+										</p:column>
+										<p:column headerText="#{text['cadastro_contador_label_fone']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.fone}" />
+										</p:column>
+										<p:column headerText="#{text['cadastro_contador_label_email']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.email}" />
+										</p:column>
+										<p:column headerText="Ações" styleClass="texto-align-center">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{contadorMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										         <p:menuitem value="#{text['label.editar']}"  icon="ui-icon-document" 
+										        actionListener="#{contadorMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not contadorMB.pesquisando}">
+									
+									<div class="row">
+										
+										<div class="form-group col-md-12">
+											<p:focus for="nome" />
+											<p:outputLabel styleClass="bLabel"  for="nome"
+												value="#{text['cadastro_contador_label_nome']}" />
+											<p:inputText id="nome"
+												value="#{contadorMB.contador.nome}" tabindex="13"
+												label="#{text['cadastro_contador_label_nome']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_nome']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									<div class="row">
+										
+										<div class="form-group col-md-2">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_inscricao_crc']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.inscricaoCrc}" tabindex="14"
+												label="#{text['cadastro_contador_label_inscricao_crc']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_inscricao_crc']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-1">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_uf_crc']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.ufCrc}" tabindex="15"
+												label="#{text['cadastro_contador_label_uf_crc']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_uf_crc']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="2" />
+										</div>
+										
+										<div class="form-group col-md-2">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_cpf']}" />
+											<p:inputMask mask="999.999.999-99" 
+												value="#{contadorMB.contador.cpf}" tabindex="16"
+												label="#{text['cadastro_contador_label_cpf']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_cpf']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-3">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_cnpj']}" />
+											<p:inputMask mask="99.999.999/9999-99" 
+												value="#{contadorMB.contador.cnpj}" tabindex="17"
+												label="#{text['cadastro_contador_label_cnpj']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_cnpj']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-4">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_logradouro']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.logradouro}" tabindex="18"
+												label="#{text['cadastro_contador_label_logradouro']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_logradouro']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="2" />
+										</div>
+										
+										<div class="form-group col-md-1">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_numero']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.numero}" tabindex="19"
+												label="#{text['cadastro_contador_label_numero']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_numero']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="2" />
+										</div>
+										
+										<div class="form-group col-md-3">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_complemento']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.complemento}" tabindex="20"
+												label="#{text['cadastro_contador_label_complemento']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_complemento']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="200" />
+										</div>
+										
+										<div class="form-group col-md-3">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_bairro']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.bairro}" tabindex="21"
+												label="#{text['cadastro_contador_label_bairro']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_bairro']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="200" />
+										</div>
+									
+									</div>
+									<div class="row">
+									
+										<div class="form-group col-md-3">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_cidade']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.cidade}" tabindex="22"
+												label="#{text['cadastro_contador_label_cidade']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_cidade']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="200" />
+										</div>
+										
+										<div class="form-group col-md-1">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_cep']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.cidade}" tabindex="23"
+												label="#{text['cadastro_contador_label_cep']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_contador_label_cep']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="9" />
+										</div>
+										
+										<div class="form-group col-md-1">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_municipio_ibge']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.municipioIbge}" tabindex="24"
+												label="#{text['cadastro_contador_label_municipio_ibge']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_contador_label_municipio_ibge']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="9" />
+										</div>
+										
+										<div class="form-group col-md-1">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_uf']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.uf}" tabindex="25"
+												label="#{text['cadastro_contador_label_uf']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_contador_label_uf']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="2" />
+										</div>
+										
+										<div class="form-group col-md-2">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_fone']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.fone}" tabindex="26"
+												label="#{text['cadastro_contador_label_fone']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_contador_label_uf']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+										<div class="form-group col-md-2">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_fax']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.fax}" tabindex="27"
+												label="#{text['cadastro_contador_label_fax']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_contador_label_fax']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-5">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_email']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.email}" tabindex="28"
+												label="#{text['cadastro_contador_label_email']}"
+												required="false" styleClass="form-control  "
+												requiredMessage="#{text['cadastro_contador_label_email']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="200" />
+										</div>
+										
+										<div class="form-group col-md-7">											 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_contador_label_site']}" />
+											<p:inputText 
+												value="#{contadorMB.contador.site}" tabindex="29"
+												label="#{text['cadastro_contador_label_site']}"
+												required="false" styleClass="form-control  "
+												requiredMessage="#{text['cadastro_contador_label_site']}"												
+												disabled="#{contadorMB.visualizando}"												
+												maxlength="200" />
+										</div>
+									
+									</div>
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{contadorMB.adiciona}"
+														rendered="#{contadorMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{contadorMB.alterar}"
+														rendered="#{contadorMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{contadorMB.limpar}"
+														rendered="#{contadorMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{contadorMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

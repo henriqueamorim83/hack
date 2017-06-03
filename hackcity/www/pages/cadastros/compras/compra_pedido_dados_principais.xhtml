@@ -1,0 +1,388 @@
+	<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+ 
+<div class="row">
+	<p:outputPanel styleClass="form-group col-md-5">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_tipo_pedido']}" />
+		<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+			value="#{compraPedidoMB.compraPedido.compraTipoPedido}" tabindex="20"
+			styleClass="form-control width100" required="true"
+			requiredMessage="#{text['cadastro_compras_pedido_label_tipo_pedido']}"
+			filter="true">
+
+			<f:selectItems value="#{compraPedidoMB.listaCompraTipoPedido}"
+				var="item" itemLabel="#{item.nome.toUpperCase()}"
+				itemValue="#{item}" />
+			<f:converter converterId="compraTipoPedidoConverter" />
+
+		</p:selectOneMenu>
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="form-group col-md-5">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_fornecedor']}" />
+		<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+			value="#{compraPedidoMB.compraPedido.fornecedor}" tabindex="21"
+			styleClass="form-control width100" required="true"
+			requiredMessage="#{text['cadastro_compras_pedido_label_fornecedor']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{compraPedidoMB.listaFornecedor}" var="item"
+				itemLabel="#{item.pessoa.nome.toUpperCase()}" itemValue="#{item}" />
+			<f:converter converterId="fornecedorConverter" />
+		</p:selectOneMenu>
+	</p:outputPanel>
+
+
+</div>
+
+<div class="row">
+	<div class="form-group col-md-2">
+		<p:outputLabel
+			value="#{text['cadastro_compras_pedido_label_data_pedido']}"></p:outputLabel>
+		<p:calendar tabindex="22"
+			value="#{compraPedidoMB.compraPedido.dataPedido}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_compras_pedido_label_data_pedido']}"
+			requiredMessage="#{text['cadastro_compras_pedido_label_data_pedido']}"
+			required="true">
+		</p:calendar>
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel
+			value="#{text['cadastro_compras_pedido_label_previsao_entrega']}"></p:outputLabel>
+		<p:calendar tabindex="23"
+			value="#{compraPedidoMB.compraPedido.dataPrevistaEntrega}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_compras_pedido_label_previsao_entrega']}"
+			requiredMessage="#{text['cadastro_compras_pedido_label_previsao_entrega']}"
+			required="false">
+		</p:calendar>
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel
+			value="#{text['cadastro_compras_pedido_label_previsao_pagamento']}"></p:outputLabel>
+		<p:calendar tabindex="24"
+			value="#{compraPedidoMB.compraPedido.dataPrevisaoPagamento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_compras_pedido_label_previsao_pagamento']}"
+			requiredMessage="#{text['cadastro_compras_pedido_label_previsao_pagamento']}"
+			required="false">
+		</p:calendar>
+	</div>
+
+	<p:outputPanel styleClass="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_forma_pagamento']}" />
+		<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+			value="#{compraPedidoMB.compraPedido.formaPagamento}" tabindex="25"
+			styleClass="form-control width100"
+			requiredMessage="#{text['cadastro_compras_pedido_label_forma_pagamento']}"
+			filter="true">
+			<f:selectItem
+				itemLabel="#{text['cadastro_compras_pedido_label_forma_pagamento_avista']}"
+				itemValue="0" />
+			<f:selectItem
+				itemLabel="#{text['cadastro_compras_pedido_label_forma_pagamento_prazo']}"
+				itemValue="1" />
+			<f:selectItem
+				itemLabel="#{text['cadastro_compras_pedido_label_forma_pagamento_outros']}"
+				itemValue="2" />
+
+		</p:selectOneMenu>
+	</p:outputPanel>
+
+	<p:outputPanel styleClass="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_tipo_frete']}" />
+		<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+			value="#{compraPedidoMB.compraPedido.tipoFrete}" tabindex="26"
+			styleClass="form-control width100"
+			requiredMessage="#{text['cadastro_compras_pedido_label_tipo_frete']}"
+			filter="true">
+			<f:selectItem
+				itemLabel="#{text['cadastro_compras_pedido_label_tipo_frete_cif']}"
+				itemValue="0" />
+			<f:selectItem
+				itemLabel="#{text['cadastro_compras_pedido_label_tipo_frete_fob']}"
+				itemValue="1" />
+
+		</p:selectOneMenu>
+	</p:outputPanel>
+
+</div>
+
+<div class="row">
+	<div class="form-group col-md-5">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_local_entrega']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.localEntrega}"
+			disabled="#{compraPedidoMB.visualizando}" tabindex="27"
+			label="#{text['cadastro_compras_pedido_label_local_entrega']}"
+			required="false" styleClass="form-control"
+			requiredMessage="#{text['cadastro_compras_pedido_label_local_entrega']}"
+			maxlength="100" />
+	</div>
+
+	<div class="form-group col-md-4">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_local_cobranca']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.localCobranca}"
+			disabled="#{compraPedidoMB.visualizando}" tabindex="28"
+			label="#{text['cadastro_compras_pedido_label_local_cobranca']}"
+			required="false" styleClass="form-control"
+			requiredMessage="#{text['cadastro_compras_pedido_label_local_cobranca']}"
+			maxlength="100" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_contato']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.contato}"
+			disabled="#{compraPedidoMB.visualizando}" tabindex="29"
+			label="#{text['cadastro_compras_pedido_label_contato']}"
+			required="false" styleClass="form-control"
+			requiredMessage="#{text['cadastro_compras_pedido_label_contato']}"
+			maxlength="100" />
+	</div>
+
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_subtotal']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorSubtotal}"
+			tabindex="30" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_subtotal']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_subtotal']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_taxa_desconto']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.taxaDesconto}"
+			tabindex="31" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_taxa_desconto']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_taxa_desconto']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_desconto']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorDesconto}"
+			tabindex="32" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_desconto']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_desconto']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_total_pedido']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorTotalPedido}"
+			tabindex="33" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_total_pedido']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_total_pedido']}"
+			maxlength="30" />
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_base_calculo_icms']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.baseCalculoIcms}"
+			tabindex="34" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_base_calculo_icms']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_base_calculo_icms']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_icms']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorIcms}"
+			tabindex="35" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_icms']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_icms']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_base_calculo_icms_st']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.baseCalculoIcmsSt}"
+			tabindex="36" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_base_calculo_icms_st']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_base_calculo_icms_st']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_icms_st']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorIcmsSt}"
+			tabindex="37" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_icms_st']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_icms_st']}"
+			maxlength="30" />
+	</div>
+
+
+
+</div>
+
+<div class="row">
+
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_total_produtos']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorTotalProdutos}"
+			tabindex="38" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_total_produtos']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_total_produtos']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_frete']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorFrete}"
+			tabindex="39" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_frete']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_frete']}"
+			maxlength="30" />
+	</div>
+
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_outras_despesas']}" />
+		<p:inputText
+			value="#{compraPedidoMB.compraPedido.valorOutrasDespesas}"
+			tabindex="40" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_outras_despesas']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_outras_despesas']}"
+			maxlength="30" />
+	</div>
+
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_seguro']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorSeguro}"
+			tabindex="41" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_seguro']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_seguro']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_ipi']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorIpi}"
+			tabindex="42" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_ipi']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_ipi']}"
+			maxlength="30" />
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_valor_nf']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.valorTotalNf}"
+			tabindex="43" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_valor_nf']}"
+			required="false" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_compras_pedido_label_valor_nf']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_qtd_parcelas']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.quantidadeParcelas}"
+			tabindex="44" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_qtd_parcelas']}"
+			required="false" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_compras_pedido_label_qtd_parcelas']}"
+			maxlength="30" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_dias_primeiro_vencimento']}" />
+		<p:inputText
+			value="#{compraPedidoMB.compraPedido.diasPrimeiroVencimento}"
+			tabindex="45" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_dias_primeiro_vencimento']}"
+			required="false" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_compras_pedido_label_dias_primeiro_vencimento']}"
+			maxlength="30" />
+	</div>
+
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_pedido_label_dias_intervalo']}" />
+		<p:inputText value="#{compraPedidoMB.compraPedido.diasIntervalo}"
+			tabindex="46" disabled="#{compraPedidoMB.visualizando}"
+			label="#{text['cadastro_compras_pedido_label_dias_intervalo']}"
+			required="false" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_compras_pedido_label_dias_intervalo']}"
+			maxlength="30" />
+	</div>
+
+</div>
+ 
+</html>

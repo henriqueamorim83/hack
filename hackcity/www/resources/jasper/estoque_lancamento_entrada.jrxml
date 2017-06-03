@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estoque_lancamento_entrada" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f20e9b3-544d-4461-a075-2183a59080d8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="33"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMAGEM" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="data" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="localEstoque" class="java.lang.String"/>
+	<field name="numeroItens" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<field name="observacoes" class="java.lang.String"/>
+	<field name="numeroNota" class="java.lang.String"/>
+	<field name="serie" class="java.lang.String"/>
+	<field name="dataEmissao" class="java.lang.String"/>
+	<field name="valorAdicional" class="java.lang.String"/>
+	<field name="itens" class="java.util.List"/>
+	<field name="confirmacao" class="java.lang.String"/>
+	<title>
+		<band height="54" splitType="Stretch">
+			<image>
+				<reportElement x="646" y="0" width="156" height="50" uuid="541fa143-cf56-47ae-a915-7471c10c3b80"/>
+			</image>
+			<textField>
+				<reportElement x="186" y="18" width="302" height="21" uuid="3781784e-5bf6-4dd6-bd62-7d62f4cbc587"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LANÇAMENTO DE ENTRADA"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="107">
+			<textField>
+				<reportElement x="0" y="0" width="141" height="20" uuid="27e4a813-32f3-4118-9870-103ec4f7a80d"/>
+				<textFieldExpression><![CDATA["Data : "+$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="0" width="121" height="20" uuid="538b6f99-2608-4d42-9bf7-b28164f925cc"/>
+				<textFieldExpression><![CDATA["Tipo : "+$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="0" width="333" height="20" uuid="012dff25-9351-4073-8e5f-eea30851bf36"/>
+				<textFieldExpression><![CDATA["Local Estoque : "+$F{localEstoque}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="595" y="0" width="123" height="20" uuid="c434e295-691a-405c-ab33-5b0e22e57dbe"/>
+				<textFieldExpression><![CDATA["Nº Nota : "+$F{numeroNota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="718" y="0" width="84" height="20" uuid="980f1899-a7b8-4ef3-83c0-75bdeead8ed0"/>
+				<textFieldExpression><![CDATA["Série : "+$F{serie}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="141" height="20" uuid="f8b84489-d739-4aa7-8e98-c4c3acccaf70"/>
+				<textFieldExpression><![CDATA["Data Emissão : "+$F{dataEmissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="20" width="140" height="20" uuid="0058e2ae-89ce-49d9-aa3b-8220e43a75b9"/>
+				<textFieldExpression><![CDATA["Valor da Adicional : "+$F{valorAdicional}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="20" width="140" height="20" uuid="85ee15ed-3274-4f11-96ce-c8424e152b2a"/>
+				<textFieldExpression><![CDATA["Valor Total : "+$F{valorTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="703" y="20" width="99" height="20" uuid="cae564b3-7518-449e-b9a8-9ab89765103b"/>
+				<textFieldExpression><![CDATA["Confirmado : "+$F{confirmacao}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="40" width="802" height="10" uuid="41133049-3344-4ab6-8e8b-97e58ac85892">
+					<printWhenExpression><![CDATA[$F{itens}!=null]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "estoque_lancamento_entrada_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

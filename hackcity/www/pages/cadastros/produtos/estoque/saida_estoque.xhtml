@@ -1,0 +1,629 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+						<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false"   life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+						</p:outputPanel>
+				
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_saida_estoque_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{saidaEstoqueMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{saidaEstoqueMB.state}" />
+								<t:saveState value="#{saidaEstoqueMB.estoque}" />
+								<t:saveState value="#{saidaEstoqueMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{saidaEstoqueMB.pesquisando}">
+									<div class="row">
+											<!-- Data Inicio-->
+											<p:outputPanel  styleClass="form-group col-md-2">
+											<p:focus for="dataInicio"></p:focus>
+													<p:outputLabel styleClass="bLabel" for="dataInicio" value="#{text['cadastro_saida_estoque_label_data_inicio']}"  />
+													<p:calendar   tabindex="5"	id="dataInicio" disabled="#{saidaEstoqueMB.visualizando}" 
+													value="#{saidaEstoqueMB.dataEntrada}"
+													converter="dataConverter"
+													navigator="true" 
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control" 											
+													label="#{text['cadastro_saida_estoque_label_data_inicio']}"
+													requiredMessage="#{text['cadastro_saida_estoque_label_data_inicio']}"
+													 required="false">											
+													</p:calendar>
+											</p:outputPanel>
+											
+											<p:outputPanel  styleClass="form-group col-md-2">
+											
+													<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_saida_estoque_label_data_final']}"  />
+													<p:calendar   tabindex="6"	id="dataFim" 
+													value="#{saidaEstoqueMB.dataFim}"
+													converter="dataConverter"
+													navigator="true" 
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control" 											
+													label="#{text['cadastro_saida_estoque_label_data_final']}"
+													requiredMessage="#{text['cadastro_saida_estoque_label_data_final']}"
+													 required="false">											
+													</p:calendar>
+											</p:outputPanel>
+											
+											<!-- Pesquisa -->
+											<p:outputPanel  styleClass="form-group col-md-3">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_saida_estoque_label_por_data']}" />
+												<p:selectOneMenu styleClass="form-control width100"
+												 required="false"
+													value="#{saidaEstoqueMB.tipoConsulta}" tabindex="7"												
+													requiredMessage="#{text['cadastro_saida_estoque_label_por_data']}"
+													filter="true">	
+													<f:selectItem itemLabel="#{text['cadastro_estoque_label_select_data_saida']}" itemValue="0"/>												
+													<f:selectItem itemLabel="#{text['cadastro_estoque_label_select_data_emissao']}" itemValue="1"/>
+																										
+												</p:selectOneMenu>
+											</p:outputPanel>
+											
+											<!-- Tipo -->
+											<p:outputPanel  styleClass="form-group col-md-3">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_saida_estoque_label_tipo']}" />
+												<p:selectOneMenu styleClass="form-control width100"
+													disabled="#{saidaEstoqueMB.visualizando}" required="false"
+													value="#{saidaEstoqueMB.tipoSaida}" tabindex="8"												
+													requiredMessage="#{text['cadastro_saida_estoque_label_tipo']}"
+													filter="true">
+													
+													<f:selectItem itemLabel=""></f:selectItem>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_saida']}" itemValue="1"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_avaria']}" itemValue="2"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_transferencia']}" itemValue="3"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_acerto_estoque']}" itemValue="4"/>													
+												</p:selectOneMenu>
+											</p:outputPanel>
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="11"
+														action="#{saidaEstoqueMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{saidaEstoqueMB.lista}" process="@form" update="@form"
+														tabindex="10" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{saidaEstoqueMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="Página {currentPage} de {totalPages}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+										
+										<p:column headerText="#{text['cadastro_saida_estoque_label_data']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.data}"  >
+												<f:converter converterId="dataConverter"></f:converter>
+											</p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_saida_estoque_label_tipo']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{saidaEstoqueMB.tipoDeSaida(item.tipoSaida)}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_saida_estoque_label_numero_nfe']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.numeroNota}"  />
+										</p:column>
+										<p:column headerText="#{text['cadastro_saida_estoque_label_serie']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.serie}"  />
+										</p:column>
+										<p:column headerText="#{text['cadastro_saida_estoque_label_numero_itens']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.qtdProdutos}"  />
+										</p:column>
+										<p:column headerText="#{text['cadastro_saida_estoque_label_valor_total']}" styleClass="texto-align-rigth">
+											<p:outputLabel value="#{item.valorTotal}"   >
+												<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+											</p:outputLabel>	
+										</p:column>
+			
+										<p:column headerText="#{text['cadastro_estoque_label_confirmacao']}" styleClass="texto-align-rigth">
+											<p:outputLabel value="#{item.confirmarFinalizacao==true?'Sim':'Não'}"   />										 
+										</p:column>
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{saidaEstoqueMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.atualizar']}"  icon="ui-icon-disk" 
+										        actionListener="#{saidaEstoqueMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not saidaEstoqueMB.pesquisando}">
+									
+										<!-- Dialog Pesquisa produtos -->
+											<p:dialog 
+													widgetVar="dialogListagemProdutos" 
+													  showEffect="pop" header="#{text['cadastro_saida_estoque_label_produto_descricao']}" 
+													  styleClass="width33" modal="true" closable="true" closeOnEscape="true"
+														 >
+													<p:outputPanel styleClass="row">													
+														<!-- EAN -->
+													<!-- 	<p:outputPanel styleClass="form-group col-md-5">
+															
+															<p:outputLabel styleClass="bLabel" 
+																value="#{text['cadastro_saida_estoque_label_dialog_produto_ean']}"  />	
+															<p:inputText tabindex="57" value="#{saidaEstoqueMB.ean}"	 id="ean"												
+															styleClass="width100">
+															<p:ajax event="change" process="@this" update="tabelaProdutosListagem"></p:ajax>															
+															</p:inputText>																
+														</p:outputPanel>-->
+														<!-- Descrição -->
+														<p:outputPanel styleClass="form-group col-md-7">
+														<p:focus for="produtoDescricao" />	
+															<p:outputLabel styleClass="bLabel"  for="produtoDescricao"
+																value="#{text['cadastro_saida_estoque_label_dialog_produto_descricao']}"  />	
+															<p:inputText tabindex="58" value="#{saidaEstoqueMB.descricao}"	id="produtoDescricao"												
+															styleClass="width100">	
+																													
+															</p:inputText>																
+														</p:outputPanel>														
+														
+														<p:outputPanel styleClass="form-group col-md-2" />
+														<p:outputPanel styleClass="form-group col-md-3 aDireita" >
+															<p:commandButton value="#{text['label.consultar']}"
+																tabindex="59" 																
+																styleClass="btn btn-success width100"
+																process="@this  :formBody:produtoDescricao"																
+																update=":mensagens :formBody:tabelaProdutosListagem" 	/>
+														
+														</p:outputPanel>	
+														
+													</p:outputPanel>
+													<p />
+													
+												<p:outputPanel styleClass="row">
+											
+													<p:dataTable id="tabelaProdutosListagem" styleClass="width100"
+														widgetVar="tabelaProdutosListagem"
+														selection="#{saidaEstoqueMB.produtosSelecionados}" 
+														rowKey="#{item.id}"
+														value="#{saidaEstoqueMB.listaProdutos}" var="item"
+														tabindex="32"														
+														paginator="true" 	rows="6"												
+														emptyMessage="#{text['table.empty']}">	
+														
+														<p:column selectionMode="multiple" style="width:30px;" />
+														
+														<p:column headerText="#{text['cadastro_saida_estoque_label_dialog_produto_codigo_produto']}" align="center" >
+															<p:outputLabel value="#{item.codigoProduto}"  />
+														</p:column>
+														<p:column headerText="#{text['cadastro_saida_estoque_label_dialog_produto_descricao']}" align="center" >
+															<p:outputLabel value="#{item.descricao}"  />
+														</p:column>
+														<p:column headerText="#{text['cadastro_saida_estoque_label_dialog_produto_ean']}" align="center" >
+															<p:outputLabel value="#{item.ean}"  />
+														</p:column>
+													</p:dataTable>
+													
+													
+													
+												</p:outputPanel>
+												
+												<p:outputPanel styleClass="row">
+													
+													<div class="col-md-5" />
+													<div class="col-xs-10 col-md-7">
+														<div class="col-md-6">		
+															<p:commandButton value="#{text['label.salvar']}"
+																tabindex="59" 																
+																styleClass="btn btn-success width100"
+																process="@this :formBody:tabelaProdutosListagem"
+																actionListener="#{saidaEstoqueMB.salvarProdutosSelecionados()}"
+																update=":mensagens :formBody:produto :formBody:listagemProdutos" 
+																oncomplete="PF('dialogListagemProdutos').hide();"/>
+															
+														</div>
+														<div class="col-md-6">
+															<p:commandButton value="#{text['label.limpar']}"
+																tabindex="60" 																
+																styleClass="btn btn-success width100"
+																process="@this"
+																actionListener="#{saidaEstoqueMB.limparDadosDialog}"
+																update=":mensagens :formBody:tabelaProdutosListagem   :formBody:produtoDescricao" 
+																/>
+														</div>
+													</div>	
+												</p:outputPanel>
+											
+											
+											</p:dialog>
+										
+											
+							
+							
+									<div class="row">
+											<!-- Data -->
+											<p:outputPanel  styleClass="form-group col-md-2">
+											
+													<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_saida_estoque_label_data']}"  />
+													<p:calendar   tabindex="20"	id="data" disabled="true" 
+													
+													value="#{saidaEstoqueMB.estoque.data}"
+													converter="dataConverter"
+													navigator="true" 
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control" 											
+													label="#{text['cadastro_saida_estoque_label_data']}"
+													requiredMessage="#{text['cadastro_saida_estoque_label_data']}"
+													 required="true">											
+													</p:calendar>
+											</p:outputPanel>
+											<!-- Tipo -->
+											<p:outputPanel  styleClass="form-group col-md-3">
+											<p:focus for="tiposaida"></p:focus>
+												<p:outputLabel styleClass="bLabel" for="tiposaida"
+													value="#{text['cadastro_saida_estoque_label_tipo']}" />
+												<p:selectOneMenu styleClass="form-control width100" id="tiposaida"
+													disabled="#{saidaEstoqueMB.visualizando}" required="true"
+													value="#{saidaEstoqueMB.estoque.tipoSaida}" tabindex="21"												
+													requiredMessage="#{text['cadastro_saida_estoque_label_tipo']}"
+													filter="true">
+													 
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_saida']}" itemValue="1"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_avaria']}" itemValue="2"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_transferencia']}" itemValue="3"/>
+													<f:selectItem itemLabel="#{text['cadastro_saida_estoque_label_select_tipo_acerto_estoque']}" itemValue="4"/>													
+												</p:selectOneMenu>
+											</p:outputPanel>
+											
+											<p:outputPanel styleClass="form-group col-md-3">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_estoque_label_local_estoque']}" />
+												<p:selectOneMenu disabled="#{saidaEstoqueMB.visualizando}"
+													value="#{saidaEstoqueMB.estoque.localEstoque}" tabindex="21"
+													styleClass="form-control width100"
+													id="localEstoque"
+													requiredMessage="#{text['cadastro_estoque_label_local_estoque']}"
+													filter="true">
+													
+													<f:selectItems value="#{saidaEstoqueMB.listaLocalEstoque}"
+														var="item" itemLabel="#{item.descricao.toUpperCase()}"
+														itemValue="#{item}" />
+													<f:converter converterId="localEstoqueConverter" />
+												
+												</p:selectOneMenu>
+											</p:outputPanel>
+										
+									</div>
+									
+									<div class="row">
+											<!-- numero de itens -->
+											<div class="form-group col-md-2" >										
+												<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_saida_estoque_label_numero_itens']}"  />												
+												<p:inputText  
+													value="#{saidaEstoqueMB.estoque.produtos.size()}" tabindex="22"
+													label="#{text['cadastro_saida_estoque_label_numero_itens']}"
+													required="false" styleClass="form-control" disabled="true"
+													requiredMessage="#{text['cadastro_saida_estoque_label_numero_itens']}"													
+													
+													/>
+											
+											</div>
+											<!-- valor total -->
+											<div class="form-group col-md-2" >										
+												<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_saida_estoque_label_valor_total']}"  />												
+												<p:inputText  
+													value="#{saidaEstoqueMB.estoque.valorTotal}" tabindex="23" disabled="true"
+													label="#{text['cadastro_saida_estoque_label_valor_total']}"
+													required="false" styleClass="form-control JSvalorMoeda"
+													requiredMessage="#{text['cadastro_saida_estoque_label_valor_total']}"													
+													
+													/>											
+											</div>	
+											<!-- observações -->
+											<div class="form-group col-md-6">
+													<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_saida_estoque_label_observacoes']}"  />												
+													<p:inputText 
+														value="#{saidaEstoqueMB.estoque.observacoes}" tabindex="24"
+														label="#{text['cadastro_saida_estoque_label_observacoes']}"
+														required="false" styleClass="form-control"
+														requiredMessage="#{text['cadastro_saida_estoque_label_observacoes']}"
+														
+														disabled="#{saidaEstoqueMB.visualizando}"
+														
+														maxlength="200" />											
+											</div>
+									</div>
+									
+									<div class="row">
+									
+										<p:fieldset legend="#{text['cadastro_saida_estoque_label_fieldset_dados_nfe_title']}">
+										
+											<div class="row">
+												<!-- número da nota -->
+												<div class="form-group col-md-2">
+														<p:outputLabel styleClass="bLabel" 
+														value="#{text['cadastro_saida_estoque_label_numero_nfe']}"  />												
+														<p:inputText 
+															value="#{saidaEstoqueMB.estoque.numeroNota}" tabindex="25"
+															label="#{text['cadastro_saida_estoque_label_numero_nfe']}"
+															required="true" styleClass="form-control JSsomenteNumeros"
+															requiredMessage="#{text['cadastro_saida_estoque_label_numero_nfe']}"															
+															disabled="#{saidaEstoqueMB.visualizando}"															
+															maxlength="10" />	
+												
+												</div>
+												<!-- número da nota -->
+												<div class="form-group col-md-2">
+														<p:outputLabel styleClass="bLabel" 
+														value="#{text['cadastro_saida_estoque_label_serie']}"  />												
+														<p:inputText 
+															value="#{saidaEstoqueMB.estoque.serie}" tabindex="26"
+															label="#{text['cadastro_saida_estoque_label_serie']}"
+															required="true" styleClass="form-control JSsomenteNumeros"
+															requiredMessage="#{text['cadastro_saida_estoque_label_serie']}"															
+															disabled="#{saidaEstoqueMB.visualizando}"															
+															maxlength="10" />	
+												
+												</div>
+											
+													<!-- Data Emissão -->
+												<p:outputPanel  styleClass="form-group col-md-2">
+															<p:outputLabel value="#{text['cadastro_saida_estoque_label_data_emissao']}"  />
+															<p:calendar   tabindex="27"	id="dataSaida" disabled="#{saidaEstoqueMB.visualizando}" 
+																value="#{saidaEstoqueMB.estoque.dataSaida}"
+																converter="dataConverter"
+																navigator="true" 
+																pattern="dd/MM/yyyy" locale="pt"
+																styleClass="JSData form-control" 											
+																label="#{text['cadastro_saida_estoque_label_data_emissao']}"
+																requiredMessage="#{text['cadastro_saida_estoque_label_data_emissao']}"
+																 required="true">											
+															</p:calendar>
+													</p:outputPanel>
+																							</div>
+										</p:fieldset>
+									
+									</div>
+									
+										
+										
+										<p />
+										<p />
+								
+								
+									<div class="row">
+										
+									
+										<p:fieldset id="produto" legend="#{text['cadastro_saida_estoque_label_fieldset_produtos_title']}">
+										
+											<div class="col-md-6" />
+												<div class="col-xs-13 col-md-3">
+													<div class="form-group" >		
+															<p:commandButton value="#{text['label.adicionar']}"
+																ajax="true" process="@this :formBody:localEstoque :formBody:tabelaProdutosListagem" update="produto :formBody:tabelaProdutosListagem" tabindex="60"	
+																oncomplete="PF('dialogListagemProdutos').show();"															
+																styleClass="btn btn-block btn-success width100">
+															</p:commandButton>
+													</div>																						
+												</div>
+												
+												
+												
+											<div class="form-group col-md-12"> 
+											
+												<p:dataTable  id="listagemProdutos" 
+												value="#{saidaEstoqueMB.estoque.produtos}" var="item"													
+												emptyMessage="#{text['table.empty']}">	
+												
+													<p:column headerText="#{text['cadastro_saida_estoque_label_item']}">
+														<p:outputLabel value="#{item.produto.descricao}" />
+													</p:column>
+													<p:column headerText="#{text['cadastro_saida_estoque_label_valor_saida']}">
+														<p:inputText  tabindex="62"	disabled="#{saidaEstoqueMB.visualizando}" 
+															label="#{text['cadastro_saida_estoque_label_valor_saida']}"
+															required="true" id="tablePreconUnitario"
+															value="#{item.valorUnitario}" 
+															styleClass="form-control JSvalorMoeda width100"	
+															converter="mascaraValorBigDecimalConverter"											
+															requiredMessage="#{text['cadastro_saida_estoque_label_valor_saida']}"												
+															/>
+													</p:column>
+													<p:column headerText="#{text['cadastro_saida_estoque_label_pedido']}">
+														<p:inputText  tabindex="62"	disabled="#{saidaEstoqueMB.visualizando}" 
+															label="#{text['cadastro_saida_estoque_label_pedido']}"
+															required="true" 
+															value="#{item.numeroPedido}" 
+															styleClass="form-control JSsomenteNumeros"																										
+															requiredMessage="#{text['cadastro_saida_estoque_label_pedido']}"												
+															>
+															
+															</p:inputText>
+													</p:column>
+													<p:column headerText="#{text['cadastro_saida_estoque_label_quantidade']}">
+														<p:inputText  tabindex="62"	disabled="#{saidaEstoqueMB.visualizando}" 
+															label="#{text['cadastro_saida_estoque_label_quantidade']}"
+															required="true"  id="qtdSaida"
+															value="#{item.qtdSaida}" 
+															 converter="mascaraValorDecimalDuasCasasConverter"
+															styleClass="form-control JSsomenteNumeros"																										
+															requiredMessage="#{text['cadastro_saida_estoque_label_quantidade']}"												
+															>
+															<p:ajax event="change" process="@this" update=":mensagens" listener="#{saidaEstoqueMB.validarQtdSaida(item)}"></p:ajax>
+														</p:inputText>	
+													</p:column>
+													<p:column headerText="#{text['cadastro_estoque_label_unidade']}" styleClass="width16">
+														<p:selectOneMenu disabled="#{saidaEstoqueMB.visualizando}"
+																	value="#{item.unidadeSelecionado}" tabindex="62"
+																	styleClass="form-control" 
+																	required="true"		id="unidadeSelecionada"															
+																	requiredMessage="#{text['cadastro_estoque_label_unidade']}"
+																	filter="true">
+																	<f:selectItem itemLabel="" />
+																	<f:selectItems value="#{saidaEstoqueMB.retornoLista(item)}"
+																		var="und" itemLabel="#{und}"
+																		itemValue="#{und}" />																	
+																<p:ajax event="change" process="@this :formBody:listagemProdutos:qtdSaida" 
+															update=":mensagens " listener="#{lancamentoEstoqueMB.validarQtdCompra(item)}"></p:ajax>	
+																</p:selectOneMenu>
+													</p:column>
+													<p:column headerText="#{text['cadastro_saida_estoque_label_saldo']}">
+														<p:outputLabel value="#{item.saldoEstoque}"></p:outputLabel>
+													</p:column>
+													
+													<p:column headerText="#{text['cadastro_saida_estoque_label_data_validade']}">
+														<p:calendar   tabindex="62"	id="data" disabled="#{saidaEstoqueMB.visualizando}" 
+																value="#{item.dataValidade}"
+																converter="dataConverter"
+																navigator="true"  
+																pattern="dd/MM/yyyy" locale="pt"
+																styleClass="JSData form-control" 											
+																label="#{text['cadastro_saida_estoque_label_data_validade']}"
+																requiredMessage="#{text['cadastro_saida_estoque_label_data_validade']}"
+																 required="false">											
+																</p:calendar>
+													</p:column>
+													<p:column>
+														<p:commandButton value="#{text['label.remover']}"
+															process="@this" update="listagemProdutos" ajax="true"
+															action="#{saidaEstoqueMB.removerEstoqueProduto(item)}" disabled="#{saidaEstoqueMB.visualizando}"
+															tabindex="62"></p:commandButton>
+													</p:column>
+												</p:dataTable>
+											</div>
+											
+												
+											
+										</p:fieldset>
+									
+									</div>
+									
+									
+									<div class="row">
+											<div class="col-md-7" />
+									</div>
+								
+								
+								
+								
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="70" action="#{saidaEstoqueMB.adiciona}"
+														rendered="#{saidaEstoqueMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="71"
+														action="#{saidaEstoqueMB.alterar}"
+														rendered="#{saidaEstoqueMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												
+												</div>
+												<p:outputPanel styleClass="col-md-4" rendered="#{saidaEstoqueMB.editando}">
+													<p:commandButton value="#{text['label.confirmar']}" tabindex="132"
+														id="botaConfirmar"
+														action="#{saidaEstoqueMB.confirmarLancamentoSaida}"
+														rendered="#{saidaEstoqueMB.editando}"  
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</p:outputPanel>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="72" action="#{saidaEstoqueMB.limpar}"
+														rendered="#{saidaEstoqueMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{saidaEstoqueMB.voltar}"
+														tabindex="73" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

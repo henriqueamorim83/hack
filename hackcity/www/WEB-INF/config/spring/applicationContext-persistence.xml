@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.1.xsd 
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+							
+	<!-- ********************************************* -->
+	<!-- Configuração do DataSource -->
+	<!-- ********************************************* -->
+	
+	<!-- Replaces ${...} placeholders with values from a properties file -->
+	<!-- (in this case, JDBC-related settings for th edataSource definition below) -->
+	<context:property-placeholder location="classpath:jdbc/jdbc.properties"/>
+	
+	 <bean id="parentDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" abstract="true">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />	
+	</bean>
+	
+ 
+	
+	 <bean id="matrizDataSource" parent="parentDataSource">
+		<property name="url" value="jdbc:postgresql://localhost:5432/corretor_docg_erp" />
+	</bean>
+	
+	<bean id="recifeDataSource" parent="parentDataSource">
+		<property name="url" value="jdbc:postgresql://localhost:5432/corretor_docg_erp_recife" />
+	</bean>
+	
+	<bean id="caruaruDataSource" parent="parentDataSource">
+		<property name="url" value="jdbc:postgresql://localhost:5432/corretor_docg_erp_caruaru" />
+	</bean>
+	
+	<bean id="garanhunsDataSource" parent="parentDataSource">
+		<property name="url" value="jdbc:postgresql://localhost:5432/corretor_docg_erp_garanhuns" />
+	</bean>
+	 
+	 
+	 <bean id="dataSource" class="br.com.hntecnologia.view.service.TenantRoutingDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">				
+				<entry key="matrizDataSource" value-ref="matrizDataSource" />
+				<entry key="recifeDataSource" value-ref="recifeDataSource" />
+				<entry key="caruaruDataSource" value-ref="caruaruDataSource" />
+				<entry key="garanhunsDataSource" value-ref="garanhunsDataSource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="matrizDataSource" />
+		
+	</bean> 
+	
+	 
+	  <bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="databasePlatform" value="${hibernate.databasePlatform}" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				 
+				 <prop key="hibernate.hbm2ddl.auto">update</prop> <!--   -->
+				<prop key="hibernate.event.merge.entity_copy_observer">allow</prop>
+				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+				<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
+				
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.c3p0.acquire_increment">5</prop>
+				<prop key="hibernate.c3p0.idle_test_period">1800</prop>
+				<prop key="hibernate.c3p0.max_size">600</prop>
+				<prop key="hibernate.c3p0.max_statements">50</prop>
+				<prop key="hibernate.c3p0.min_size">5</prop>
+				<prop key="hibernate.c3p0.timeout">1800</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+
+
+				
+			</props>
+		</property>
+	</bean> 
+	
+	  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean> 
+	
+	<!-- Exception translation bean post processor -->
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	
+	<!-- Jasper configuration -->
+	
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="/WEB-INF/jasper-views.xml" />
+		<property name="order" value="1" />
+	</bean>
+</beans>

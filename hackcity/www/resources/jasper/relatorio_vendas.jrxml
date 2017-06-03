@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendas_aberto" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e052d989-0b0c-4bcf-a7fe-4c2b015ff99c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="144"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<field name="numeroPedido" class="java.lang.String"/>
+	<field name="dataVenda" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="desconto" class="java.lang.String"/>
+	<field name="usuarioDesconto" class="java.lang.String"/>
+	<field name="frete" class="java.lang.String"/>
+	<field name="outros" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<field name="formaPagamento" class="java.lang.String"/>
+	<field name="parcelamento" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<field name="dataInicio" class="java.lang.String"/>
+	<field name="dataFinal" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<title>
+		<band height="100">
+			<image>
+				<reportElement x="664" y="0" width="138" height="71" uuid="2c8e53d0-3122-47e7-9845-e8b8960d5d76"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="153" y="11" width="481" height="47" uuid="01a570fc-735c-425f-b2d4-3afb69620740"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Vendas"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="555" y="71" width="247" height="20" uuid="3a9ee232-15d8-4881-ba23-5a6d6da1928b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="71" width="242" height="20" uuid="324e3697-0c48-4005-8b33-80be4a335719"/>
+				<textFieldExpression><![CDATA["Período: "+$F{dataInicio}+" à "+$F{dataFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="242" height="20" uuid="512de610-89b5-4595-a083-cf5277722767"/>
+				<textFieldExpression><![CDATA["Usuário : "+ $F{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="68" height="20" uuid="a7410f90-1c4c-4496-b3e3-5302db3b8cda"/>
+				<textFieldExpression><![CDATA["Nº Pedido"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="0" width="153" height="20" uuid="70445fc9-4593-4bc6-bc69-ba38a57f5dc4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Cliente"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="221" y="0" width="78" height="20" uuid="5aab1513-8077-4001-9b7f-cd2d0eec5226"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Data Venda"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="299" y="0" width="105" height="20" uuid="ca8b4e04-2ca6-40d5-9556-a63632b19d44"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Situaçao"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="404" y="0" width="70" height="20" uuid="c7b25f97-9e5a-4f8b-ac08-3a03be62b466"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Desconto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="53" height="20" uuid="d04f9c48-6962-4f76-bc23-b1a108935cdf"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Frete"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="527" y="0" width="50" height="20" uuid="4fb277e0-70b7-49f2-8fdd-79e13ac5c719"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Outros"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="577" y="0" width="70" height="20" uuid="366cf71b-a950-4829-8b2e-7d47759c8177"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Valor"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="647" y="0" width="104" height="20" uuid="c1eb0c99-8847-4a9f-a795-01714a624fab"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["F.Pagamento"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="751" y="0" width="51" height="20" uuid="6aa7cb04-edc0-457b-9afd-32517109ea12"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Parcelas"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="299" y="0" width="105" height="20" uuid="c87f4fd6-282f-416f-acef-3ad5bbbefbe5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="527" y="0" width="50" height="20" uuid="a3ab9f61-1d63-44b9-af0a-83021aabbd5c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{outros}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="647" y="0" width="104" height="20" uuid="b1759a4d-e618-4216-82e1-96ae9df21702"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{formaPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="221" y="0" width="78" height="20" uuid="78c4c0cb-3b4e-4285-aab1-15146622a8b3"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{dataVenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="0" width="153" height="20" uuid="a6215008-0460-477a-9d29-af23dada1a9b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="404" y="0" width="70" height="20" uuid="ac4c4ff7-7842-47fc-84e7-d2825a523aee"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="68" height="20" uuid="5707fb2c-721f-476b-bc11-aed025c44b11"/>
+				<textFieldExpression><![CDATA[$F{numeroPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="751" y="0" width="51" height="20" uuid="9bb081db-05b3-4cad-936e-c7d48a442d00"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{parcelamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="53" height="20" uuid="8b5fbab7-129e-4ed1-ad2e-7e8a68c22ae4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{frete}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="577" y="0" width="70" height="20" uuid="f88e08e2-7939-419e-9a75-a1d3aa42df33"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valorTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

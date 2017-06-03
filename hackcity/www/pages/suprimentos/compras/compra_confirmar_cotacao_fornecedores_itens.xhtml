@@ -1,0 +1,227 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<p:outputPanel id="grupoFornecedores">
+<div class="row">
+	<div class="col-md-12">
+		<p:dataTable id="dataTableCompraFornecedorCotacao" var="obj"
+			value="#{compraConfirmaCotacaoMB.compraCotacao.listaCompraFornecedorCotacao}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			resizableColumns="true"
+			selection="#{compraConfirmaCotacaoMB.compraFornecedorCotacaoSelecionado}"
+			selectionMode="single" rowKey="#{obj.id}" editable="true">
+
+			<f:facet name="header">
+				<p:commandButton process="@this" title="Exporta CSV Fornecedores"
+					icon=" ui-icon-arrowthick-1-s" ajax="false" styleClass="aEsquerda"
+					actionListener="#{compraConfirmaCotacaoMB.exportaCsvFornecedor()}" />
+				<p:commandButton process=":formBody:dados:dataTableCompraFornecedorCotacao"
+					title="Importa CSV Fornecedor" icon=" ui-icon-arrowthick-1-l"
+					update=":formBody:dados:dialogUploadArquivo" styleClass="aEsquerda"
+					oncomplete="PF('dialogUploadArquivo').show()" />
+			</f:facet>
+
+			<p:ajax event="rowSelect"
+				listener="#{compraConfirmaCotacaoMB.selecionarFornecedor}"
+				update=":formBody:dados:dataTableCompraCotacaoDetalhe" />
+
+			<p:ajax event="rowEdit"
+				listener="#{compraConfirmaCotacaoMB.salvarDadosFornecedor}"
+				update=":formBody:dados:dataTableCompraFornecedorCotacao" />
+
+			<p:column headerText="Fornecedor">
+				<h:outputLabel value="#{obj.fornecedor.pessoa.nome}" />
+			</p:column>
+			<p:column headerText="Prazo Entrega">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.prazoEntrega}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{obj.prazoEntrega}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="Condicoes Pagamento">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.condicoesPagamento}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{obj.condicoesPagamento}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="Valor Subtotal">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorSubtotal}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorSubtotal}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="Valor Desconto">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorDesconto}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorDesconto}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="Total">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.total}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.total}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:32px">
+				<p:rowEditor />
+			</p:column>
+
+		</p:dataTable>
+
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<p:outputLabel
+			value="#{text['cadastro_compras_confirmar_cotacao_label_itens']}"></p:outputLabel>
+		<p:separator />
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<p:dataTable id="dataTableCompraCotacaoDetalhe" var="obj"
+			value="#{compraConfirmaCotacaoMB.compraFornecedorCotacao.listaCompraCotacaoDetalhe}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			resizableColumns="true" editable="true"
+			emptyMessage="Nenhum fornecedor selecionado">
+
+			<p:ajax event="rowEdit"
+				listener="#{compraConfirmaCotacaoMB.alteraItemFornecedor}"
+				update="dataTableCompraCotacaoDetalhe" />
+
+			<p:column headerText="Produto">
+				<h:outputLabel value="#{obj.pedidoProduto.itemPedido.produto.descricao.toUpperCase()}" rendered="#{obj.pedidoProduto.itemPedido.produto!=null}" />
+				<h:outputLabel value="#{obj.pedidoProduto.itemPedido.receita.descricao.toUpperCase()}" rendered="#{obj.pedidoProduto.itemPedido.receita!=null}" />
+				<h:outputLabel value="#{obj.itemPedido.descricaoItem.toUpperCase()}" rendered="#{obj.itemPedido !=null}" />
+			
+			</p:column>
+			<p:column headerText="Quantidade">
+				<h:outputLabel value="#{obj.quantidade.intValue()}">
+					<f:convertNumber pattern="0" />
+				</h:outputLabel>
+
+			</p:column>
+			<p:column headerText="Valor Unitario">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorUnitario}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorUnitario}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="Valor Subtotal">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorSubtotal}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorSubtotal}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+			<p:column headerText="Taxa Desconto">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.taxaDesconto}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.taxaDesconto}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+			<p:column headerText="Valor Desconto">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorDesconto}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorDesconto}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+			<p:column headerText="Valor Total">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputLabel value="#{obj.valorTotal}">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber value="#{obj.valorTotal}" decimalPlaces="2" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:32px">
+				<p:rowEditor />
+			</p:column>
+		</p:dataTable>
+
+	</div>
+</div>
+<p:dialog id="dialogUploadArquivo" header="Selecionar Arquivo"
+				widgetVar="dialogUploadArquivo" showEffect="slide"
+				hideEffect="slide" resizable="true" modal="true" closable="false"
+				width="800">
+				<p:outputPanel id="panelUploadArquivo">
+					<div class="t2ti-campo-100">
+						<p:fileUpload
+							fileUploadListener="#{compraConfirmaCotacaoMB.importaCsvFornecedor}"
+							mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(csv)$/"
+							update=":mensagens,:formBody:dados:dataTableCompraCotacaoDetalhe,:formBody:dados:dataTableCompraFornecedorCotacao"
+							oncomplete="PF('dialogUploadArquivo').hide()" />
+					</div>
+				</p:outputPanel>
+				<f:facet name="footer">
+					<p:commandButton value="Cancelar"
+						oncomplete="PF('dialogUploadArquivo').hide();" process="@this" />
+				</f:facet>
+			</p:dialog>
+</p:outputPanel>
+</html>

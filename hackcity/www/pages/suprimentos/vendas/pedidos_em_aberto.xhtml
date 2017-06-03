@@ -1,0 +1,292 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition
+		template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="true">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_suprimentos_item_pedido_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+
+					<h:form binding="#{pedidoAbertoMB.form}" id="formBody">
+											
+						<div class="box-body">
+						
+							<p:panel>
+								<t:saveState value="#{pedidoAbertoMB.state}" />
+								
+								 
+								
+									
+									<!-- Dialog Pesquisa Fornecedores -->
+									<p:dialog widgetVar="dialogListagemFornecedores" showEffect="pop"
+										header="#{text['cadastro_suprimentos_item_pedido_label_fornecedor']}"
+										styleClass="width36" modal="true" closable="true" 
+										height="390"
+										closeOnEscape="true">
+									 	
+									 	<div class="row">	
+									 		<p:outputPanel styleClass="form-group col-md-3" />
+									 		
+									 	</div>
+										<p />
+										<p:outputPanel styleClass="row">
+
+											<p:dataTable id="tabelaFornecedoresListagem"
+												styleClass="width100" widgetVar="tabelaFornecedoresListagem"
+												selection="#{pedidoAbertoMB.fornecedoresSelecionados}"
+												rowKey="#{item.id}" value="#{pedidoAbertoMB.listaFornecedores}"
+												var="item" tabindex="32"   
+												emptyMessage="#{text['table.empty']}">
+
+												<p:column selectionMode="multiple" style="width:30px;" />
+
+												<p:column
+													headerText="#{text['cadastro_suprimentos_item_pedido_label_fornecedor']}"
+													align="center">
+													<p:outputLabel value="#{item.pessoa.nome.toUpperCase()}" />
+												</p:column>
+												 
+												<p:column
+													headerText="#{text['cadastro_suprimentos_item_pedido_label_cpf_cnpj']}"
+													align="center">
+													<p:outputLabel value="#{item.pessoa.pessoaFisica.cpf}" rendered="#{item.pessoa.pessoaFisica!=null}" />
+													<p:outputLabel value="#{item.pessoa.pessoaJuridica.cnpj}" rendered="#{item.pessoa.pessoaJuridica!=null}" />
+												</p:column>
+											</p:dataTable>
+
+
+
+										</p:outputPanel>
+										<p />
+										<p:outputPanel styleClass="row">
+
+											<div class="col-md-5" />
+											<div class="col-xs-10 col-md-10">
+
+												 
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="60" styleClass="btn btn-success width100"
+														process="@this :formBody:tabelaFornecedoresListagem"
+														actionListener="#{pedidoAbertoMB.requisicaoConfirmada()}"
+														update=":mensagens"
+														oncomplete="PF('dialogListagemFornecedores').hide();" />
+
+												</div>
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.fechar']}"
+														tabindex="61" styleClass="btn btn-success width100"
+														process="@this"
+														oncomplete="PF('dialogListagemFornecedores').hide();"													 
+														  />
+												</div>
+											</div>
+										</p:outputPanel>
+
+
+									</p:dialog>
+									
+								 
+								
+								
+								<div class="row">
+
+									<div class="col-md-12">
+
+										<p:dataTable id="tabela"
+											value="#{pedidoAbertoMB.listaPedidoProdutos}"
+											styleClass="ajusta_coluna" var="item" lazy="true"
+											scrollable="true"
+											
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											rowClasses="odd, even" emptyMessage="#{text['table.empty']}">											
+											
+											<p:subTable var="pedido" value="#{item.listaDePedidoProduto}"  >											
+											
+											 <f:facet name="header" >								                 
+													<p:outputLabel value="#{text['cadastro_suprimentos_item_pedido_label_numero_pedido']} - #{item.numeroPedido} - #{item.cliente.pessoa.nome}" />												 
+											</f:facet>
+											
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_produto']}"   >
+												<p:outputLabel value="#{pedido.itemPedido.produto!=null?pedido.itemPedido.produto.descricao : pedido.itemPedido.receita.descricao}" style="#{pedido.itemPedido.produto!=null?'color: blue;':'color: red;'}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"    />
+											</p:column>
+											
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_quantidade']}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"   >
+													<p:outputLabel value="#{pedido.quantidade}" />
+											</p:column>
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_unidade']}"   >
+												<p:outputLabel value="#{pedido.unidade.descricao} - #{pedido.unidade.abreviatura}" style="#{pedido.itemPedido.produto!=null?'color: blue;':'color: red;'}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"    />
+											</p:column>
+											  
+											<!-- <p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_valor_soma']}" >
+												<p:outputLabel value="R$ "  /> <p:spacer width="2" />
+												<p:outputLabel value="#{pedido.valor}"  >
+													 <f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>-->
+											
+										   	</p:subTable>
+										   	
+										   	<!--<p:columnGroup type="footer">
+									                <p:row>
+									                  <p:column footerText=" " />
+									                    <p:column footerText="Totais: " style="text-align:right"/>									                  
+									                    <p:column footerText="#{item.valor}"  styleClass="texto-align-center" >									                    	
+									                    </p:column>
+									                </p:row>
+									          </p:columnGroup>-->
+										</p:dataTable>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-2">
+											
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+								<h3 class="box-title">#{text['cadastro_receita_label_title']}</h3>
+								</div>
+								<div class="row">
+
+									<div class="col-md-12">
+
+										<p:dataTable id="tabelaReceita"
+											value="#{pedidoAbertoMB.listaPedidoReceitas}"
+											styleClass="ajusta_coluna" var="item" lazy="true"
+											scrollable="true"
+											
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											rowClasses="odd, even" emptyMessage="#{text['table.empty']}">											
+											
+											<p:subTable var="pedido" value="#{item.listaDePedidoProduto}"  >
+											
+											
+											 <f:facet name="header" >								                 
+													<p:outputLabel value="#{text['cadastro_suprimentos_item_pedido_label_numero_pedido']} - #{item.numeroPedido} - #{item.cliente.pessoa.nome}" />												 
+											</f:facet>
+											
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_produto']}" >
+												<p:outputLabel value="#{pedido.itemPedido.receita.descricao}" style="#{pedido.itemPedido.produto!=null?'color: blue;':'color: red;'}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"    />
+											</p:column>
+											
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_quantidade']}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"   >
+													<p:outputLabel value="#{pedido.quantidade}" />
+											</p:column>
+											<p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_unidade']}"   >
+												<p:outputLabel value="#{pedido.unidade.descricao} - #{pedido.unidade.abreviatura}" style="#{pedido.itemPedido.produto!=null?'color: blue;':'color: red;'}"  rendered="#{pedidoAbertoMB.situacaoPedido(pedido.situacaoPedido)}"    />
+											</p:column>
+											  
+											<!-- <p:column styleClass="texto-align-center" headerText="#{text['cadastro_suprimentos_item_pedido_label_valor_soma']}" >
+												<p:outputLabel value="R$ "  /> <p:spacer width="2" />
+												<p:outputLabel value="#{pedido.valor}"  >
+													 <f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>-->
+								             
+								              <!-- <p:columnGroup type="footer">
+									                <p:row>
+									                  <p:column footerText=" " />
+									                    <p:column footerText="Totals: " style="text-align:right"/>									                  
+									                    <p:column footerText="#{item.valor}"  styleClass="texto-align-center" >
+									                    	
+									                    </p:column>
+									                </p:row>
+									          </p:columnGroup> -->
+											
+										   	</p:subTable>
+										</p:dataTable>
+									</div>
+								</div>	
+								
+									<div class="row">
+										 <div class="col-md-7" />
+										 	<div class="col-xs-12 col-md-5">
+										 		 
+												<div class="form-group col-md-4">		
+													<p:commandButton value="#{text['label.relatorio']}"
+														title="#{text['label.relatorio']}"  tabindex="102"
+														process="@this"	ajax="false"										
+														update=":mensagens "
+														oncomplete="PrimeFaces.monitorDownload(showStatus,hideStatus)"												
+														styleClass="btn btn-primary width100">												
+														<p:fileDownload	value="#{pedidoAbertoMB.emitirRelatorioVendasAberto}">
+															
+														</p:fileDownload>
+													</p:commandButton>
+												</div>
+												
+												<div class="form-group col-md-4">		
+													<p:commandButton value="#{text['label.gerar_cotacao']}"
+														immediate="true" actionListener="#{pedidoAbertoMB.solicitacaoPedido(false)}"
+														tabindex="103" styleClass="btn btn-primary width100" 
+														process="@form"
+														update="@form :mensagens" 
+														oncomplete="PF('dialogListagemFornecedores').show();"
+														/>
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.gerar_pedido']}"
+														immediate="true" actionListener="#{pedidoAbertoMB.solicitacaoPedido(true)}"
+														tabindex="104" styleClass="btn btn-primary width100" 
+														process="@form"
+														update="@form :mensagens" 
+														oncomplete="PF('dialogListagemFornecedores').show();"	
+														>
+													</p:commandButton>	
+												</div>
+										 	
+											</div>
+									</div>
+
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+</h:body>
+</html>

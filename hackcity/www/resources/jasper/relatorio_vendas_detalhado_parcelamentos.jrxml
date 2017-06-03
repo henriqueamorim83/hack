@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_vendas_detalhado_parcelamentos" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3941b67b-8aa5-4b5a-8702-74759d12e9f8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="vencimento" class="java.lang.String"/>
+	<field name="parcela" class="java.lang.String"/>
+	<field name="valor" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="259" height="20" uuid="983bdabc-ffc2-4661-9c9c-e09e7f5830a7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vencimento"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="259" y="0" width="169" height="20" uuid="6572bce3-c549-4477-8d04-9c125d3b9ed8"/>
+				<textElement textAlignment="Center">
+					<font size="14" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Parcela"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="597" y="0" width="205" height="20" uuid="526a6c59-8594-4eac-a7b0-9e21b68b19fc"/>
+				<textElement textAlignment="Center">
+					<font size="14" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Situação"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="428" y="0" width="169" height="20" uuid="99b2b610-03da-402d-839e-3f493860477b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="597" y="1" width="205" height="20" uuid="d184f8c1-6942-4e12-b183-1d1e88da2ce4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="1" width="259" height="20" uuid="f0f7b971-4e44-42fb-bc9d-5602e75d424c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{vencimento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="428" y="1" width="169" height="20" uuid="396556be-1682-4603-bfdd-2c2ea18ea697"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="259" y="1" width="169" height="20" uuid="4a5d676b-585f-4283-a86d-d9ab990c95db"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{parcela}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:outputPanel id="panelFornecedor"> 
+
+<div class="row">
+
+	<div class="form-group col-md-12">
+
+		<p:dataTable id="dataTableCompraFornecedorCotacao" var="item"
+			value="#{compraCotacaoMB.compraCotacao.listaCompraFornecedorCotacao}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			resizableColumns="true">
+
+			<f:facet name="header">
+				<p:commandButton title="Novo" icon="ui-icon-plus" 
+					process="dataTableCompraFornecedorCotacao"
+					update=":formBody:dados:panelFornecedor"
+					actionListener="#{compraCotacaoMB.incluirFornecedor()}"  
+					disabled="#{compraCotacaoMB.visualizando}" tabindex="20"
+					oncomplete="PF('dialogCompraFornecedorCotacao').show();"
+					styleClass="aEsquerda"   />
+			</f:facet>
+			 
+			<p:column
+				headerText="#{text['cadastro_compras_cotacao_label_fornecedor']}"
+				styleClass="form-control">
+				<p:outputLabel value="#{item.fornecedor.pessoa.nome}"></p:outputLabel>
+			</p:column>
+			
+			<p:column headerText="Ações" width="10%">
+				<div class="row col-md-10">
+					<div class="btn-group">						 			 
+							 
+							<p:commandButton value="#{text['label.remover']}" icon="ui-icon-trash"
+							 	disabled="#{compraCotacaoMB.visualizando}"
+								actionListener="#{compraCotacaoMB.excluirFornecedorCotacao(item)}"
+								process="dataTableCompraFornecedorCotacao" styleClass="form-control"
+								update="dataTableCompraFornecedorCotacao :mensagens" />
+							
+					 
+					</div>
+				</div>
+			</p:column>
+			
+		</p:dataTable>
+	</div>
+
+</div>
+
+
+<p:dialog id="dialogCompraFornecedorCotacao" rendered="#{compraCotacaoMB.dialogFornecedor}"
+	header="Inclusão/Alteração de Fornecedor"
+	widgetVar="dialogCompraFornecedorCotacao" showEffect="slide"
+	hideEffect="slide" resizable="true" modal="true" closable="false"
+	width="800">
+
+
+	<div class="row">
+		<div class="form-group col-md-5">
+			<p:outputLabel styleClass="bLabel"
+				value="#{text['cadastro_compras_cotacao_label_fornecedor']}" />
+
+			<p:selectOneMenu tabindex="25" converter="fornecedorConverter"
+				required="false" id="cotacaoFornecedor"  
+				value="#{compraCotacaoMB.compraFornecedorCotacao.fornecedor}"
+				disabled="#{compraCotacaoMB.visualizando}" styleClass="form-control"
+				label="#{text['cadastro_compras_cotacao_label_fornecedor']}"
+				requiredMessage="#{text['cadastro_compras_cotacao_label_fornecedor']}"
+				filter="true">
+				 
+				<f:selectItems value="#{compraCotacaoMB.listaFornecedores}"
+					var="item" itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+					 
+			</p:selectOneMenu>
+
+		</div>
+	</div>
+
+	<f:facet name="footer">
+		<p:commandButton value="Salvar"
+			actionListener="#{compraCotacaoMB.salvarFornecedor()}" tabindex="27"
+			process="dialogCompraFornecedorCotacao :formBody:dados:dataTableCompraFornecedorCotacao"
+			update=":formBody:dados:dataTableCompraFornecedorCotacao  :mensagens"
+			ajax="true" onsuccess="PF('dialogCompraFornecedorCotacao').hide();" />
+		<p:commandButton value="Cancelar" process="@this" tabindex="28"
+			oncomplete="PF('dialogCompraFornecedorCotacao').hide();" />
+
+	</f:facet>
+
+</p:dialog>
+
+</p:outputPanel>
+
+</html>

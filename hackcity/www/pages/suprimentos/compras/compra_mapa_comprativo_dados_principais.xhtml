@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:outputLabel
+			value="#{text['cadastro_compras_cotacao_label_data_cotacao']}"></p:outputLabel>
+		<p:calendar tabindex="10"
+			value="#{compraMapaComparativoMB.compraCotacao.dataCotacao}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control" disabled="#{compraMapaComparativoMB.visualizando}"
+			label="#{text['cadastro_compras_cotacao_label_data_cotacao']}"
+			requiredMessage="#{text['cadastro_compras_cotacao_label_data_cotacao']}"
+			required="true">
+		</p:calendar>
+	</div>
+
+	<div class="form-group col-md-6">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_cotacao_label_descricao']}" />
+		<p:inputText value="#{compraMapaComparativoMB.compraCotacao.descricao}"
+			tabindex="11"
+			label="#{text['cadastro_compras_cotacao_label_descricao']}"
+			styleClass="form-control" 
+			required="true"
+			requiredMessage="#{text['cadastro_compras_cotacao_label_descricao']}"
+			disabled="#{compraMapaComparativoMB.visualizando}" maxlength="200" />
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_cotacao_label_situacao']}" />
+		<p:selectOneMenu
+			disabled="true"
+			value="#{compraMapaComparativoMB.compraCotacao.situacao}" tabindex="11"
+			styleClass="form-control width100"
+			requiredMessage="#{text['cadastro_compras_cotacao_label_situacao']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{compraMapaComparativoMB.listaSituacao}" var="item"
+				itemLabel="#{item}" itemValue="#{item}" />	 
+		</p:selectOneMenu>
+
+	</div>
+
+</div>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_vendas_aberto" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88a941fc-c805-433f-aa8f-5ef6ffdabcf1">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/henrique/programa/projeto_java/ripe_cafe/ripe/www/resources/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="produtos" class="java.util.List"/>
+	<field name="produtoRipe" class="java.util.List"/>
+	<title>
+		<band height="83" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="19" width="406" height="47" uuid="aa07675f-2063-429b-a92c-95461b9acb8e"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório Vendas Aberto"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="417" y="8" width="138" height="71" uuid="c87e972a-6236-4839-af2c-c32b1462cb8c"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="294" height="20" uuid="fcb9a1ba-f45c-4ebd-a73f-18a63bcd91b4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CLIENTE : "+$F{cliente}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="24" width="555" height="7" uuid="359adccf-a8dc-43ae-be4f-602e79440a5d"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{produtos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_vendas_aberto_produtos.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="Float" x="0" y="31" width="555" height="1" uuid="0e503a80-dd71-4a3b-8440-6f54fb9c5a4b"/>
+			</line>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="38" width="555" height="5" uuid="0a1295f8-64be-4b41-b032-3954a9f5d6ec"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{produtoRipe})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_vendas_aberto_produto_ripe.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="Float" x="0" y="1" width="555" height="1" uuid="070f7106-4f5d-4e98-9016-1f4af6c1945f"/>
+			</line>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="22">
+			<textField>
+				<reportElement x="436" y="2" width="80" height="20" uuid="abd8b88b-5161-45ae-ae9a-a8c92cf6bc92"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="516" y="2" width="40" height="20" uuid="31bd0550-20d1-40f3-b678-bff6a41cb884"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

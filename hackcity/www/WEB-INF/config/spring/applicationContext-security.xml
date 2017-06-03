@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:b="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/security 
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd"
+	xmlns:sec="http://www.springframework.org/schema/security">
+
+
+	<sec:global-method-security	secured-annotations="enabled" />
+ 
+
+	<sec:http use-expressions="true" auto-config="true" >
+			
+		<sec:intercept-url pattern="/*.jsp" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/*.pdf" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/DownloadServlet" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/rest" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/rest/chave" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/rest/contrato" access="isAuthenticated()" />
+		<sec:intercept-url pattern="/appServlet" access="isAuthenticated()" />
+		
+		
+		<sec:intercept-url pattern="/pages/index.jsf" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE','ESTAGIARIO')" />
+ 		<sec:intercept-url pattern="/pages/usuario/**" access="hasRole('ADMINISTRADOR')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/parametrizacao/**" access="hasRole('ADMINISTRADOR')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/produtos/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />	
+ 		<sec:intercept-url pattern="/pages/cadastros/compras/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />	
+ 		<sec:intercept-url pattern="/pages/cadastros/nfe/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/vendas/cliente/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/vendas/pedido/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />	
+ 		<sec:intercept-url pattern="/pages/cadastros/vendas/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />
+ 		<sec:intercept-url pattern="/pages/cliente/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+ 		<sec:intercept-url pattern="/pages/cliente/pedido/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/financeiro/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />
+ 		<sec:intercept-url pattern="/pages/cadastros/despesas/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','ESTAGIARIO')" />	
+		<sec:intercept-url pattern="/pages/cadastros/pessoa/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />	
+		<sec:intercept-url pattern="/pages/cadastros/empresa/**" access="hasAnyRole('ADMINISTRADOR')" />	
+	    <sec:intercept-url pattern="/modulos/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR')" />	
+	    <sec:intercept-url pattern="/pages/suprimentos/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	    <sec:intercept-url pattern="/pages/suprimentos/compras/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	    <sec:intercept-url pattern="/pages/suprimentos/produtos/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/suprimentos/produtos/estoque/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/suprimentos/produtos/receita/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/michelle/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/michelle/compras/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/michelle/pessoa/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/michelle/produtos/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 	<sec:intercept-url pattern="/pages/michelle/vendas/**" access="hasAnyRole('ADMINISTRADOR','OPERADOR','CLIENTE')" />
+	 
+		
+		<sec:form-login login-page="/auth/login.jsf"
+			authentication-failure-url="/auth/login.jsf" />
+			
+			<sec:logout invalidate-session="true"/>
+
+		<sec:access-denied-handler error-page="/auth/acessoNegado.jsf" />
+		
+		<sec:logout logout-url="/logout" invalidate-session="true" delete-cookies="JSESSIONID"  logout-success-url="/auth/login.jsf" />
+		  <session-management session-fixation-protection="none"/>
+		 
+	</sec:http>
+		
+
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider
+			user-service-ref="userDetailService" />
+
+	</sec:authentication-manager>
+	
+	<b:bean id="securityContextRepositoryNoJSession" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+    	<b:property name="disableUrlRewriting" value="true"/>
+	</b:bean>
+
+
+</b:beans>

@@ -1,0 +1,136 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<div class="row">
+	<div class="form-group col-md-8">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_cliente']}" />
+		<p:selectOneMenu tabindex="10" converter="clienteConverter"
+			required="true" value="#{finCobrancaMB.finCobranca.cliente}"
+			disabled="#{finCobrancaMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fin_cobranca_label_cliente']}"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_cliente']}"
+			filter="true">
+
+			<f:selectItems value="#{finCobrancaMB.listaCliente}" var="item"
+				itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+</div>
+
+<div class="row">
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_data_contato']}" />
+		<p:calendar tabindex="11"
+			value="#{finCobrancaMB.finCobranca.dataContato}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_fin_cobranca_label_data_contato']}"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_data_contato']}"
+			required="true">
+		</p:calendar>
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_hora_contato']}" />
+			<p:calendar tabindex="12"
+			value="#{finCobrancaMB.finCobranca.horaContato}"
+			converter="horaConverter" navigator="true" pattern="HH:mm" timeOnly="true"
+			locale="pt" styleClass="form-control"
+			label="#{text['cadastro_fin_cobranca_label_data_acerto_pagamento']}"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_data_acerto_pagamento']}"
+			required="true">
+		</p:calendar>
+		<!--<p:inputMask mask="99:99:99"
+			value="#{finCobrancaMB.finCobranca.horaContato}" tabindex="12"
+			label="#{text['cadastro_fin_cobranca_label_hora_contato']}"
+			required="false" styleClass="form-control"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_hora_contato']}"
+			disabled="#{finCobrancaMB.visualizando}" />-->
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_telefone_contato']}" />
+		<p:inputText value="#{finCobrancaMB.finCobranca.telefoneContato}"
+			tabindex="13"
+			label="#{text['cadastro_fin_cobranca_label_telefone_contato']}"
+			required="false" styleClass="form-control JSsomenteNumeros"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_telefone_contato']}"
+			disabled="#{finCobrancaMB.visualizando}" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_data_acerto_pagamento']}" />
+		<p:calendar tabindex="14"
+			value="#{finCobrancaMB.finCobranca.dataAcertoPagamento}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_fin_cobranca_label_data_acerto_pagamento']}"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_data_acerto_pagamento']}"
+			required="true">
+		</p:calendar>
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_total_atraso']}" />
+		<p:inputText value="#{finCobrancaMB.finCobranca.totalAtrasado}"
+			tabindex="15"
+			label="#{text['cadastro_fin_cobranca_label_total_atraso']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_total_atraso']}"
+			disabled="#{finCobrancaMB.visualizando}" />
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_total_juros']}" />
+		<p:inputText value="#{finCobrancaMB.finCobranca.totalJuros}"
+			tabindex="16"
+			label="#{text['cadastro_fin_cobranca_label_total_juros']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_total_juros']}"
+			disabled="#{finCobrancaMB.visualizando}" />
+	</div>
+	
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_total_multa']}" />
+		<p:inputText value="#{finCobrancaMB.finCobranca.totalMulta}"
+			tabindex="17"
+			label="#{text['cadastro_fin_cobranca_label_total_multa']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_total_multa']}"
+			disabled="#{finCobrancaMB.visualizando}" />
+	</div>
+	
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fin_cobranca_label_total_receber']}" />
+		<p:inputText value="#{finCobrancaMB.finCobranca.totalReceberNaData}"
+			tabindex="18"
+			label="#{text['cadastro_fin_cobranca_label_total_receber']}"
+			required="true" styleClass="form-control JSvalorMoeda"
+			converter="mascaraValorBigDecimalConverter"
+			requiredMessage="#{text['cadastro_fin_cobranca_label_total_receber']}"
+			disabled="#{finCobrancaMB.visualizando}" />
+	</div>
+	
+</div>
+
+</html>

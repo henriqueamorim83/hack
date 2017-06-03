@@ -1,0 +1,338 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_lancamento_pagar_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finLancamentoPagarMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finLancamentoPagarMB.state}" />
+								<t:saveState value="#{finLancamentoPagarMB.finLancamentoPagar}" />
+								<t:saveState value="#{finLancamentoPagarMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa"
+									rendered="#{finLancamentoPagarMB.pesquisando}">
+									<div class="row"></div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{finLancamentoPagarMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finLancamentoPagarMB.lista}" process="@form"
+														update="@form" tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela"
+										value="#{finLancamentoPagarMB.objetos}"
+										styleClass="ajusta_coluna" var="item" paginator="true"
+										lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finLancamentoPagarMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fin_documento_origem']}">
+											<p:outputLabel value="#{item.finDocumentoOrigem.descricao}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fornecedor']}">
+											<p:outputLabel value="#{item.fornecedor.pessoa.nome}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_qtd_parcela']}">
+											<p:outputLabel value="#{item.quantidadeParcela}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_pagar']}">
+											<p:outputLabel value="#{item.valorAPagar}">
+												<f:converter converterId="mascaraValorBigDecimalConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_data_lancamento']}">
+											<p:outputLabel value="#{item.dataLancamento}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_primeiro_vencimento']}">
+											<p:outputLabel value="#{item.primeiroVencimento}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_fin_lancamento_pagar_label_mesclado']}">
+											<p:outputLabel value="#{item.mescladoPara}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														<p:menuitem value="#{text['label.visualizar']}"
+															icon="ui-icon-document"
+															actionListener="#{finLancamentoPagarMB.prepararVisualizar(item)}"
+															process="@this" update="@form messages" />
+														<p:separator />
+														<p:menuitem value="#{text['label.editar']}"
+															icon="ui-icon-disk"
+															actionListener="#{finLancamentoPagarMB.prepararAlterar(item)}"
+															process="@this" update="@form messages" />
+														<p:separator />
+														<p:menuitem value="#{text['label.remover']}"
+															icon="ui-icon-trash"
+															actionListener="#{finLancamentoPagarMB.remove(item)}"
+															ajax="false" process="@form" update="@form messages" />
+
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+									<div class="col-md-4">
+										<p:commandButton value="#{text['label.mesclar']}"
+											title="#{text['label.mesclar']}" tabindex="10"
+											oncomplete="PF('dialogFinLancamentoPagar').show();"
+											rendered="#{finParcelaPagamentoMB.pesquisando}"
+											styleClass="btn btn-primary width100" process="@form"
+											update="@this :mensagens" />
+									</div>
+
+									<p:dialog widgetVar="dialogFinLancamentoPagar" showEffect="pop"
+										header="#{text['cadastro_fin_lancamento_pagar_label_title']}"
+										styleClass="width70" height="300" modal="true" closable="true"
+										closeOnEscape="true">
+
+										<div class="row">
+											<div class="col-md-12">
+												<p:dataTable id="FinLancamentoPagarDataTable"
+													value="#{finLancamentoPagarMB.listagemFinLancamentoPagar}"
+													styleClass="ajusta_coluna " var="item"  
+													rowsPerPageTemplate="5,10,15"
+													 rows="10" scrollable="true" rowKey="#{item.id}"
+													selection="#{finLancamentoPagarMB.lancamentosSelecionados}"
+													paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+													currentPageReportTemplate="{currentPage} de #{finLancamentoPagarMB.objetos.pageSize}"
+													rowClasses="odd, even"
+													emptyMessage="#{text['table.empty']}">
+
+													<f:facet name="header">
+
+														<p:commandButton process=":formBody:FinLancamentoPagarDataTable"
+															title="#{text['label.mesclar']}" icon="ui-icon-copy"
+															value="#{text['label.mesclar']}"
+															actionListener="#{finLancamentoPagarMB.mesclarLancamentos()}"
+															update="@form :mensagens">
+															
+														</p:commandButton>
+
+													</f:facet>
+
+													<p:column selectionMode="multiple" style="width:30px;" />
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fin_documento_origem']}">
+														<p:outputLabel
+															value="#{item.finDocumentoOrigem.descricao}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_fornecedor']}">
+														<p:outputLabel value="#{item.fornecedor.pessoa.nome}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_qtd_parcela']}">
+														<p:outputLabel value="#{item.quantidadeParcela}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_valor_pagar']}">
+														<p:outputLabel value="#{item.valorAPagar}">
+															<f:converter
+																converterId="mascaraValorBigDecimalConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_data_lancamento']}">
+														<p:outputLabel value="#{item.dataLancamento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_primeiro_vencimento']}">
+														<p:outputLabel value="#{item.primeiroVencimento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+												</p:dataTable>
+
+											</div>
+										</div>
+										
+										<div class="row">
+										
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="12"
+													oncomplete="PF('dialogFinLancamentoPagar').hide();"
+													rendered="#{finLancamentoPagarMB.pesquisando}"
+													action="#{finLancamentoPagarMB.voltar()}"
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+										</div>
+									</p:dialog>
+
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finLancamentoPagarMB.pesquisando}">
+
+									<p:tabView id="dados">
+										<p:tab
+											title="#{text['cadastro_fin_lancamento_pagar_label_dados_principais_title']}">
+											<ui:include src="fin_lancamento_pagar_dados_principais.xhtml"></ui:include>
+										</p:tab>
+
+										<p:tab
+											disabled="#{empty finLancamentoPagarMB.finLancamentoPagar.id}"
+											title="#{text['cadastro_fin_lancamento_pagar_label_parcela_title']}">
+											<ui:include src="fin_lancamento_pagar_parcela.xhtml"></ui:include>
+										</p:tab>
+
+										<p:tab
+											disabled="#{empty finLancamentoPagarMB.finLancamentoPagar.id}"
+											title="#{text['cadastro_fin_lancamento_pagar_label_natureza_financeira_label']}">
+											<ui:include
+												src="fin_lancamento_pagar_natureza_financeira.xhtml"></ui:include>
+										</p:tab>
+									</p:tabView>
+
+
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-12" />
+											<div class="col-xs-12 col-md-12">
+												<div class="col-md-2">
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{finLancamentoPagarMB.adiciona}"
+														rendered="#{finLancamentoPagarMB.adicionando==true}"
+														ajax="true" styleClass="btn btn-success width100"
+														process="@this :formBody:dados:panelFinLancamentoPagarDadosPessoais"
+														update="@form :mensagens" />
+
+													<p:commandButton value="#{text['label.atualizar']}"
+														tabindex="41" action="#{finLancamentoPagarMB.alterar}"
+														rendered="#{finLancamentoPagarMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+
+
+												<div class="col-md-2">
+													<p:commandButton value="#{text['label.gerar_pgto_fixo']}"
+														tabindex="42"
+														rendered="#{finLancamentoPagarMB.editando or finLancamentoPagarMB.adicionando}"
+														styleClass="btn btn-warning width100" ajax="false"
+														action="#{finLancamentoPagarMB.geraPagamentoFixo()}"
+														update="@form :mensagens" />
+												</div>
+
+												<div class="col-md-2">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="43" action="#{finLancamentoPagarMB.limpar}"
+														rendered="#{finLancamentoPagarMB.adicionando}"
+														ajax="false" styleClass="btn btn-primary width100"
+														process="@this" update="@form :mensagens" />
+												</div>
+												<div class="col-md-2">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finLancamentoPagarMB.voltar}"
+														tabindex="44" styleClass="btn btn-primary width100"
+														process="@form" update="@form :mensagens" />
+												</div>
+
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

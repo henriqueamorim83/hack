@@ -1,0 +1,381 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<p:outputPanel id="informacoesGerais">	
+	
+	<div class="row">
+	
+		<div class="form-group col-md-3">
+			<p:focus for="cnpj" />
+			<p:outputLabel styleClass="bLabel"  for="cnpj"
+				value="#{text['cadastro_empresa_label_cnpj']}" />
+			<p:inputMask mask="99.999.999/9999-99"  id="cnpj"
+				value="#{empresaMB.empresa.cnpj}" tabindex="13"
+				label="#{text['cadastro_empresa_label_cnpj']}"
+				required="true" styleClass="form-control"
+				requiredMessage="#{text['cadastro_empresa_label_cnpj']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="18" />
+		</div>
+		<div class="form-group col-md-9">
+			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_razao_social']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.razaoSocial}" tabindex="14"
+				label="#{text['cadastro_empresa_label_razao_social']}"
+				required="true" styleClass="form-control"
+				requiredMessage="#{text['cadastro_empresa_label_razao_social']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+	</div>
+	
+	<div class="row">
+	
+		<div class="form-group col-md-9">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_nome_fantasia']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.nomeFantasia}" tabindex="15"
+				label="#{text['cadastro_empresa_label_nome_fantasia']}"
+				required="true" styleClass="form-control"
+				requiredMessage="#{text['cadastro_empresa_label_nome_fantasia']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+	</div>
+	
+	<div class="row">
+	
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_inscricao_estadual']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.inscricaoEstadual}" tabindex="16"
+				label="#{text['cadastro_empresa_label_inscricao_estadual']}"
+				required="false" styleClass="form-control JSsomenteNumeros"
+				requiredMessage="#{text['cadastro_empresa_label_inscricao_estadual']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="20" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_inscricao_estadual_st']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.inscricaoEstadualSt}" tabindex="17"
+				label="#{text['cadastro_empresa_label_inscricao_estadual_st']}"
+				required="false" styleClass="form-control JSsomenteNumeros"
+				requiredMessage="#{text['cadastro_empresa_label_inscricao_estadual_st']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="20" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_inscricao_municipal']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.inscricaoMunicipal }" tabindex="18"
+				label="#{text['cadastro_empresa_label_inscricao_municipal']}"
+				required="false" styleClass="form-control JSsomenteNumeros"
+				requiredMessage="#{text['cadastro_empresa_label_inscricao_municipal']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="20" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_inscricao_junta_comercial']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.inscricaoJuntaComercial }" tabindex="19"
+				label="#{text['cadastro_empresa_label_inscricao_junta_comercial']}"
+				required="false" styleClass="form-control JSsomenteNumeros"
+				requiredMessage="#{text['cadastro_empresa_label_inscricao_junta_comercial']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="20" />
+		</div>
+		
+		<div class="form-group col-md-2">
+			<p:outputLabel value="#{text['cadastro_empresa_label_data_inscricao_junta']}"></p:outputLabel>
+			<p:calendar   tabindex="20"	  
+				value="#{empresaMB.empresa.dataInscJuntaComercial}"
+				converter="dataConverter"
+				navigator="true"  
+				pattern="dd/MM/yyyy" locale="pt"
+				styleClass="JSData form-control" 	
+				label="#{text['cadastro_empresa_label_data_inscricao_junta']}"
+				requiredMessage="#{text['cadastro_empresa_label_data_inscricao_junta']}"
+				required="false">						
+			</p:calendar>		
+		</div>
+		
+	</div>
+	
+	<div class="row">
+	
+		<div class="form-group col-md-2">
+			<p:outputLabel value="#{text['cadastro_empresa_label_data_inicio_atividades']}"></p:outputLabel>
+			<p:calendar   tabindex="20"	  
+				value="#{empresaMB.empresa.dataInicioAtividades}"
+				converter="dataConverter"
+				navigator="true"  
+				pattern="dd/MM/yyyy" locale="pt"
+				styleClass="JSData form-control" 	
+				label="#{text['cadastro_empresa_label_data_inicio_atividades']}"
+				requiredMessage="#{text['cadastro_empresa_label_data_inicio_atividades']}"
+				required="false">						
+			</p:calendar>		
+		</div>
+		
+		<div class="form-group col-md-2">
+			<p:outputLabel	value="#{text['cadastro_empresa_label_crt']}"
+				 styleClass="bLabel" />
+			<p:selectOneMenu value="#{empresaMB.empresa.crt}"
+				 tabindex="21" styleClass="form-control"
+				disabled="#{empresaMB.visualizando}" required="false"
+				requiredMessage="#{text['cadastro_empresa_label_crt']}">
+				<f:selectItem itemLabel="1- Simples Nacional" itemValue="1" />
+				<f:selectItem itemLabel="2- Simples Nacional - Excesso" itemValue="2" />			
+				<f:selectItem itemLabel="3- Regime Normal" itemValue="3" />
+				
+			</p:selectOneMenu>
+		</div>
+		
+		<div class="form-group col-md-2">
+			<p:outputLabel	value="#{text['cadastro_empresa_label_tipo_regime']}"
+				 styleClass="bLabel" />
+			<p:selectOneMenu value="#{empresaMB.empresa.tipoRegime}"
+				 tabindex="22" styleClass="form-control"
+				disabled="#{empresaMB.visualizando}" required="false"
+				requiredMessage="#{text['cadastro_empresa_label_tipo_regime']}">
+				<f:selectItem itemLabel="Simples Nacional" itemValue="1" />
+				<f:selectItem itemLabel="Lucro Real" itemValue="2" />			
+				<f:selectItem itemLabel="Lucro Presumido" itemValue="3" />
+				
+			</p:selectOneMenu>
+		</div>
+	
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_aliquota_pis']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.aliquotaPis }" tabindex="23"
+				label="#{text['cadastro_empresa_label_aliquota_pis']}"
+				converter="mascaraValorBigDecimalConverter"
+				required="false" styleClass="form-control  JSvalorMoeda"
+				requiredMessage="#{text['cadastro_empresa_label_aliquota_pis']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_aliquota_cofins']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.aliquotaCofins }" tabindex="24"
+				label="#{text['cadastro_empresa_label_aliquota_cofins']}"
+				converter="mascaraValorBigDecimalConverter"
+				required="false" styleClass="form-control  JSvalorMoeda"
+				requiredMessage="#{text['cadastro_empresa_label_aliquota_cofins']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_aliquota_sat']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.aliquotaSat }" tabindex="25"
+				label="#{text['cadastro_empresa_label_aliquota_sat']}"
+				converter="mascaraValorBigDecimalConverter"
+				required="false" styleClass="form-control  JSvalorMoeda"
+				requiredMessage="#{text['cadastro_empresa_label_aliquota_sat']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		
+		 
+		
+	</div>
+	
+	<div class="row">
+	
+		<div class="form-group col-md-3">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_empresa_contato']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.empresaContato }" tabindex="26"
+				label="#{text['cadastro_empresa_label_empresa_contato']}"
+				required="true" styleClass="form-control  "
+				requiredMessage="#{text['cadastro_empresa_label_empresa_contato']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-4">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_email']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.email }" tabindex="27"
+				label="#{text['cadastro_empresa_label_email']}"
+				required="false" styleClass="form-control  "
+				requiredMessage="#{text['cadastro_empresa_label_email']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_suframa']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.suframa }" tabindex="28"
+				label="#{text['cadastro_empresa_label_suframa']}"
+				required="false" styleClass="form-control  "
+				requiredMessage="#{text['cadastro_empresa_label_suframa']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+	</div>
+	
+	
+	<div class="row">
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_codigo_ibge_uf']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.codigoIbgeUf }" tabindex="29"
+				label="#{text['cadastro_empresa_label_codigo_ibge_uf']}"
+				required="false" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_codigo_ibge_uf']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_codigo_ibge_cidade']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.codigoIbgeCidade }" tabindex="30"
+				label="#{text['cadastro_empresa_label_codigo_ibge_cidade']}"
+				required="false" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_codigo_ibge_cidade']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_codigo_cnae_principal']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.codigoCnaePrincipal }" tabindex="31"
+				label="#{text['cadastro_empresa_label_codigo_cnae_principal']}"
+				required="true" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_codigo_cnae_principal']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_codigo_gps']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.codigoGps }" tabindex="32"
+				label="#{text['cadastro_empresa_label_codigo_gps']}"
+				required="false" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_codigo_gps']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_codigo_terceiros']}" />
+			<p:inputText   
+				value="#{empresaMB.empresa.codigoTerceiros }" tabindex="34"
+				label="#{text['cadastro_empresa_label_codigo_terceiros']}"
+				required="false" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_codigo_terceiros']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+		
+		<div class="form-group col-md-2">			 
+			<p:outputLabel styleClass="bLabel"   
+				value="#{text['cadastro_empresa_label_cei']}" />
+			<p:inputText   
+				value="cadastro_empresa_label_cei }" tabindex="35"
+				label="#{text['cadastro_empresa_label_cei']}"
+				required="false" styleClass="form-control JSsomenteNumeros "
+				requiredMessage="#{text['cadastro_empresa_label_cei']}"				
+				disabled="#{empresaMB.visualizando}"				
+				maxlength="200" />
+		</div>
+	
+	</div>
+	<div class="row">
+		<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_empresa_label_sindicato']}" />
+				<p:selectOneMenu disabled="#{empresaMB.visualizando}"
+					value="#{empresaMB.empresa.sindicato}" tabindex="36"
+					styleClass="form-control"
+					converter="sindicatoConverter"
+					requiredMessage="#{text['cadastro_empresa_label_sindicato']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{empresaMB.listaSindicato}"
+						var="item" itemLabel="#{item.nome}"
+						itemValue="#{item}" />				
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+			
+		<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_empresa_label_fpas']}" />
+				<p:selectOneMenu disabled="#{empresaMB.visualizando}"
+					value="#{empresaMB.empresa.fpas}" tabindex="37"
+					styleClass="form-control"
+					converter="fpasConverter"
+					requiredMessage="#{text['cadastro_empresa_label_fpas']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{empresaMB.listaFpas}"
+						var="item" itemLabel="#{item.descricao}"
+						itemValue="#{item}" />				
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+	<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_empresa_label_contador']}" />
+				<p:selectOneMenu disabled="#{empresaMB.visualizando}"
+					value="#{empresaMB.empresa.contador}" tabindex="38"
+					styleClass="form-control"
+					converter="contadorConverter"
+					requiredMessage="#{text['cadastro_empresa_label_contador']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{empresaMB.listaContador}"
+						var="item" itemLabel="#{item.nome}"
+						itemValue="#{item}" />				
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+	
+	</div>
+	
+
+
+</p:outputPanel>
+</ui:composition>

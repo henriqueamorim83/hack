@@ -1,0 +1,225 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_banco_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{bancoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{bancoMB.state}" />
+								<t:saveState value="#{bancoMB.banco}" />
+								<t:saveState value="#{bancoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{bancoMB.pesquisando}">
+									<div class="row">
+										
+										
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{bancoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{bancoMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{bancoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{bancoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column	headerText="#{text['cadastro_banco_label_codigo']}">
+											<p:outputLabel value="#{item.codigo}" />
+										</p:column>
+										
+										<p:column	headerText="#{text['cadastro_banco_label_nome']}">
+											<p:outputLabel value="#{item.nome}" />
+										</p:column>
+
+										<p:column	headerText="#{text['cadastro_banco_label_url']}">
+											<p:outputLabel value="#{item.url}" />
+										</p:column>
+										
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{bancoMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{bancoMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{bancoMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not bancoMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-12">
+											<p:focus for="nome" />
+											<p:outputLabel styleClass="bLabel"  for="nome"
+												value="#{text['cadastro_banco_label_nome']}" />
+											<p:inputText id="nome"
+												value="#{bancoMB.banco.nome}" tabindex="13"
+												label="#{text['cadastro_banco_label_nome']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_banco_label_nome']}"												
+												disabled="#{bancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-3">											
+											<p:outputLabel styleClass="bLabel" 
+												value="#{text['cadastro_banco_label_codigo']}" />
+											<p:inputText
+												value="#{bancoMB.banco.codigo}" tabindex="14"
+												label="#{text['cadastro_banco_label_codigo']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_banco_label_codigo']}"												
+												disabled="#{bancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-7">											
+											<p:outputLabel styleClass="bLabel" 
+												value="#{text['cadastro_banco_label_url']}" />
+											<p:inputText
+												value="#{bancoMB.banco.codigo}" tabindex="15"
+												label="#{text['cadastro_banco_label_url']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_banco_label_url']}"												
+												disabled="#{bancoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{bancoMB.adiciona}"
+														rendered="#{bancoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{bancoMB.alterar}"
+														rendered="#{bancoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{bancoMB.limpar}"
+														rendered="#{bancoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{bancoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

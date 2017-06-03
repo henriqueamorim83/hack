@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+<div class="row">
+	<div class="col-md-12">
+	
+		<p:dataTable id="dataTableFinCobrancaParcelaReceber" var="obj"
+									value="#{finCobrancaMB.finCobranca.listaFinCobrancaParcelaReceber}"
+									paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+									resizableColumns="true" editable="true" editMode="row">
+									<div class="aEsquerda">
+									<f:facet name="header"  >
+										<p:commandButton process="dataTableFinCobrancaParcelaReceber"
+											title="#{text['cadastro_fin_cobranca_label_button_calcular']}" 
+											icon="ui-icon-calculator"
+											styleClass="aEsquerda"
+											actionListener="#{finCobrancaMB.calcularJurosMulta}"
+											update="dataTableFinCobrancaParcelaReceber,:formBody:outputPanelDetalhe" />
+										<p:commandButton process="dataTableFinCobrancaParcelaReceber"
+											title="#{text['cadastro_fin_cobranca_label_button_simular']}" 
+											icon="ui-icon-pencil"
+											styleClass="aEsquerda"
+											actionListener="#{finCobrancaMB.simulaValores}"
+											update=":formBody:outputPanelDetalhe" />
+									</f:facet>
+									</div>	
+
+									<p:ajax event="rowEdit" listener="#{finCobrancaMB.alteraParcelaCobranca}"
+										update="dataTableFinCobrancaParcelaReceber" />
+
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_vencimento']}">
+										<p:outputLabel value="#{obj.dataVencimento}" >
+											<f:converter converterId="dataConverter"></f:converter>
+										</p:outputLabel>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_vlr_parcela']}">
+										<h:outputLabel value="#{obj.valorParcela}">
+											<f:convertNumber pattern="#,##0.00" />
+										</h:outputLabel>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_juros_simulado']}">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputLabel value="#{obj.valorJuroSimulado}">
+													<f:convertNumber pattern="#,##0.00" />
+												</h:outputLabel>
+											</f:facet>
+											<f:facet name="input">
+												<pe:inputNumber value="#{obj.valorJuroSimulado}"
+													decimalPlaces="2" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_juros_acordo']}">
+										<h:outputLabel value="#{obj.valorJuroAcordo}">
+											<f:convertNumber pattern="#,##0.00" />
+										</h:outputLabel>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_multa']}">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputLabel value="#{obj.valorMultaSimulado}">
+													<f:convertNumber pattern="#,##0.00" />
+												</h:outputLabel>
+											</f:facet>
+											<f:facet name="input">
+												<pe:inputNumber value="#{obj.valorMultaSimulado}"
+													decimalPlaces="2" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_multa_acordo']}">
+										<h:outputLabel value="#{obj.valorMultaAcordo}">
+											<f:convertNumber pattern="#,##0.00" />
+										</h:outputLabel>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_vlr_receber_simulado']}" width="15%">
+										<h:outputLabel value="#{obj.valorReceberSimulado}">
+											<f:convertNumber pattern="#,##0.00" />
+										</h:outputLabel>
+									</p:column>
+									<p:column headerText="#{text['cadastro_fin_cobranca_label_parcela_simulado_vlr_receber']}" width="15%">
+										<h:outputLabel value="#{obj.valorReceberAcordo}">
+											<f:convertNumber pattern="#,##0.00" />
+										</h:outputLabel>
+									</p:column>
+									<p:column width="2%">
+										<p:rowEditor />
+									</p:column>									
+								</p:dataTable>
+	
+	</div>
+
+</div>
+
+</html>	

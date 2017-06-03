@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:fieldset id="enderecoField" styleClass="width98"
+		legend="#{text['cadastro_pedido_label_endereco_fieldset_entrega_title']}">
+		<div class="row">
+			<p:outputPanel id="idCep" styleClass="form-group col-md-3">
+				<p:outputLabel
+					value="#{text['cadastro_pedido_label_endereco_entrega_cep']}" for="cep"
+					styleClass="bLabel" />
+				<p:inputMask mask="99999?-999" placeholder=""
+					styleClass="form-control" disabled="#{pedidoMB.visualizando}"
+					id="cep" tabindex="15"
+					value="#{pedidoMB.pedido.enderecoEntrega.logradouro.cep}"
+					label="#{text['cadastro_pedido_label_endereco_entrega_cep']}"
+					required="true"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_cep']}">
+					<p:ajax process=":formBody:enderecoField"
+						update="iDEstado :formBody:enderecoField formBody:enderecoEntrega :formBody:iDEstado :formBody:iDCidade :formBody:iDBairro :formBody:iDLogradouro messages"
+						listener="#{pedidoMB.buscarCEP}"></p:ajax>
+				</p:inputMask>
+			</p:outputPanel>
+			<p:outputPanel id="iDEstado" styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_estado']}" />
+				<p:selectOneMenu id="iDUf" maxlength="2"
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.enderecoEntrega.estado}" tabindex="16"
+					styleClass="form-control width100"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_estado']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaEstados}" var="item"
+						itemLabel="#{item.sigla}" itemValue="#{item}" />
+					<p:ajax event="change" update="iDCidade" process="@this" />
+					<f:converter converterId="estadoConverter" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+			<p:outputPanel id="iDCidade" styleClass="form-group col-md-6">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_cidade']}" />
+				<p:selectOneMenu id="cidade" tabindex="17" maxlength="2"
+					converter="cidadeConverter" styleClass="form-control width100"
+					disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.pedido.enderecoEntrega.cidade}"
+					label="#{text['cadastro_pedido_label_endereco_entrega_cidade']}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_cidade']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaCidadesPorEstado}"
+						var="item" itemLabel="#{item.descricao.toUpperCase()}"
+						itemValue="#{item}" />
+					<p:ajax event="change" update="iDBairro" process="@this" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+		</div>
+		<div class="row">
+			<p:outputPanel id="iDBairro" styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_bairro']}" />
+				<p:selectOneMenu id="bairro" tabindex="18" maxlength="2"
+					converter="bairroConverter" styleClass="form-control width100"
+					disabled="#{pedidoMB.visualizando}" 
+					value="#{pedidoMB.pedido.enderecoEntrega.bairro}"
+					label="#{text['cadastro_pedido_label_endereco_entrega_bairro']}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_bairro']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaBairrosPorcidade}"
+						var="item" itemLabel="#{item.descricao.toUpperCase()}"
+						itemValue="#{item}" />
+					<p:ajax event="change" update="iDLogradouro" process="@this" />
+				</p:selectOneMenu>
+			</p:outputPanel>
+			<p:outputPanel id="iDLogradouro" styleClass="form-group col-md-7">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_logradouro']}"
+					for="logradouro"  />
+				<p:autoComplete id="logradouro" dropdown="true" scrollHeight="150"
+					disabled="#{pedidoMB.visualizando}" 
+					value="#{pedidoMB.pedido.enderecoEntrega.logradouro.descricao}"
+					tabindex="19" var="item" itemLabel="#{item}" itemValue="#{item}"				
+					styleClass="width96"
+					completeMethod="#{pedidoMB.complete}" minQueryLength="5"
+					process="@this" />
+			
+				
+			</p:outputPanel>
+			<p:outputPanel styleClass="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_numero']}" />
+				<p:inputText id="numero"
+					value="#{pedidoMB.pedido.enderecoEntrega.numero}" tabindex="20"
+					label="#{text['cadastro_pedido_label_endereco_entrega_numero']}"
+					required="false" styleClass="form-control"
+					
+					disabled="#{pedidoMB.visualizando}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_numero']}"
+					 />
+			</p:outputPanel>
+		</div>
+		<div class="row">
+			<p:outputPanel styleClass="form-group col-md-12">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_endereco_entrega_complemento']}" />
+				<p:inputText id="complemento"
+					value="#{pedidoMB.pedido.enderecoEntrega.complemento}" tabindex="22"
+					label="#{text['cadastro_pedido_label_endereco_entrega_complemento']}"
+					required="false" 
+					styleClass="form-control" disabled="#{pedidoMB.visualizando}"
+					requiredMessage="#{text['cadastro_pedido_label_endereco_entrega_complemento']}"
+					 />
+			</p:outputPanel>
+		</div>
+	</p:fieldset>
+
+</ui:composition>

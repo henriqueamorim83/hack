@@ -1,0 +1,407 @@
+.width4{width: 4%;}
+.width5{width: 5%;}
+.width9{width: 9%;}
+.width10{width: 10%;}
+.width11{width: 11%;}
+.width12{width: 12%;}
+.width13{width: 13%;}
+.width15{width: 15%;}
+.width16{width: 16%;}
+.width18{width: 18%;}
+.width19{width: 19%;}
+.width20{width: 20% !important;}
+.width23{width: 23%;}
+.width25{width: 25%;}
+.width30{width: 30%;}
+.width31{width: 31%;}
+.width32{width: 32%;}
+.width33{width: 33% !important;}
+.width40{width: 40%;}
+.width43{width: 43%;}
+.width46{width: 46%;}
+.width50{width: 50% !important;}
+.width60{width: 60%;}
+.width66{width: 66%;}
+.width70{width: 70% !important;}
+.width80{width: 80%;}
+.width90{width: 90%;}
+.width91{width: 91% !important;}
+.width95{width: 95%;}
+.width98{width: 98%;}
+.width99{width: 99%;}
+.width100{width: 100% !important;}
+.width105{width: 105% !important;}
+.width124{width: 124%;}
+.width126{width: 126%;}
+.width155{width: 155%;}
+.width157{width: 157%;}
+.width159{width: 159%;}
+.width160{width: 160%;}
+.width200{width: 200% !important;}
+
+.text-align-left1{
+	margin-left: 1px;
+	float: left;
+}
+.text-align-left4{
+	margin-left: 4px;
+	
+}
+.text-align-left5{
+	margin-left: 5px;
+	float: left;
+}
+.text-align-left10{
+	margin-left: 10px;
+	float: left;
+}
+.text-align-left10-rigth{
+	margin-left: 10px;
+	float: right;
+}
+!important;
+.aDireita{	
+	float: right !important;;
+}
+.align-rigth-margin12px{
+	margin-right : 12px;	
+	float: right;
+}
+.align-rigth-margin31px{
+	margin-right : 31px;	
+	float: right;
+}
+.align-rigth-margin38px{
+	margin-right : 38px;	
+	float: right;
+}
+.align-rigth-margin12{
+	margin-right : 12%;	
+	float: right;
+}
+.text-align-left15{
+	margin-left: 15px;
+	float: left;
+}
+.text-align-left20{
+	margin-left: 20px;
+	float: left;
+}
+.text-align-left25{
+	margin-left: 25px;
+	float: left;
+}
+.text-align-left30px{
+	margin-left: 30px;
+	float: left;
+}
+.text-align-left30{
+	margin-left: 30%;
+	float: left;
+}
+.text-align-left40{
+	margin-left: 40px;
+	float: left;
+}
+.text-align-left44{
+	margin-left: 44px;
+	float: left;
+}
+.text-align-left56{
+	margin-left: 56px;
+	float: left;
+}
+.text-align-left72{
+	margin-left: 72px;
+	float: left;
+}
+
+.text-align-left74{
+	margin-left: 74px;
+	float: left;
+}
+
+
+.alpha grid_4{background-image: url("../../hackcity/resources/images/logo.png");}
+.alpha grid_5{background-image: url("../../hackcity/resources/images/marcahn1.png");}
+#logradouro{width: 100%;}
+.uplFileClass div label{height: 15px !important;width: 30px !important;}
+.estiloColuna { width: 20px !important;}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.botaoRemover.ui-state-hover {
+	/*background: url("../../hackcity/resources/images/remover.png") no-repeat center !important;
+	background-position: top !important;*/
+}
+.botaoRemover {
+	background: url("../../hackcity/resources/images/remover.png") no-repeat center !important;
+	background-repeat: no-repeat !important;
+	background-position: top !important;
+	width: 24px !important;
+	height: 24px !important;
+	border: none !important;
+	box-shadow: none !important;
+	font-size: 0px !important;
+	cursor: pointer;
+}
+.comandLink{
+	font-size: 16px !important;
+	color: #000000 !important;
+}
+
+.texto-align-center{
+	text-align: center;
+}
+
+.texto-align-rigth{
+	text-align: right;
+}
+.buttonAlign5{
+	float: left;
+	margin-left:5px;
+	margin-top:28px;
+}
+.buttonAlign10{
+	margin-left: 10px;
+	 float: left;
+}
+.buttonAlign20{
+	margin-left: 20px;
+	 float: left;
+}
+.buttonAlign30{
+	margin-left: 30px;
+	 float: left;
+}
+.dialog-nota{
+
+   height: 147px !important;
+  width: 650px !important;
+  position: fixed !important;
+  top: 155px !important;
+  left: 344.03125px !important;
+  z-index: 1021 !important;
+}
+.margin-right55px{
+	  margin-right: 55px;
+}
+.margin-top-8{
+	margin-top: 8%;
+}
+.margin-top-20{
+	margin-top: -20px;
+}
+.margin-top-29{
+	margin-top: 29px;
+}
+.margin-top-50{
+	margin-top: -50px;
+}
+.margin-top5{
+	margin-top:5px;
+}
+.margin-top12{
+	margin-top:12px;
+}
+.margin-top20{
+	margin-top:20px;
+}
+
+.margin-top27{
+	margin-top:27px;
+}
+.margin-top30{
+	margin-top:30px;
+}
+.botaoConsultar{
+	  margin-right: 12px;
+  margin-top: 2px;
+    float: right;
+}
+.botaoCancelar{
+  float: right;
+  margin-right: -56px;
+  margin-top: 26px;
+}
+.botaoConfirmar{
+ float: right;
+  margin-right: 12%;
+  margin-top: 1%;
+}
+
+.botaoListagem{
+float: right;
+  margin-right: -57px;
+  margin-top: 50px;
+}
+#divMensagemErro {
+	margin: 0 auto;
+	padding: 10px;
+	text-align: left;
+	margin-bottom: 15px;
+	border-radius: 5px;
+	width: 90%;
+	vertical-align: middle;
+	display: none;
+}
+
+#divMensagemErro ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	margin-left: 20px;
+}
+
+#divMensagemErro ul li {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+/*
+Status Dialog 
+*/
+.statusAjaxDialog{
+	width: 250px;
+	height: 160px;	
+}
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container {width: 96% !important; padding-left: 2%; padding-right: 2%;}
+.ui-selectonemenu-panel .ui-selectonemenu-filter {width: 90% !important; padding-left: 2%; padding-right: 8%;}
+:focus {
+	outline: 0;
+}
+*::-moz-selection {background:#323A45; color:red;}
+*::selection {    background: #9EC3F5;   color: #070AD8;}
+
+#dialogCliente{
+	  left: 570px !important;
+}
+.display{
+	background-image: url("/hackcity/javax.faces.resource/ripe.png.jsf?ln=images");
+	height:150px;
+	margin: 2em auto;
+    background-repeat: no-repeat;
+    position: fixed;
+    left: 40%;
+    top: 30%;
+}
+.panelPadrao{
+	margin-left: 10px;
+ 	float: left;  		
+}
+
+.tipoDocumento{
+	    margin: 29px 0px 0px 6px;
+	    width: 10%;
+}
+.ui-datatable-tablewrapper{
+	width: 100%;
+}
+
+#formBody:logradouro_input{
+	width: 100%;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container .ui-icon {
+    position: absolute;
+    top: 10px;
+    right: 1px
+}
+.align-rigth{
+	float: right !important;
+}
+
+.cadProdutos{
+	background-color: hsla(42, 97%, 29%, 0.08);;
+}
+
+
+/**Barra Lateral Relógio**/
+.clock {
+    z-index:20000;
+    position:absolute;
+    margin:0 auto;
+    padding:0px 0;
+    right:0;
+    color:#444;
+    padding-right:7px;
+    width:200px;
+    font-weight: bold;
+    
+    font-family:"HelveticaNeue45Light",Helvetica, Arial, serif;
+}
+
+.clock #Date {
+    font-size:13px;
+    text-align:right;
+    color:#444;
+    font-weight: bold;
+}
+
+.clock ul {
+    width:55px;
+    margin:0 auto;
+    padding:0px;
+    list-style:none;
+    text-align:center;
+    float:right;
+    letter-spacing:normal
+}
+.clock ul li {
+    display:inline;
+    font-size:13px;
+    text-align:center;
+    padding-left:0;
+    padding-right:0;
+    margin:0;
+}
+
+.clock #point {
+    position:relative; -moz-animation:mymove 1s ease infinite;
+    -webkit-animation:mymove 1s ease infinite;
+    padding-left:0;
+    padding-right:0;
+    margin:0;
+}
+
+.clock #sec, .barra_lateral .clock .point_2{
+    opacity:0.2;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger{
+	width: 25px !important;
+}
+
+ 
+
+.ui-fileupload-buttonbar .ui-fileupload-choose input {
+    /* position: absolute; */
+    top: 0;
+    right: 0;
+    margin: 5px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    font-size: 0px;
+    direction: ltr;
+    cursor: pointer;
+}   
+
+.ui-fileupload-content .ui-progressbar {
+    width: 82px !important;
+    height: 20px;
+    margin: 0px;
+}
+
+.ui-button-text{
+   font-size:14px;
+}
+.smallButton .ui-button-text {
+   font-size:11px;
+}
+
+#eventDialog{
+	width:30% ;	
+}
+
+.idcol{width: 10%}
+.prioritycol{width: 5%}
+.titlecol{width: 30%}
+.descriptioncol{width: 40%}
+.actionscol{width: 10px}	

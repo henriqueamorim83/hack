@@ -1,0 +1,384 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_convenio_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{convenioMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{convenioMB.state}" />
+								<t:saveState value="#{convenioMB.convenio}" />
+								<t:saveState value="#{convenioMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{convenioMB.pesquisando}">
+									<div class="row">
+									  
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{convenioMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{convenioMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{convenioMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{convenioMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+
+										<p:column 	headerText="#{text['cadastro_convenio_label_cnpj']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.cnpj}" />
+										</p:column>
+										<p:column 	headerText="#{text['cadastro_convenio_label_nome']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.nome}" />
+										</p:column>
+										<p:column	headerText="#{text['cadastro_convenio_label_nome']}">
+											<p:outputLabel value="#{item.nome}" />
+										</p:column>
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{convenioMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{convenioMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{convenioMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not convenioMB.pesquisando}">
+									
+									<div class="row">
+										 <div class="form-group col-md-12">		
+										 	<p:focus for="nome"></p:focus>									 
+											<p:outputLabel styleClass="bLabel"   for="nome"
+												value="#{text['cadastro_convenio_label_nome']}" />
+											<p:inputText id="nome"
+												value="#{convenioMB.convenio.nome}" tabindex="10"
+												label="#{text['cadastro_convenio_label_nome']}"
+												required="false" styleClass="form-control  "
+												requiredMessage="#{text['cadastro_convenio_label_nome']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="200" />
+										</div>
+										
+									</div>
+									
+									
+								
+									<div class="row">
+									
+										<div class="form-group col-md-4">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_logradouro']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.logradouro}" tabindex="16"
+												label="#{text['cadastro_convenio_label_logradouro']}"
+												required="false" styleClass="form-control   "
+												requiredMessage="#{text['cadastro_convenio_label_logradouro']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="200" />
+										</div>
+										
+										<div class="form-group col-md-1">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_numero']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.numero}" tabindex="17"
+												label="#{text['cadastro_convenio_label_numero']}"
+												required="false" styleClass="form-control   "
+												requiredMessage="#{text['cadastro_convenio_label_numero']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+										<div class="form-group col-md-3">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_bairro']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.bairro}" tabindex="18"
+												label="#{text['cadastro_convenio_label_bairro']}"
+												required="false" styleClass="form-control   "
+												requiredMessage="#{text['cadastro_convenio_label_bairro']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+										<div class="form-group col-md-1">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_uf']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.uf}" tabindex="19"
+												label="#{text['cadastro_convenio_label_uf']}"
+												required="false" styleClass="form-control   "
+												requiredMessage="#{text['cadastro_convenio_label_uf']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="2" />
+										</div>
+										
+										<div class="form-group col-md-2">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_municipio_ibge']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.municipioIbge}" tabindex="20"
+												label="#{text['cadastro_convenio_label_municipio_ibge']}"
+												required="false" styleClass="form-control  JSsomenteNumeros "
+												requiredMessage="#{text['cadastro_convenio_label_municipio_ibge']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="21" />
+										</div>
+									
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-2">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_cep']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.cep}" tabindex="21"
+												label="#{text['cadastro_convenio_label_cep']}"
+												required="false" styleClass="form-control  JSsomenteNumeros "
+												requiredMessage="#{text['cadastro_convenio_label_cep']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="9" />
+										</div>
+										
+										<div class="form-group col-md-3">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_fone']}" />
+											<p:inputText  
+												value="#{convenioMB.convenio.telefone}" tabindex="22"
+												label="#{text['cadastro_convenio_label_fone']}"
+												required="false" styleClass="form-control  JSsomenteNumeros "
+												requiredMessage="#{text['cadastro_convenio_label_fone']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_convenio_label_desconto']}" />
+												<p:inputText 
+													value="#{convenioMB.convenio.desconto}" tabindex="23"
+													label="#{text['cadastro_convenio_label_desconto']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" 
+													disabled="#{convenioMB.visualizando}"
+													requiredMessage="#{text['cadastro_convenio_label_desconto']}"
+													/>		 
+										</p:outputPanel>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel value="#{text['cadastro_convenio_label_data_cadastro']}"></p:outputLabel>
+											<p:calendar   tabindex="23"	  
+												value="#{convenioMB.convenio.dataCadastro}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_convenio_label_data_cadastro']}"
+												requiredMessage="#{text['cadastro_convenio_label_data_cadastro']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel value="#{text['cadastro_convenio_label_data_vencimento']}"></p:outputLabel>
+											<p:calendar   tabindex="24"	  
+												value="#{convenioMB.convenio.dataVencimento}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_convenio_label_data_vencimento']}"
+												requiredMessage="#{text['cadastro_convenio_label_data_vencimento']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-3">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_cnpj']}" />
+											<p:inputMask mask="99.999.999/9999-99"  
+												value="#{convenioMB.convenio.cnpj}" tabindex="25"
+												label="#{text['cadastro_convenio_label_cnpj']}"
+												required="false" styleClass="form-control  JSsomenteNumeros "
+												requiredMessage="#{text['cadastro_convenio_label_cnpj']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+										<div class="form-group col-md-5">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_email']}" />
+											<p:inputText 
+												value="#{convenioMB.convenio.email}" tabindex="26"
+												label="#{text['cadastro_convenio_label_email']}"
+												required="false" styleClass="form-control    "
+												requiredMessage="#{text['cadastro_convenio_label_email']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										<div class="form-group col-md-4">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_site']}" />
+											<p:inputText 
+												value="#{convenioMB.convenio.site}" tabindex="27"
+												label="#{text['cadastro_convenio_label_site']}"
+												required="false" styleClass="form-control    "
+												requiredMessage="#{text['cadastro_convenio_label_site']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="20" />
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									
+										<div class="form-group col-md-12">										 	 					 
+											<p:outputLabel styleClass="bLabel"   
+												value="#{text['cadastro_convenio_label_descricao']}" />
+											<p:inputTextarea 
+												value="#{convenioMB.convenio.descricao}" tabindex="28"
+												label="#{text['cadastro_convenio_label_descricao']}"
+												required="false" styleClass="form-control    "
+												requiredMessage="#{text['cadastro_convenio_label_descricao']}"												
+												disabled="#{convenioMB.visualizando}"												
+												maxlength="500" />
+										</div>
+									
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{convenioMB.adiciona}"
+														rendered="#{convenioMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{convenioMB.alterar}"
+														rendered="#{convenioMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{convenioMB.limpar}"
+														rendered="#{convenioMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{convenioMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

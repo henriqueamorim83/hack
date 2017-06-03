@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+	
+	
+<div class="col-md-12">
+		<p:dataTable id="dataTableFinParcelaRecebimento" var="item"
+			value="#{finParcelaRecebimentoMB.finParcelaReceber.listaFinParcelaRecebimento}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			selection="#{finParcelaRecebimentoMB.finParcelaRecebimentoSelecionado}"
+			selectionMode="single" resizableColumns="true" rowKey="#{item.id}"
+			emptyMessage="#{text['table.empty']}">
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_tipo']}">
+				<p:outputLabel value="#{item.finTipoRecebimento.descricao}" />
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_dados_principais_data_vencimento']}">
+				<p:outputLabel value="#{item.dataRecebimento}">
+					<f:converter converterId="dataConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_juros']}">
+				<p:outputLabel value="#{item.valorJuro}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_multa']}">
+				<p:outputLabel value="#{item.valorMulta}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_desconto']}">
+				<p:outputLabel value="#{item.valorDesconto}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_valor_pago']}">
+				<p:outputLabel value="#{item.valorRecebido}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_recebimento_label_recebimentos_historico']}">
+				<p:outputLabel value="#{item.historico}" />
+
+
+			</p:column>
+
+			<p:column headerText="Ações">
+				<div class="row col-md-12">
+					<div class="btn-group">
+						<p:menuButton value="#{text['label.opcao']}">
+							<p:menuitem value="#{text['label.remover']}"
+								action="#{finParcelaRecebimentoMB.excluirFinParcelaRecebimento(item)}"
+								title="#{text['label.remover']}" icon="ui-icon-document"								 
+								process="dataTableFinParcelaRecebimento" update="@form :mensagens" />
+						</p:menuButton>
+					</div>
+				</div>
+			</p:column>
+		</p:dataTable>
+
+	</div>
+ 
+
+</html>	

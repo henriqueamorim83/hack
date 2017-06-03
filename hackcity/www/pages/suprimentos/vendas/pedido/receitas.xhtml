@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<p:fieldset id="receitasFieldSet" styleClass="width98"
+		legend="#{text['cadastro_pedido_label_receita_title_field_set']}">
+
+	<div class="row">
+		
+			<p:outputPanel styleClass="form-group col-md-1">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_receita_quantidade']}" />
+				<p:inputText  id="qtdReceita"
+					value="#{pedidoMB.quantidade}" tabindex="50"
+					label="#{text['cadastro_pedido_label_receita_quantidade']}"
+					required="false" 
+					styleClass="form-control JSsomenteNumeros" disabled="#{pedidoMB.visualizando}"
+					requiredMessage="#{text['cadastro_pedido_label_receita_quantidade']}"
+					 >					
+				</p:inputText>	 
+			</p:outputPanel>
+			
+			<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pedido_label_receita_descricao']}" />
+				<p:selectOneMenu disabled="#{pedidoMB.visualizando}"
+					value="#{pedidoMB.itemPedido}" tabindex="51"
+					styleClass="form-control width100"
+					requiredMessage="#{text['cadastro_pedido_label_receita_descricao']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{pedidoMB.listaItemPedidos}"
+						var="item" itemLabel="#{item.produto!=null? item.produto.descricao: item.receita.descricao}"
+						itemValue="#{item}" />
+					<f:converter converterId="itemPedidoConverter" />
+					
+				</p:selectOneMenu>
+			</p:outputPanel>
+			
+			
+			<div class="form-center coll-md-5"/>
+			<div class="form-group col-md-1" style="top : 13px;">		
+				<p:commandButton value="#{text['label.salvar']}"
+					tabindex="52" action="#{pedidoMB.adicionarReceita}"					
+					styleClass="btn btn-success width100" process="@this :formBody:receitasFieldSet "
+					update=":formBody:receitasFieldSet   :formBody:valores :mensagens :formBody:subTotal :formBody:descontoPedido" />
+			</div>		
+			
+		
+			
+					
+				
+			
+	</div>
+	
+	
+		<p:outputPanel styleClass="row">
+				
+			<p:outputPanel styleClass="form-group col-md-12">								
+			<p:dataTable id="tabelaReceita" styleClass="width100"					
+					rowKey="#{item.id}"
+					value="#{pedidoMB.pedido.listaDePedidoProduto}" var="item"									
+					paginator="true" 	rows="6"					
+					emptyMessage="#{text['table.empty']}">							
+					
+					<p:column headerText="#{text['cadastro_pedido_label_receita_quantidade']}" >
+						<p:outputLabel value="#{item.quantidade}"  />
+					</p:column>
+					<p:column headerText="#{text['cadastro_pedido_label_receita_ean']}" >
+						<p:outputLabel value="#{item.itemPedido.produto!=null?item.itemPedido.produto.ean :item.itemPedido.receita.ean }"  />
+					</p:column>
+					<p:column headerText="#{text['cadastro_pedido_label_receita_descricao']}" >
+						<p:outputLabel value="#{item.itemPedido.produto!=null?item.itemPedido.produto.descricao :item.itemPedido.receita.descricao}"  />
+					</p:column>
+					 <p:column headerText="#{text['cadastro_pedido_label_receita_unidade']}" >
+						<p:outputLabel value="#{item.unidade.descricao} - #{item.unidade.abreviatura}"  />
+					</p:column>
+					<p:column headerText="#{text['cadastro_pedido_label_receita_valor_unitario']}" >
+						<p:outputLabel value="#{item.itemPedido.produto!=null?item.itemPedido.produto.precoVenda :item.itemPedido.receita.valorVenda}" >
+							 <f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+						</p:outputLabel>
+					</p:column>
+					<p:column headerText="#{text['cadastro_pedido_label_receita_valor_soma']}" >
+						<p:outputLabel value="#{item.valor}"  >
+							 <f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+						</p:outputLabel>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{text['label.remover']}"
+							process="@this :formBody:receitasFieldSet :formBody:valores"
+							update=":formBody:receitasFieldSet   :formBody:valores :mensagens :formBody:subTotal :formBody:valores" ajax="true"
+							action="#{pedidoMB.removerReceita(item)}" disabled="#{pedidoMB.visualizando}"
+							tabindex="53"></p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+			
+		</p:outputPanel>
+		
+		
+		
+	
+	
+
+</p:fieldset>	
+
+</ui:composition>	

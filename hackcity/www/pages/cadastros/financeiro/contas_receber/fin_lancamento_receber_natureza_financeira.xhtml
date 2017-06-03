@@ -1,0 +1,141 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<p:outputPanel id="panelFinLctoReceberNtFinanceira">
+
+	<div class="row">
+
+		<div class="col-md-12">
+
+			<p:dataTable id="dataTableFinLctoReceberNtFinanceira"
+				value="#{finLancamentoReceberMB.finLancamentoReceber.listaFinLctoReceberNtFinanceira}"
+				styleClass="ajusta_coluna" var="item" paginator="true" lazy="true"
+				rows="10" scrollable="true" sresizableColumns="true"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+				<f:facet name="header">
+					<p:commandButton process="dataTableFinLctoReceberNtFinanceira"
+						title="adicionar" label="adicionar" value="adicionar"
+						actionListener="#{finLancamentoReceberMB.incluirFinLctoReceberNtFinanceira()}"
+						oncomplete="PF('dialogFinNaturezaFinanceira').show()"
+						update="dataTableFinLctoReceberNtFinanceira formBody:dados:dialogFinNaturezaFinanceira" />
+				</f:facet>
+
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_label']}">
+					<p:outputLabel value="#{item.naturezaFinanceira.descricao}"></p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_data_inclusao']}">
+					<p:outputLabel value="#{item.dataInclusao}">
+						<f:converter converterId="dataConverter"></f:converter>
+					</p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_valor']}">
+					<p:outputLabel value="#{item.valor}">
+						<f:converter converterId="mascaraValorBigDecimalConverter" />
+					</p:outputLabel>
+				</p:column>
+
+				<p:column headerText="Ações">
+					<div class="row col-md-12">
+						<div class="btn-group">
+							<p:menuButton value="#{text['label.opcao']}">							 
+								<p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+									actionListener="#{finLancamentoReceberMB.alterarFinLctoReceberNtFinanceira(item)}"
+									process="@this" update="dataTableFinLctoReceberNtFinanceira :formBody:dados:panelFinLctoReceberNtFinanceira :mensagens" 
+									oncomplete="PF('dialogFinNaturezaFinanceira').show()"/>
+								<p:separator />
+								<p:menuitem value="#{text['label.remover']}"
+									icon="ui-icon-trash"
+									actionListener="#{finLancamentoReceberMB.excluirFinLctoReceberNtFinanceira(item)}" ajax="true"
+									process="@this" update="dataTableFinLctoReceberNtFinanceira :mensagens" />
+
+							</p:menuButton>
+						</div>
+					</div>
+				</p:column>
+			</p:dataTable>
+
+			
+
+		</div>
+
+	</div>
+
+	<p:dialog id="dialogFinNaturezaFinanceira"
+		header="#{text['cadastro_fin_lancamento_receber_label_parcela_title']}"
+		widgetVar="dialogFinNaturezaFinanceira" showEffect="slide" width="800"
+		hideEffect="slide" resizable="true" modal="true" closable="false">
+
+		<div class="row">
+			<div class="col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_label']}" />
+				<p:selectOneMenu tabindex="50"
+					value="#{finLancamentoReceberMB.finLctoReceberNtFinanceira.naturezaFinanceira}"
+					disabled="#{finLancamentoReceberMB.visualizando}"
+					converter="naturezaFinanceiraConverter" styleClass="form-control"
+					label="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_label']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_label']}"
+					filter="true">
+					<f:selectItem itemLabel="" />
+					<f:selectItems
+						value="#{finLancamentoReceberMB.listaNaturezaFinanceira}"
+						itemValue="#{item}" itemLabel="#{item.descricao}" var="item" />
+				</p:selectOneMenu>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_data_inclusao']}" />
+				<p:calendar tabindex="51"
+					value="#{finLancamentoReceberMB.finLctoReceberNtFinanceira.dataInclusao}"
+					converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+					locale="pt" styleClass="JSData form-control"
+					label="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_data_inclusao']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_data_inclusao']}"
+					required="false">
+				</p:calendar>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_valor']}" />
+				<p:inputText
+					value="#{finLancamentoReceberMB.finLctoReceberNtFinanceira.valor}"
+					tabindex="52"
+					label="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_valor']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_valor']}"
+					disabled="#{finLancamentoReceberMB.visualizando}" />
+			</div>
+
+		</div>
+
+		<f:facet name="footer">
+			<p:commandButton value="#{text['label.salvar']}"
+				actionListener="#{finLancamentoReceberMB.salvarFinLctoReceberNtFinanceira()}"
+				process="dialogFinNaturezaFinanceira" update="panelFinLctoReceberNtFinanceira :mensagens"
+				oncomplete="if (!args.validationFailed) {PF('dialogFinNaturezaFinanceira').hide();}" />
+			<p:commandButton value="#{text['label.cancelar']}" immediate="true"
+				ajax="true" process="@this" update=":mensagens"
+				oncomplete="PF('dialogFinNaturezaFinanceira').hide();" />
+		</f:facet>
+
+	</p:dialog>
+
+</p:outputPanel>
+
+</html>

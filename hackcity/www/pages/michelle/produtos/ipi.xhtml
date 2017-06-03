@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+
+
+	<p:fieldset
+		legend="#{text['cadastro_produto_label_ipi_title_fieldset']}" 
+		styleClass="form-group col-md-11 width100" >
+		
+		
+		<div class="row">
+				<!--classe ENQUADRAMENTO -->				
+				<p:outputPanel styleClass="form-group col-md-6">
+		
+					<p:outputLabel styleClass="bLabel"
+						value="#{text['cadastro_produto_label_ipi_classe_enquadaramento']}" />
+					<p:inputText value="#{produtoMB.produto.ipi.classe}"
+						tabindex="90" disabled="#{produtoMB.visualizando}"
+						label="#{text['cadastro_produto_label_ipi_classe_enquadaramento']}"
+						required="false" styleClass="form-control JSsomenteNumeros"			
+						requiredMessage="#{text['cadastro_produto_label_ipi_classe_enquadaramento']}"
+						maxlength="3" />
+				</p:outputPanel>
+		</div>	
+		<div class="row">	
+				<!--codigo ENQUADRAMENTO -->			
+				<p:outputPanel styleClass="form-group col-md-5">
+					<p:outputLabel styleClass="bLabel"
+						value="#{text['cadastro_produto_label_ipi_codigo_enquadaramento']}" />
+					<p:inputText value="#{produtoMB.produto.ipi.codigo}"
+						tabindex="91" disabled="#{produtoMB.visualizando}"
+						label="#{text['cadastro_produto_label_ipi_codigo_enquadaramento']}"
+						required="false" styleClass="form-control JSsomenteNumeros"			
+						requiredMessage="#{text['cadastro_produto_label_ipi_codigo_enquadaramento']}"
+						maxlength="5" />
+				</p:outputPanel>
+		</div>
+		<div class="row">	
+				<!--CNPJ FORNECEDOR -->
+				<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_produto_label_ipi_cnpj_produto']}" />
+				<p:inputMask mask="99.999.999/9999-99" placeholder="" value="#{produtoMB.produto.ipi.cnpj_produtor}"
+					tabindex="92" disabled="#{produtoMB.visualizando}"
+					label="#{text['cadastro_produto_label_ipi_cnpj_produto']}"
+					required="false" styleClass="form-control"			
+					requiredMessage="#{text['cadastro_produto_label_ipi_cnpj_produto']}"
+					 />
+			</p:outputPanel>
+		</div>		
+	</p:fieldset>
+</ui:composition>

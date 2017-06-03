@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:pt="http://xmls.jcp.org/jsf/core">
+<h:body>
+	<ui:composition>
+		<aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">          
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">            
+            <!-- MENU PAINEL -->
+            <li class="treeview"><a href="#"><i class="fa fa-dashboard"></i> <span>#{text['menu_panel']}</span></a></li>
+           
+                                   
+                  <!-- SUB MENU CADASTRO VENDAS -->
+	              
+	                			 
+		                		<li><a href="#{request.contextPath}/pages/cliente/pedido/pedido.jsf">#{text['menu_vendas_pedidos']}</a></li>
+		                		 
+		              
+                                  
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+	</ui:composition>
+</h:body>
+</html>

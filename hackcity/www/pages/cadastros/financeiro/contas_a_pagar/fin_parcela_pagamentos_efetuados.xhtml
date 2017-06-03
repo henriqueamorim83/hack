@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<div class="row">
+
+	<div class="col-md-12">
+		<p:dataTable id="dataTableFinParcelaPagamento" var="item"
+			value="#{finParcelaPagamentoMB.finParcelaPagar.listaFinParcelaPagamento}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+			selection="#{finParcelaPagamentoMB.finParcelaPagamentoSelecionado}"
+			selectionMode="single" resizableColumns="true" rowKey="#{item.id}"
+			emptyMessage="#{text['table.empty']}">
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_tipo_pagamento']}">
+				<p:outputLabel value="#{item.finTipoPagamento.descricao}" />
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_data_pagamento']}">
+				<p:outputLabel value="#{item.dataPagamento}">
+					<f:converter converterId="dataConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_valor_juros']}">
+				<p:outputLabel value="#{item.valorJuro}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_valor_multa']}">
+				<p:outputLabel value="#{item.valorMulta}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_valor_desconto']}">
+				<p:outputLabel value="#{item.valorDesconto}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_valor_pago']}">
+				<p:outputLabel value="#{item.valorPago}">
+					<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column
+				headerText="#{text['cadastro_fin_parcela_pagar_label_pagamento_historico']}">
+				<p:outputLabel value="#{item.historico}" />
+
+
+			</p:column>
+
+			<p:column headerText="Ações">
+				<div class="row col-md-12">
+					<div class="btn-group">
+						<p:menuButton value="#{text['label.opcao']}">
+							<p:menuitem value="#{text['label.remover']}"
+								action="#{finParcelaPagamentoMB.excluirFinParcelaPagamento(item)}"
+								title="#{text['label.remover']}" icon="ui-icon-document"								 
+								process="dataTableFinParcelaPagamento" update="@form dataTableFinParcelaPagamento :mensagens" />
+						</p:menuButton>
+					</div>
+				</div>
+			</p:column>
+		</p:dataTable>
+
+	</div>
+</div>
+
+
+</html>

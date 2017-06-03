@@ -1,0 +1,961 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_colaborador_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{colaboradorMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{colaboradorMB.state}" />
+								<t:saveState value="#{colaboradorMB.colaborador}" />
+								<t:saveState value="#{colaboradorMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{colaboradorMB.pesquisando}">
+										
+									
+									<div class="row">
+												<!--PESSOA  -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="5"  
+												converter="colaboradorConverter" 
+												value="#{colaboradorMB.colaborador}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_pessoa']}"
+												requiredMessage="#{text['cadastro_colaborador_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaColaboradores}" var="item" 
+												 itemLabel="#{item.pessoa.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										<!-- TIPO COLABORADOR -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_tipo_colaborador']}"  />
+											<p:selectOneMenu tabindex="6"  
+												converter="tipoColaboradorConverter" 
+												value="#{colaboradorMB.colaborador.tipoColaborador}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_tipo_colaborador']}"
+												requiredMessage="#{text['cadastro_colaborador_label_tipo_colaborador']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaTipoColaboradores}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									<!-- TIPO ADMISSÃO -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_tipo_admissao']}"  />
+											<p:selectOneMenu tabindex="7"  
+												converter="tipoAdmissaoConverter" 
+												value="#{colaboradorMB.colaborador.tipoAdmissao}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_tipo_admissao']}"
+												requiredMessage="#{text['cadastro_colaborador_label_tipo_admissao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaTipoAdmissao}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+											<!-- SITUAÇÃO COLABORADOR -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_situacao_colaborador']}"  />
+											<p:selectOneMenu tabindex="8"  
+												converter="situacaoColaboradorConverter" 
+												value="#{colaboradorMB.colaborador.situacaoColaborador}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_situacao_colaborador']}"
+												requiredMessage="#{text['cadastro_colaborador_label_situacao_colaborador']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaSituacaoColaborador}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									
+									</div>
+									
+									
+									<div class="row">
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{colaboradorMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{colaboradorMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{colaboradorMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{colaboradorMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_colaborador_label_matricula']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.matricula}" />
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_colaborador_label_pessoa']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.pessoa.nome}" />
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_colaborador_label_setor']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.setor.nome}" />
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_colaborador_label_cargo']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.cargo.nome}" />
+										</p:column>
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{colaboradorMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{colaboradorMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{colaboradorMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not colaboradorMB.pesquisando}">
+									
+									<div class="row">
+												<!--PESSOA  -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="15"  
+												converter="pessoaConverter" 
+												value="#{colaboradorMB.colaborador.pessoa}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_pessoa']}"
+												requiredMessage="#{text['cadastro_colaborador_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaPessoas}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										<!-- TIPO COLABORADOR -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_tipo_colaborador']}"  />
+											<p:selectOneMenu tabindex="16"  
+												converter="tipoColaboradorConverter" 
+												value="#{colaboradorMB.colaborador.tipoColaborador}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_tipo_colaborador']}"
+												requiredMessage="#{text['cadastro_colaborador_label_tipo_colaborador']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaTipoColaboradores}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									<!-- TIPO ADMISSÃO -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_tipo_admissao']}"  />
+											<p:selectOneMenu tabindex="17"  
+												converter="tipoAdmissaoConverter" 
+												value="#{colaboradorMB.colaborador.tipoAdmissao}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_tipo_admissao']}"
+												requiredMessage="#{text['cadastro_colaborador_label_tipo_admissao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaTipoAdmissao}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+											<!-- SITUAÇÃO COLABORADOR -->
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_situacao_colaborador']}"  />
+											<p:selectOneMenu tabindex="18"  
+												converter="situacaoColaboradorConverter" 
+												value="#{colaboradorMB.colaborador.situacaoColaborador}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_situacao_colaborador']}"
+												requiredMessage="#{text['cadastro_colaborador_label_situacao_colaborador']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaSituacaoColaborador}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									
+									</div>
+									
+									<div class="row">
+												<!-- NIVEL FORMAÇÃO  -->
+										<div class="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_nivel_formacao']}"  />
+											<p:selectOneMenu tabindex="19"  
+												converter="nivelFormacaoConverter" 
+												value="#{colaboradorMB.colaborador.nivelFormacao}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_nivel_formacao']}"
+												requiredMessage="#{text['cadastro_colaborador_label_nivel_formacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaNivelFormacao}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										<!--CARGO  -->
+										<div class="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_cargo']}"  />
+											<p:selectOneMenu tabindex="20"  
+												converter="cargoConverter" 
+												value="#{colaboradorMB.colaborador.cargo}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_cargo']}"
+												requiredMessage="#{text['cadastro_colaborador_label_cargo']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaCargos}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									
+										<!-- SETOR -->
+										<div class="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_setor']}"  />
+											<p:selectOneMenu tabindex="21"  
+												converter="setorConverter" 
+												value="#{colaboradorMB.colaborador.setor}"
+												disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_colaborador_label_setor']}"
+												requiredMessage="#{text['cadastro_colaborador_label_setor']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{colaboradorMB.listaSetores}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									
+									</div>
+								
+									<div class="row">
+												<!--  CONTABIL CONTA-->
+											<div class="form-group col-md-6">
+												<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_contabil_conta']}"  />
+												<p:selectOneMenu tabindex="22"  
+													converter="contabilContaConverter" 
+													value="#{colaboradorMB.colaborador.contabilConta}"
+													disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+													label="#{text['cadastro_colaborador_label_contabil_conta']}"
+													requiredMessage="#{text['cadastro_colaborador_label_contabil_conta']}" 
+													 filter="true">	
+													 <f:selectItem itemLabel=""/>
+													 <f:selectItems value="#{colaboradorMB.listaContabilConta}" var="item" 
+													 itemLabel="#{item.descricao}"
+													  itemValue="#{item}"/>														
+												</p:selectOneMenu>
+											</div>
+												<!-- SINDICATO -->
+											<div class="form-group col-md-6">
+												<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_colaborador_label_sindicato']}"  />
+												<p:selectOneMenu tabindex="23"  
+													converter="sindicatoConverter" 
+													value="#{colaboradorMB.colaborador.sindicato}"
+													disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+													label="#{text['cadastro_colaborador_label_sindicato']}"
+													requiredMessage="#{text['cadastro_colaborador_label_sindicato']}" 
+													 filter="true">	
+													 <f:selectItem itemLabel=""/>
+													 <f:selectItems value="#{colaboradorMB.listaSindicato}" var="item" 
+													 itemLabel="#{item.nome}"
+													  itemValue="#{item}"/>														
+												</p:selectOneMenu>
+											</div>
+									
+									</div>
+									
+									<div class="row">
+												<!--DATA CADASTRO  -->
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_data_cadastro']}" />
+											<p:calendar   tabindex="23"	  
+												value="#{colaboradorMB.colaborador.dataCadastro}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_colaborador_label_data_cadastro']}"
+												requiredMessage="#{text['cadastro_colaborador_label_data_cadastro']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+											<!-- DATA ADMISSÃO -->
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_data_admissao']}" />
+											<p:calendar   tabindex="24"	  
+												value="#{colaboradorMB.colaborador.dataAdmissao}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_colaborador_label_data_admissao']}"
+												requiredMessage="#{text['cadastro_colaborador_label_data_admissao']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+											<!-- VENCIMENTO FERIAS -->
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_vencimento_ferias']}" />
+											<p:calendar   tabindex="25"	  
+												value="#{colaboradorMB.colaborador.vencimentoFerias}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_colaborador_label_vencimento_ferias']}"
+												requiredMessage="#{text['cadastro_colaborador_label_vencimento_ferias']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+											<!-- DATA TRANSFERENCIA -->
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_data_transferencia']}" />
+											<p:calendar   tabindex="26"	  
+												value="#{colaboradorMB.colaborador.dataTransferencia}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_colaborador_label_data_transferencia']}"
+												requiredMessage="#{text['cadastro_colaborador_label_data_transferencia']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+												<!-- DATA DEMISSÃO  -->
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_data_demissao']}" />
+											<p:calendar   tabindex="27"	  
+												value="#{colaboradorMB.colaborador.dataDemissao}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_colaborador_label_data_demissao']}"
+												requiredMessage="#{text['cadastro_colaborador_label_data_demissao']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+									
+									</div>
+									
+									
+									<div class="row">
+												<!--  CODIGO TURMA PONTO-->
+										<div class="form-group col-md-4">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_codigo_turma_ponto']}" />
+											<p:inputText value="#{colaboradorMB.colaborador.codigoTurmaPonto}"
+												tabindex="28"
+												label="#{text['cadastro_colaborador_label_codigo_turma_ponto']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_codigo_turma_ponto']}"
+											 />
+										</div>
+											<!-- DESCONTO PLANO DE SAUDE -->
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_desconto_plano_saude']}" />
+											<p:selectOneMenu tabindex="29"  
+													
+													value="#{colaboradorMB.colaborador.descontoPlanoSaude}"
+													disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+													label="#{text['cadastro_colaborador_label_desconto_plano_saude']}"
+													requiredMessage="#{text['cadastro_colaborador_label_desconto_plano_saude']}" 
+													 filter="true">	
+													 <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+													<f:selectItem itemLabel="Não" itemValue="Não"/>										
+												</p:selectOneMenu>
+										</div>
+										<!-- SAL NA RAIS -->
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_sai_na_rais']}" />
+											<p:selectOneMenu tabindex="30"  
+													
+													value="#{colaboradorMB.colaborador.saiNaRais}"
+													disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+													label="#{text['cadastro_colaborador_label_sai_na_rais']}"
+													requiredMessage="#{text['cadastro_colaborador_label_sai_na_rais']}" 
+													 filter="true">	
+													 <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+													<f:selectItem itemLabel="Não" itemValue="Não"/>										
+												</p:selectOneMenu>
+										</div>
+										<!-- MATRICULA -->
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_matricula']}" />
+											<p:inputText value="#{colaboradorMB.colaborador.matricula}"
+												tabindex="31" disabled="true"
+												label="#{text['cadastro_colaborador_label_matricula']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_matricula']}"
+											 />
+										</div>										
+										
+									</div>
+									
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_tile_exame']}">
+					
+					<div class="row">
+					
+							<!-- EXAME O ULTIMO  -->
+						<div class="form-group col-md-3">
+							<p:outputLabel value="#{text['cadastro_colaborador_label_fieldset_exame_ultimo']}"></p:outputLabel>
+							<p:calendar   tabindex="31"	  
+									value="#{colaboradorMB.colaborador.exameMedicoUltimo}"
+									converter="dataConverter"
+									navigator="true"  
+									pattern="dd/MM/yyyy" locale="pt"
+									styleClass="JSData form-control" 	
+									label="#{text['cadastro_colaborador_label_fieldset_exame_ultimo']}"
+									requiredMessage="#{text['cadastro_colaborador_label_fieldset_exame_ultimo']}"
+									required="false">						
+							</p:calendar>										
+						</div>
+						<!-- EXAME VENCIMENTO -->
+						<div class="form-group col-md-3">
+							<p:outputLabel value="#{text['cadastro_colaborador_label_fieldset_exame_vencimento']}"></p:outputLabel>
+							<p:calendar   tabindex="32"	  
+									value="#{colaboradorMB.colaborador.exameMedicoVencimento}"
+									converter="dataConverter"
+									navigator="true"  
+									pattern="dd/MM/yyyy" locale="pt"
+									styleClass="JSData form-control" 	
+									label="#{text['cadastro_colaborador_label_fieldset_exame_vencimento']}"
+									requiredMessage="#{text['cadastro_colaborador_label_fieldset_exame_vencimento']}"
+									required="false">						
+							</p:calendar>										
+						</div>
+						
+					</div>
+				
+				
+				</p:fieldset>		
+				
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_sefip_title']}">
+						<div class="row">
+								<!--  CATEGORIA SEFIP-->
+								<div class="form-group col-md-4">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_sefip_categoria_sefip']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.categoriaSefip}" tabindex="33"
+												disabled="#{colaboradorMB.visualizando}" maxlength="2"
+												label="#{text['cadastro_colaborador_label_fieldset_sefip_categoria_sefip']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_sefip_categoria_sefip']}" />
+								</div>
+								<!-- SEFIP OCORRÊNCIA -->
+								<div class="form-group col-md-4">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_sefip_ocorrencia_sefip']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.ocorrenciaSefip}"
+												disabled="#{colaboradorMB.visualizando}" maxlength="100" tabindex="34"
+												label="#{text['cadastro_colaborador_label_fieldset_sefip_ocorrencia_sefip']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_sefip_ocorrencia_sefip']}" />
+								</div>
+								<!--  CODIGO DEMISSÃO SEFIP-->
+								<div class="form-group col-md-4">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_sefip_codigo_demissao_sefip']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.codigoDemissaoSefip}"
+												disabled="#{colaboradorMB.visualizando}" maxlength="100" tabindex="35"
+												label="#{text['cadastro_colaborador_label_fieldset_sefip_codigo_demissao_sefip']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_sefip_codigo_demissao_sefip']}" />
+								</div>
+						</div>	
+								
+					</p:fieldset>				
+					
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_caged_title']}">
+					
+						<div class="row">
+								<!-- CODIGO ADMISSÃO CAGED  -->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_caged_codigo_admissao_caged']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.codigoDemissaoSefip}"
+												disabled="#{colaboradorMB.visualizando}" maxlength="5" tabindex="36"
+												label="#{text['cadastro_colaborador_label_fieldset_caged_codigo_admissao_caged']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_caged_codigo_admissao_caged']}" />
+							</div>
+									<!--CODIGO DEMISSÃO CAGED  -->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_caged_codigo_demissao_caged']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.codigoDemissaoSefip}"
+												disabled="#{colaboradorMB.visualizando}" maxlength="10" tabindex="37"
+												label="#{text['cadastro_colaborador_label_fieldset_caged_codigo_demissao_caged']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_caged_codigo_demissao_caged']}" />
+							</div>
+										<!--CAGED DEFICIENCIA  -->
+							<div class="form-group col-md-3">
+								<p:outputLabel styleClass="bLabel"	value="#{text['cadastro_colaborador_label_fieldset_caged_deficiencia']}" />
+									<p:selectOneMenu tabindex="38"
+											value="#{colaboradorMB.colaborador.cagedDeficiencia}"
+											disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+											label="#{text['cadastro_colaborador_label_fieldset_caged_deficiencia']}"
+											requiredMessage="#{text['cadastro_colaborador_label_fieldset_caged_deficiencia']}" 
+											 filter="true">	
+											 <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+											<f:selectItem itemLabel="Não" itemValue="Não"/>										
+									</p:selectOneMenu>
+							</div>
+						
+						</div>
+					
+					
+					
+					</p:fieldset>
+					
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_fgts_tile']}">
+						<div class="row">
+									<!-- FGTS OPTANTE  -->
+								<div class="form-group col-md-3">
+								<p:outputLabel styleClass="bLabel"	value="#{text['cadastro_colaborador_label_fieldset_fgts_optante']}" />
+									<p:selectOneMenu tabindex="39"
+											value="#{colaboradorMB.colaborador.fgtsOptante}"
+											disabled="#{colaboradorMB.visualizando}" styleClass="form-control"
+											label="#{text['cadastro_colaborador_label_fieldset_fgts_optante']}"
+											requiredMessage="#{text['cadastro_colaborador_label_fieldset_fgts_optante']}" 
+											 filter="true">	
+											 <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+											<f:selectItem itemLabel="Não" itemValue="Não"/>										
+									</p:selectOneMenu>
+							</div>
+										<!-- FGTS DATA OPÇÃO -->
+							<div class="form-group col-md-3">
+								<p:outputLabel value="#{text['cadastro_colaborador_label_fieldset_fgts_data_opcao']}"></p:outputLabel>
+								<p:calendar   tabindex="40"	  
+										value="#{colaboradorMB.colaborador.fgtsDataOpcao}"
+										converter="dataConverter"
+										navigator="true"  
+										pattern="dd/MM/yyyy" locale="pt"
+										styleClass="JSData form-control" 	
+										label="#{text['cadastro_colaborador_label_fieldset_fgts_data_opcao']}"
+										requiredMessage="#{text['cadastro_colaborador_label_fieldset_fgts_data_opcao']}"
+										required="false">						
+								</p:calendar>										
+							</div>
+										<!-- FGTS CONTA -->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_colaborador_label_fieldset_fgts_conta']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.fgtsConta}"
+												disabled="#{colaboradorMB.visualizando}" maxlength="10" tabindex="41"
+												label="#{text['cadastro_colaborador_label_fieldset_fgts_conta']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_fgts_conta']}" />
+							</div>
+							
+							
+						</div>
+						
+					</p:fieldset>
+					
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_clt_title']}">
+					
+					<div class="row">
+					
+									<!-- CLT DATA EXPEDIÇÃO -->
+							<div class="form-group col-md-2">
+								<p:outputLabel value="#{text['cadastro_colaborador_label_fieldset_clt_data_expedicao']}"></p:outputLabel>
+								<p:calendar   tabindex="42"	  
+										value="#{colaboradorMB.colaborador.ctpsDataExpedicao}"
+										converter="dataConverter"
+										navigator="true"  
+										pattern="dd/MM/yyyy" locale="pt"
+										styleClass="JSData form-control" 	
+										label="#{text['cadastro_colaborador_label_fieldset_clt_data_expedicao']}"
+										requiredMessage="#{text['cadastro_colaborador_label_fieldset_clt_data_expedicao']}"
+										required="false">						
+								</p:calendar>										
+							</div>
+					
+									<!-- CLT UF -->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_clt_uf']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.ctpsUf}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="43"
+												maxlength="2"
+												label="#{text['cadastro_colaborador_label_fieldset_clt_uf']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_clt_uf']}"
+											 />
+							</div>
+									<!-- CLT NUMERO -->
+							<div class="form-group col-md-4">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_clt_numero']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.ctpsNumero}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="44"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_clt_numero']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_clt_numero']}"
+											 />
+							</div>
+							
+									<!-- CLT SERIE -->
+							<div class="form-group col-md-4">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_clt_serie']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.ctpsSerie}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="45"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_clt_serie']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_clt_serie']}"
+											 />
+							</div>
+					</div>
+					
+				
+				</p:fieldset>	
+					
+				
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_pagamento_title']}">
+					
+					<div class="row">
+								<!-- FORMA DE PAGAMENTO -->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_forma_pagamento']}" />
+									<p:selectOneMenu 
+												disabled="#{colaboradorMB.visualizando}"
+												value="#{colaboradorMB.colaborador.pagamentoForma}" tabindex="46"
+												styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_forma_pagamento']}"
+												filter="true">
+												<f:selectItem itemLabel="Conta" itemValue="Conta" />
+												<f:selectItem itemLabel="Dinheiro" itemValue="Dinheiro"/>
+												<f:selectItem itemLabel="Cheque" itemValue="Cheque"/>
+												
+									</p:selectOneMenu>
+							</div>
+					
+									<!-- BANCO -->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_banco']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pagamentoBanco}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="47"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_pagamento_banco']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_banco']}"
+											 />
+							</div>
+							
+									<!-- AGENCIA -->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_agencia']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pagamentoAgencia}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="47"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_pagamento_agencia']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_agencia']}"
+											 />
+							</div>
+							
+									<!-- DIGITO -->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pagamentoAgenciaDigito}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="48"
+												maxlength="1"
+												label="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}"
+											 />
+							</div>
+							
+									<!-- CONTA -->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_conta']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pagamentoConta}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="49"
+												maxlength="10"
+												label="#{text['cadastro_colaborador_label_fieldset_pagamento_conta']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_conta']}"
+											 />
+							</div>
+									<!-- CONTA DIGITO-->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pagamentoContaDigito}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="50"
+												maxlength="1"
+												label="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pagamento_digito']}"
+											 />
+							</div>
+					</div>		
+					
+					
+				</p:fieldset>	
+				
+				
+				<p:fieldset legend="#{text['cadastro_colaborador_label_fieldset_pis_title']}">
+				
+						<div class="row">
+									<!-- PIS DATA CADASTRO -->
+							<div class="form-group col-md-2">
+								<p:outputLabel value="#{text['cadastro_colaborador_label_fieldset_pis_data_cadastro']}" />
+								<p:calendar   tabindex="51"	  
+										value="#{colaboradorMB.colaborador.pisDataCadastro}"
+										converter="dataConverter"
+										navigator="true"  
+										pattern="dd/MM/yyyy" locale="pt"
+										styleClass="JSData form-control" 	
+										label="#{text['cadastro_colaborador_label_fieldset_pis_data_cadastro']}"
+										requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_data_cadastro']}"
+										required="false">						
+								</p:calendar>										
+							</div>
+						
+						
+						
+									<!-- PIS NUMERO-->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pis_numero']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pisNumero}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="52"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_pis_numero']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_numero']}"
+											 />
+							</div>
+							
+									<!-- PIS BANCO-->
+							<div class="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pis_banco']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pisBanco}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="53"
+												maxlength="100"
+												label="#{text['cadastro_colaborador_label_fieldset_pis_banco']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_banco']}"
+											 />
+							</div>
+							
+									<!-- PIS AGENCIA-->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pis_agencia']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pisAgencia}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="54"
+												maxlength="10"
+												label="#{text['cadastro_colaborador_label_fieldset_pis_agencia']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_agencia']}"
+											 />
+							</div>
+							
+									<!-- PIS DIGITO-->
+							<div class="form-group col-md-1">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pis_digito']}" />
+									<p:inputText value="#{colaboradorMB.colaborador.pisAgenciaDigito}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="55"
+												maxlength="1"
+												label="#{text['cadastro_colaborador_label_fieldset_pis_digito']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_digito']}"
+											 />
+							</div>
+						</div>
+						
+						<div class="row">
+						
+									<!-- PIS OBSERVAÇÃO-->
+							<div class="form-group col-md-12">
+									<p:outputLabel styleClass="bLabel" value="#{text['cadastro_colaborador_label_fieldset_pis_observacao']}" />
+									<p:inputTextarea value="#{colaboradorMB.colaborador.observacao}"
+												disabled="#{colaboradorMB.visualizando}"
+												tabindex="56"
+												maxlength="244"
+												label="#{text['cadastro_colaborador_label_fieldset_pis_observacao']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_colaborador_label_fieldset_pis_observacao']}"
+											 />
+							</div>
+						</div>
+						
+						
+						
+				</p:fieldset>
+				
+				
+				
+				
+				
+						
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="100" action="#{colaboradorMB.adiciona}"
+														rendered="#{colaboradorMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="101"
+														action="#{colaboradorMB.alterar}"
+														rendered="#{colaboradorMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="102" action="#{colaboradorMB.limpar}"
+														rendered="#{colaboradorMB.adicionando}" immediate="true"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{colaboradorMB.voltar}"
+														tabindex="103" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	
+	
+		<p:fieldset id="fieldSetUnidade" legend="#{text['menu_cadastro_produto_unidade']}" styleClass="width100">
+									
+									<div class="row">
+									<!-- Descrição -->
+										<div class="form-group col-md-4">
+											<p:focus for="descricaoUnidade" />
+											<p:outputLabel value="#{text['cadastro_unidade_label_descricao']}*" styleClass="bLabel" for="descricaoUnidade" />
+											<p:inputText id="descricaoUnidade" value="#{produtoMB.unidadeCadastro.descricao}" tabindex="21"
+												label="#{text['cadastro_unidade_label_descricao']}"  styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_unidade_label_descricao']}*" required="true" 
+												onkeydown="this.value = this.value.toUpperCase()"
+												onkeyup="this.value = this.value.toUpperCase()"												 
+												maxlength="100"/>
+										</div>
+										<!-- Embalagem -->
+										<div class="form-group col-md-2">
+											<p:outputLabel value="#{text['cadastro_unidade_label_embalagem']}*" styleClass="bLabel" />
+											<p:inputText  value="#{produtoMB.unidadeCadastro.embalagem}" tabindex="22" 
+												onkeydown="this.value = this.value.toUpperCase()"
+												onkeyup="this.value = this.value.toUpperCase()"		
+												label="#{text['cadastro_unidade_label_embalagem']}"  styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_unidade_label_embalagem']}" required="true"
+												maxlength="40"/>
+										</div>
+										<!-- Abreveatura -->
+										<div class="form-group col-md-2">
+											<p:outputLabel value="#{text['cadastro_unidade_label_abreveatura']}*" styleClass="bLabel" />
+											<p:inputText  value="#{produtoMB.unidadeCadastro.abreviatura}" tabindex="23" 
+												onkeydown="this.value = this.value.toUpperCase()"
+												onkeyup="this.value = this.value.toUpperCase()"	
+												label="#{text['cadastro_unidade_label_abreveatura']}"  styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_unidade_label_abreveatura']}"  required="true"
+												maxlength="10"/>
+										</div>
+										<!-- quantidade -->
+										<div class="form-group col-md-2">												
+												<p:outputLabel value="#{text['cadastro_unidade_label_quantidade']}*" styleClass="bLabel" />
+												<p:inputText  value="#{produtoMB.unidadeCadastro.quantidade}" tabindex="24" required="true"
+													label="#{text['cadastro_unidade_label_quantidade']}"  styleClass="form-control width90 JSsomenteNumeros"
+													requiredMessage="#{text['cadastro_unidade_label_quantidade']}"  
+													maxlength="100"/>
+										</div>
+									</div>
+									<!-- pesos na proxima linha -->
+									<div class="row">
+											
+																							
+													<!-- peso liquido -->
+													<div class="form-group col-md-2" >
+														<p:outputLabel value="#{text['cadastro_unidade_label_peso_liquido']}" styleClass="bLabel"  />
+														<p:inputText  value="#{produtoMB.unidadeCadastro.pesoLiquido}" tabindex="26" 
+															id="unidade_pesoLiquido"
+															label="#{text['cadastro_unidade_label_peso_liquido']}" 
+															required="false" styleClass="form-control width90 "
+															requiredMessage="#{text['cadastro_unidade_label_peso_liquido']}"
+															
+															title="Peso em KG" placeholder="0" converter="mascaraValorDecimalConverter"
+															maxlength="100"/>
+													</div>	
+													<div class="form-group col-md-2" >
+														<p:outputLabel value="#{text['cadastro_unidade_label_medida']}" styleClass="bLabel"  />
+														<p:selectOneMenu  	value="#{produtoMB.unidadeCadastro.medidaLiquido}"	
+														tabindex="27" styleClass="width70" >	
+														 <f:selectItem itemLabel="KG" itemValue="KG"/>
+														 <f:selectItem itemLabel="GR" itemValue="GR"/>																							
+														</p:selectOneMenu>
+													</div>
+													
+														<!-- peso bruto -->
+														<div class="form-group col-md-2" >
+															<p:outputLabel value="#{text['cadastro_unidade_label_peso_bruto']}" styleClass="bLabel"  />
+															<p:inputText  value="#{produtoMB.unidadeCadastro.pesoBruto}" tabindex="28" 
+																id="unidade_pesoBruto"
+																label="#{text['cadastro_unidade_label_peso_bruto']}" required="false" styleClass="form-control width90 "
+																requiredMessage="#{text['cadastro_unidade_label_peso_bruto']}"
+																converter="mascaraValorDecimalConverter"
+																 title="Peso em KG" placeholder="0"
+																 maxlength="100"/>
+														</div>
+														<div class="form-group col-md-2" >
+																	<p:outputLabel value="#{text['cadastro_unidade_label_medida']}" styleClass="bLabel"  />
+																<p:selectOneMenu  	value="#{produtoMB.unidadeCadastro.medidaBruta}"	
+																tabindex="29" styleClass="form-control width70" >	
+																 <f:selectItem itemLabel="KG" itemValue="KG"/>
+																 <f:selectItem itemLabel="GR" itemValue="GR"/>																							
+																</p:selectOneMenu>
+														</div>	
+											
+													
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-3">		
+													<p:commandButton value="#{text['label.salvar']}" 
+														actionListener="#{produtoMB.salvarUnidade}"			tabindex="34"								
+														styleClass="btn btn-success width100" process="fieldSetUnidade :formBody:unidadeCompra"
+														update=":formBody:panelUnidade  :formBody:unidadeCompra :mensagens" 
+														onsuccess="PF('dialogUnidade').hide();" />
+												</div>	
+										<div class="form-group col-md-3">		
+													<p:commandButton value="#{text['label.limpar']}" 
+														actionListener="#{produtoMB.cadastrarUnidade}"			tabindex="35"								
+														styleClass="btn btn-success width100" process="@this"
+														update="fieldSetUnidade :mensagens" />
+												</div>	
+												
+										<div class="form-group col-md-3">		
+													<p:commandButton value="#{text['label.cancelar']}" ajax="true"
+														actionListener="#{produtoMB.cancelarCadastroUnidade}"		tabindex="36"									
+														styleClass="btn btn-success width100" process="@this"
+														update=":formBody:panelUnidade  :formBody:unidadeCompra :mensagens"
+														onsuccess="PF('dialogUnidade').hide();"/>
+												</div>						
+									</div>
+									
+		</p:fieldset>	
+</ui:composition>	

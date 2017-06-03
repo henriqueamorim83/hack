@@ -1,0 +1,255 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_fluxo_caixa_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finFluxoCaixaMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finFluxoCaixaMB.state}" />
+
+
+
+								<p:outputPanel styleClass="clear" />
+								<hr />
+								<div class="row">
+
+									<div class="col-md-12">
+
+										<p:dataTable id="dataTableFinFluxoCaixaBanco"
+											value="#{finFluxoCaixaMB.listaFluxoCaixa}"		rendered="#{not finFluxoCaixaMB.visualizando}"									
+											styleClass="ajusta_coluna" var="item" paginator="true"
+											lazy="true" rows="5" scrollable="true"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+											<f:facet name="header">
+												<p:commandButton title="#{text['label.editar']}" 
+													rendered="#{not finFluxoCaixaMB.visualizando}"
+													icon="ui-icon-refresh" styleClass="aEsquerda"
+													actionListener="#{finFluxoCaixaMB.buscaDados}"
+													update="@form :mensagens" />
+
+											</f:facet>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_operacao']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.operacao}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_conta_caixa']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.nomeContaCaixa}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_pessoa']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.nomePessoa}" />
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_data_lancamento']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.dataLancamento}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_data_vencimento']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.dataVencimento}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											 
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_valor']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.valor}">
+													<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_situacao']}">
+												<p:outputLabel
+													value="#{finFluxoCaixaMB.descricaoSituacao(item.viewFinFluxoCaixa.codigoSituacao)}" />
+											</p:column>
+
+											<p:column headerText="Ações">
+												<div class="row col-md-12">
+													<div class="btn-group">
+														<p:menuButton value="#{text['label.opcao']}">
+															<p:menuitem value="#{text['label.detalhes']}"
+																icon="ui-icon-document"
+																actionListener="#{finFluxoCaixaMB.prepararVisualizar(item)}"
+																process="@this" update="@form messages" />
+															<p:separator />
+
+														</p:menuButton>
+													</div>
+												</div>
+											</p:column>
+										</p:dataTable>
+									</div>
+
+								</div>
+
+								<div class="row">
+									<p:outputPanel rendered="#{not finFluxoCaixaMB.visualizando}"
+										styleClass="form-group col-md-3 text-align-left14">
+										<p:outputLabel
+											value="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}" />
+										<p:calendar tabindex="8"
+											value="#{finFluxoCaixaMB.periodo}"
+											converter="dataConverter" navigator="true"
+											pattern="dd/MM/yyyy" locale="pt"
+											styleClass="JSData form-control"
+											label="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}"
+											requiredMessage="#{text['cadastro_fin_movimento_caixa_banco_label_periodo']}"
+											required="true">
+										</p:calendar>
+									</p:outputPanel>
+
+								</div>
+
+
+
+								<p:outputPanel id="outputPanelDetalhe"
+									rendered="#{finFluxoCaixaMB.visualizando}">
+
+									<div class="row">
+										<p:dataTable id="dataTableFinFluxoCaixaDetalhe" var="item"
+												value="#{finFluxoCaixaMB.listaFluxoCaixaDetalhe}"
+												paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+												resizableColumns="true">	
+												
+											<p:column headerText="#{text['cadastro_fin_fluxo_caixa_label_operacao']}">
+												<p:outputLabel value="#{item.viewFinFluxoCaixa.operacao}"></p:outputLabel>
+											</p:column>	
+											
+											<p:column headerText="#{text['cadastro_fin_fluxo_caixa_label_conta_caixa']}">
+												<p:outputLabel value="#{item.viewFinFluxoCaixa.nomeContaCaixa}"></p:outputLabel>
+											</p:column>	
+											
+											<p:column headerText="#{text['cadastro_fin_fluxo_caixa_label_pessoa']}">
+												<p:outputLabel value="#{item.viewFinFluxoCaixa.nomePessoa}"></p:outputLabel>
+											</p:column>	
+												
+											<p:column headerText="#{text['cadastro_fin_fluxo_caixa_label_pessoa']}">
+												<p:outputLabel value="#{item.viewFinFluxoCaixa.nomePessoa}"></p:outputLabel>
+											</p:column>	
+											
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_data_lancamento']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.dataLancamento}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_pago_recebido']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.dataVencimento}">
+													<f:converter converterId="dataConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											 
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_valor']}">
+												<p:outputLabel
+													value="#{item.viewFinFluxoCaixa.valor}">
+													<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+											</p:column>
+
+											<p:column
+												headerText="#{text['cadastro_fin_fluxo_caixa_label_situacao']}">
+												<p:outputLabel
+													value="#{finFluxoCaixaMB.descricaoSituacao(item.viewFinFluxoCaixa.codigoSituacao)}" />
+											</p:column>		
+											
+												<f:facet name="footer">
+													<p:outputLabel value="#{finFluxoCaixaMB.totais}" />
+												</f:facet>	
+										</p:dataTable>		
+									</div>
+								
+									<div class="row">
+										 
+
+										<div class="col-md-3">
+											<p:commandButton title="#{text['label.fechar']}"
+												value="#{text['label.fechar']}"
+												actionListener="#{finFluxoCaixaMB.voltar()}"
+												process="@this" update="@form :mensagens" />
+										</div>
+									</div>
+								</p:outputPanel>
+
+
+
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

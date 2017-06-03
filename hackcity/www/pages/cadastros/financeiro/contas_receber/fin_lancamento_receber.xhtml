@@ -1,0 +1,355 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_lancamento_receber_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finLancamentoReceberMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finLancamentoReceberMB.state}" />
+								<t:saveState
+									value="#{finLancamentoReceberMB.finLancamentoReceber}" />
+								<t:saveState value="#{finLancamentoReceberMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa"
+									rendered="#{finLancamentoReceberMB.pesquisando}">
+									<div class="row"></div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{finLancamentoReceberMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finLancamentoReceberMB.lista}" process="@form"
+														update="@form" tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela"
+										value="#{finLancamentoReceberMB.objetos}"
+										styleClass="ajusta_coluna" var="item" paginator="true"
+										lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finLancamentoReceberMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_numero_documento']}">
+											<p:outputLabel value="#{item.numeroDocumento}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_cliente']}">
+											<p:outputLabel value="#{item.cliente.pessoa.nome}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_qtde_parcela']}">
+											<p:outputLabel value="#{item.quantidadeParcela}"></p:outputLabel>
+										</p:column>
+										
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_valor_a_receber']}">
+											<p:outputLabel value="#{item.valorAReceber}">
+												<f:converter converterId="mascaraValorBigDecimalConverter"/>
+											</p:outputLabel>
+										</p:column>
+										
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_data_lancamento']}">
+											<p:outputLabel value="#{item.dataLancamento}">
+												<f:converter converterId="dataConverter"/>
+											</p:outputLabel>
+										</p:column>
+										
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_primeiro_vencimento']}">
+											<p:outputLabel value="#{item.primeiroVencimento}">
+												<f:converter converterId="dataConverter"/>
+											</p:outputLabel>
+										</p:column>
+										
+										<p:column
+											headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_mesclado']}">
+											<p:outputLabel value="#{item.mescladoPara}" />
+												 
+										 
+										</p:column>
+
+
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														<p:menuitem value="#{text['label.visualizar']}"
+															icon="ui-icon-document"
+															actionListener="#{finLancamentoReceberMB.prepararVisualizar(item)}"
+															process="@this" update="@form messages" />
+														<p:separator />
+														<p:menuitem value="#{text['label.editar']}"
+															icon="ui-icon-disk"
+															actionListener="#{finLancamentoReceberMB.prepararAlterar(item)}"
+															process="@this" update="@form messages" />
+														<p:separator />
+														<p:menuitem value="#{text['label.remover']}"
+															icon="ui-icon-trash"
+															actionListener="#{finLancamentoReceberMB.remove(item)}"
+															ajax="false" process="@this" update="@form messages" />
+
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+									
+									
+									<div class="col-md-4">
+										<p:commandButton value="#{text['label.mesclar']}"
+											title="#{text['label.mesclar']}" tabindex="10"
+											oncomplete="PF('dialogFinLancamentoReceber').show();"
+											rendered="#{finParcelaPagamentoMB.pesquisando}"
+											styleClass="btn btn-primary width100" process="@form"
+											update="@this :mensagens" />
+									</div>
+
+									<p:dialog widgetVar="dialogFinLancamentoReceber" showEffect="pop"
+										header="#{text['cadastro_fin_lancamento_receber_label_title']}"
+										styleClass="width70" height="300" modal="true" closable="true"
+										closeOnEscape="true">
+
+										<div class="row">
+											<div class="col-md-12">
+												<p:dataTable id="FinLancamentoReceberDataTable"
+													value="#{finLancamentoReceberMB.listagemFinLancamentoReceber}"
+													styleClass="ajusta_coluna " var="item" paginator="true"
+													lazy="true" rows="5" scrollable="true" rowKey="#{item.id}"
+													selection="#{finLancamentoReceberMB.lancamentosSelecionados}"
+													paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+													currentPageReportTemplate="{currentPage} de #{finLancamentoReceberMB.objetos.pageSize}"
+													rowClasses="odd, even"
+													emptyMessage="#{text['table.empty']}">
+
+													<f:facet name="header">
+
+														<p:commandButton process=":formBody:FinLancamentoReceberDataTable"
+															title="#{text['label.mesclar']}" icon="ui-icon-copy"
+															value="#{text['label.mesclar']}"
+															actionListener="#{finLancamentoReceberMB.mesclarLancamentos()}"
+															update="@form :mensagens">
+															
+														</p:commandButton>
+
+													</f:facet>
+
+													<p:column selectionMode="multiple" style="width:30px;" />
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_documento_origem']}">
+														<p:outputLabel
+															value="#{item.finDocumentoOrigem.descricao}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_cliente']}">
+														<p:outputLabel value="#{item.cliente.pessoa.nome}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_qtde_parcela']}">
+														<p:outputLabel value="#{item.quantidadeParcela}"></p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_valor_a_receber']}">
+														<p:outputLabel value="#{item.valorAReceber}">
+															<f:converter
+																converterId="mascaraValorBigDecimalConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_data_lancamento']}">
+														<p:outputLabel value="#{item.dataLancamento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_lancamento_receber_label_dados_receber_primeiro_vencimento']}">
+														<p:outputLabel value="#{item.primeiroVencimento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+												</p:dataTable>
+
+											</div>
+										</div>
+										
+										<div class="row">
+										
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="12"
+													oncomplete="PF('dialogFinLancamentoReceber').hide();"
+													rendered="#{finLancamentoReceberMB.pesquisando}"
+													action="#{finLancamentoReceberMB.voltar()}"
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+										</div>
+									</p:dialog>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finLancamentoReceberMB.pesquisando}">
+
+									<p:tabView id="dados">
+
+										<p:tab
+											title="#{text['cadastro_fin_lancamento_receber_label_dados_principais_title']}">
+											<ui:include
+												src="fin_lancamento_receber_dados_principais.xhtml"></ui:include>
+										</p:tab>
+
+										<p:tab
+											disabled="#{empty finLancamentoReceberMB.finLancamentoReceber.id}"
+											title="#{text['cadastro_fin_lancamento_receber_label_parcela_title']}">
+											<ui:include
+												src="fin_lancamento_receber_parcelas.xhtml"></ui:include>
+										</p:tab>
+
+										<p:tab
+											disabled="#{empty finLancamentoReceberMB.finLancamentoReceber.id}"
+											title="#{text['cadastro_fin_lancamento_receber_label_natureza_financeira_label']}">
+											<ui:include
+												src="fin_lancamento_receber_natureza_financeira.xhtml"></ui:include>
+										</p:tab>
+
+									</p:tabView>
+
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-8">
+												 
+												 <p:outputPanel styleClass="col-md-4" rendered="#{finLancamentoReceberMB.adicionando==true}">
+												 
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="100" action="#{finLancamentoReceberMB.adiciona}"														
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												</p:outputPanel>
+
+												<p:outputPanel styleClass="col-md-2" rendered="#{finLancamentoReceberMB.editando}">
+													<p:commandButton value="#{text['label.editar']}" 
+														tabindex="101"
+														action="#{finLancamentoReceberMB.alterar()}"														
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</p:outputPanel>
+												
+												<p:outputPanel styleClass="col-md-3" rendered="#{finLancamentoReceberMB.editando}">
+													<p:commandButton value="#{text['label.gerar_boleto']}" 
+														tabindex="102" ajax="false"
+														action="#{finLancamentoReceberMB.gerarBoleto()}"														
+														styleClass="btn btn-warning width100" process="@form"
+														update="@this :mensagens" />
+												</p:outputPanel>
+												  <p:outputPanel styleClass="col-md-5" rendered="#{finLancamentoReceberMB.editando}">
+													<p:commandButton value="#{text['label.arquivo_remessa']}" 
+														tabindex="103"
+														action="#{finLancamentoReceberMB.gerarRemessa()}"														
+														styleClass="btn btn-warning width100" process="@this"
+														update="@this :mensagens" />
+												</p:outputPanel> 
+
+												<p:outputPanel styleClass="col-md-2" rendered="#{finLancamentoReceberMB.adicionando}">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="104" action="#{finLancamentoReceberMB.limpar}"														
+														styleClass="btn btn-primary width100" process="@form"
+														update="@this :mensagens" />
+												</p:outputPanel>
+
+												<p:outputPanel styleClass="col-md-2">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finLancamentoReceberMB.voltar}"
+														tabindex="105" styleClass="btn btn-primary width100"
+														process="@this" update="@form :mensagens" />
+												</p:outputPanel>
+
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

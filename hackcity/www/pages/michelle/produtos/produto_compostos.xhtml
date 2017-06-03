@@ -1,0 +1,302 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_michelle/template_michelle.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<!-- Default Content -->
+			 <section class="content">
+			
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_produto_composto_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{produtoCompostoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{produtoCompostoMB.state}" />
+								<t:saveState value="#{produtoCompostoMB.produtoComposto}" />
+								<t:saveState value="#{produtoCompostoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{produtoCompostoMB.pesquisando}">
+									<div class="row">
+										<div class="col-md-5" >
+										<p:focus for="descricaoPesquisa" />
+											<p:outputLabel styleClass="bLabel" 
+												value="#{text['cadastro_grupo_produto_label_descricao']}" for="descricaoPesquisa" />
+												
+											<p:inputText id="descricaoPesquisa" 
+												value="#{produtoCompostoMB.produtoComposto.descricao}" tabindex="2"
+												label="#{text['cadastro_grupo_produto_label_descricao']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_grupo_produto_label_descricao']}"
+												
+												disabled="#{produtoCompostoMB.visualizando}"
+												
+												maxlength="100" />
+										</div>
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{produtoCompostoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{produtoCompostoMB.lista}" 
+														process="@form" 
+														update="@form messages"
+														tabindex="6" 
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{produtoCompostoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{produtoCompostoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										
+										<p:column
+											headerText="#{text['cadastro_grupo_produto_label_descricao']}" >
+											<h:outputText value="#{item.descricao}" />
+										</p:column>
+
+										<p:column headerText="Ações" align="center">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" styleClass="form-group col-md-3">
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										         styleClass="form-control"
+										         actionListener="#{produtoCompostoMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"	
+										         styleClass="form-control"									       
+										         actionListener="#{produtoCompostoMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <!-- <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{produtoCompostoMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>-->
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not produtoCompostoMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-7">
+											<p:focus for="descricao" />
+											<p:outputLabel styleClass="bLabel"  for="descricao"
+												value="#{text['cadastro_grupo_produto_label_descricao']}" />
+											<p:inputText id="descricao"
+												value="#{produtoCompostoMB.produtoComposto.descricao}" tabindex="13"
+												label="#{text['cadastro_grupo_produto_label_descricao']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_grupo_produto_label_descricao']}"
+												
+												disabled="#{produtoCompostoMB.visualizando}"
+												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">
+											 
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_grupo_produto_label_codigo']}" />
+											<p:inputText  
+												value="#{produtoCompostoMB.produtoComposto.codigo}" tabindex="14"
+												label="#{text['cadastro_grupo_produto_label_codigo']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_grupo_produto_label_codigo']}"
+												
+												disabled="#{produtoCompostoMB.visualizando}"
+												
+												maxlength="100" />
+										</div>
+										
+									</div>
+									
+									<div class="row">
+									
+										<p:outputPanel styleClass="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_composto_produto']}" />
+											<p:selectOneMenu styleClass="form-control"
+												disabled="#{produtoCompostoMB.visualizando}" required="false"
+												value="#{produtoCompostoMB.produto}" tabindex="15"
+												requiredMessage="#{text['cadastro_produto_composto_produto']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoCompostoMB.listaProdutos}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="produtoConverter" />
+												<p:ajax event="change" process="@this"	update="@this :formBody:listagemProdutos" listener="#{produtoCompostoMB.salvarProdutoSelecionado()}" ></p:ajax>
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+										<div class="form-group col-md-3">
+
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_produto_label_entrada']}" />
+												<p:selectOneMenu disabled="#{produtoCompostoMB.visualizando}"
+													value="#{produtoCompostoMB.produtoComposto.unidade}" tabindex="19"
+													styleClass="width100" required="true"  
+													requiredMessage="#{text['cadastro_produto_label_entrada']}"
+													filter="true">
+													<f:selectItem itemLabel="" />
+													<f:selectItems value="#{produtoCompostoMB.listaUnidades}"
+														var="item"
+														itemLabel="#{item.descricao.toUpperCase()} - #{item.abreviatura.toUpperCase()} "
+														itemValue="#{item}" />
+													<f:converter converterId="unidadeConverter" />
+													 
+												</p:selectOneMenu>
+
+											</div>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-12">
+
+												<p:dataTable id="listagemProdutos"
+													value="#{produtoCompostoMB.produtoComposto.listaProdutos}" var="item"
+													paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+													currentPageReportTemplate="{currentPage} de #{produtoCompostoMB.produtoComposto.listaProdutos.size()}"
+													rowClasses="odd, even"
+													emptyMessage="#{text['table.empty']}">
+
+													<p:column
+														headerText="#{text['cadastro_receita_label_table_produtos_codigo']}"
+														styleClass="texto-align-center">
+														<p:outputLabel value="#{item.codigoProduto}" />
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_receita_label_table_produtos_descricao']}">
+														<p:outputLabel value="#{item.descricao.toUpperCase()}" />
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_receita_label_table_produtos_ean']}"
+														styleClass="texto-align-center">
+														<p:outputLabel value="#{item.ean}" />
+													</p:column>
+													
+												</p:dataTable>
+												
+											</div>
+											
+													
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{produtoCompostoMB.adiciona}"
+														rendered="#{produtoCompostoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+													
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{produtoCompostoMB.alterar}"
+														rendered="#{produtoCompostoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{produtoCompostoMB.limpar}"
+														rendered="#{produtoCompostoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{produtoCompostoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,331 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_operadora_cartao_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{operadoraCartaoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{operadoraCartaoMB.state}" />
+								<t:saveState value="#{operadoraCartaoMB.operadoraCartao}" />
+								<t:saveState value="#{operadoraCartaoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{operadoraCartaoMB.pesquisando}">
+									<div class="row">
+										
+										
+										
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{operadoraCartaoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{operadoraCartaoMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{operadoraCartaoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{operadoraCartaoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+										
+										<p:column headerText="#{text['cadastro_operadora_cartao_label_nome']}">
+											<p:outputLabel styleClass="bLabel"  value="#{item.nome}"  />
+										</p:column>
+										<p:column headerText="#{text['cadastro_operadora_cartao_label_bandeira']}">
+											<p:outputLabel styleClass="bLabel"  value="#{item.bandeira}"  />
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_operadora_cartao_label_contabil_conta']}">
+											<p:outputLabel styleClass="bLabel"  value="#{item.contabilConta.descricao}"  />
+										</p:column>
+										<p:column headerText="#{text['cadastro_operadora_cartao_label_conta_caixa']}">
+											<p:outputLabel styleClass="bLabel"  value="#{item.contaCaixa.nome}"  />
+										</p:column>
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{operadoraCartaoMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{operadoraCartaoMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{operadoraCartaoMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not operadoraCartaoMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_operadora_cartao_label_contabil_conta']}"  />
+											<p:selectOneMenu tabindex="14"  
+												converter="contabilContaConverter" 
+												value="#{operadoraCartaoMB.operadoraCartao.contabilConta}"
+												disabled="#{operadoraCartaoMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_operadora_cartao_label_contabil_conta']}"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_contabil_conta']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{operadoraCartaoMB.listaContabilConta}" var="item" 
+												 itemLabel="#{item.descricao}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_operadora_cartao_label_conta_caixa']}"  />
+											<p:selectOneMenu tabindex="15"  
+												converter="contaCaixaConverter" 
+												value="#{operadoraCartaoMB.operadoraCartao.contaCaixa}"
+												disabled="#{operadoraCartaoMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_operadora_cartao_label_conta_caixa']}"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_conta_caixa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{operadoraCartaoMB.listaContaCaixa}" var="item" 
+												 itemLabel="#{item.descricao}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-5">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_bandeira']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.bandeira}" tabindex="16"
+												label="#{text['cadastro_operadora_cartao_label_bandeira']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_bandeira']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-5">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_nome']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.nome}" tabindex="17"
+												label="#{text['cadastro_operadora_cartao_label_nome']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_nome']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									</div>
+									<div class="row">
+										
+										<div class="form-group col-md-2">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_taxa_adm']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.taxaAdm}" tabindex="18"
+												label="#{text['cadastro_operadora_cartao_label_taxa_adm']}"
+												converter="mascaraValorBigDecimalConverter"
+												required="false" styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_taxa_adm']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_taxa_adm_debito']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.taxaAdm}" tabindex="19"
+												converter="mascaraValorBigDecimalConverter"
+												label="#{text['cadastro_operadora_cartao_label_taxa_adm_debito']}"
+												required="false" styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_taxa_adm_debito']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-4">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_valor_aluguel_pos_pin']}" />
+											<p:inputText 
+												converter="mascaraValorBigDecimalConverter"
+												value="#{operadoraCartaoMB.operadoraCartao.valorAluguelPosPin}" tabindex="19"
+												label="#{text['cadastro_operadora_cartao_label_valor_aluguel_pos_pin']}"
+												required="false" styleClass="form-control JSvalorMoeda"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_valor_aluguel_pos_pin']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+										<div class="form-group col-md-2">
+											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_vencimento_aluguel']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.valorAluguelPosPin}" tabindex="20"
+												label="#{text['cadastro_operadora_cartao_label_vencimento_aluguel']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_vencimento_aluguel']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="2" />
+										</div>
+									
+									</div>
+									
+									<div class="row">									
+										<div class="form-group col-md-5">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_fone1']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.fone1}" tabindex="21"
+												label="#{text['cadastro_operadora_cartao_label_fone1']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_fone1']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+										
+											<div class="form-group col-md-5">											
+											<p:outputLabel styleClass="bLabel"  
+												value="#{text['cadastro_operadora_cartao_label_fone2']}" />
+											<p:inputText 
+												value="#{operadoraCartaoMB.operadoraCartao.fone2}" tabindex="22"
+												label="#{text['cadastro_operadora_cartao_label_fone2']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_operadora_cartao_label_fone2']}"												
+												disabled="#{operadoraCartaoMB.visualizando}"												
+												maxlength="100" />
+										</div>
+									</div>
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{operadoraCartaoMB.adiciona}"
+														rendered="#{operadoraCartaoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{operadoraCartaoMB.alterar}"
+														rendered="#{operadoraCartaoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{operadoraCartaoMB.limpar}"
+														rendered="#{operadoraCartaoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{operadoraCartaoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="compra_pedido" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c5a7b697-108e-46fa-bf9f-045fcf5ca9ae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="dataPorExtenso" class="java.lang.String"/>
+	<field name="fornecedor" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="dataPedido" class="java.lang.String"/>
+	<field name="formaPagamento" class="java.lang.String"/>
+	<field name="tipoFrete" class="java.lang.String"/>
+	<field name="previsaoEntrega" class="java.lang.String"/>
+	<field name="previsaoPagamento" class="java.lang.String"/>
+	<field name="localEntrega" class="java.lang.String"/>
+	<field name="localCobranca" class="java.lang.String"/>
+	<field name="contato" class="java.lang.String"/>
+	<field name="subTotal" class="java.lang.String"/>
+	<field name="taxaDesconto" class="java.lang.String"/>
+	<field name="valorDesconto" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<field name="listaItensPedido" class="java.util.List"/>
+	<title>
+		<band height="69" splitType="Stretch">
+			<textField>
+				<reportElement x="123" y="16" width="275" height="28" uuid="a302c105-0de4-4b10-bc1d-fe61b26d527e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pedido de Compras"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="417" y="0" width="138" height="44" uuid="efe4ca3a-1e52-4380-a098-4aeb76ab288e"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="353" y="46" width="202" height="20" uuid="b8cee9f1-f470-49e1-8a76-d743813e80ed"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{dataPorExtenso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="46" width="169" height="20" uuid="143d54d5-ae0b-4d1b-9f07-cc1e919f6806"/>
+				<textFieldExpression><![CDATA["Usuário : "+ $F{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+</jasperReport>

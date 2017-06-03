@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_compras_pedido_produtos" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5d590bfb-f1f9-4321-a63b-8e2cb699ed4d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="produto" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="unidade" class="java.lang.String"/>
+	<field name="valorUnitario" class="java.lang.String"/>
+	<field name="valorDesconto" class="java.lang.String"/>
+	<field name="valorTotal" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="227" height="20" uuid="fafb73af-937b-42c9-a477-e228b6e8dae6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Produto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="0" width="120" height="20" uuid="a7045ef8-23eb-4852-b5e4-5a25e6aab6b5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Total"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="0" width="118" height="20" uuid="31837898-32ca-4357-b9c8-cc7631487468"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Desconto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="0" width="110" height="20" uuid="e2dd2d72-06be-49c7-be83-25c0c9c41454"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor Unitário"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="0" width="86" height="20" uuid="6f14c6ab-4725-4206-a110-cd1147060852"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Quantidade"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="313" y="0" width="141" height="20" uuid="aaf53e52-b6b7-460f-b8b9-66cdf53095e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Unidade"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="313" y="0" width="141" height="20" uuid="d4dfa717-a6b9-45d7-b070-dae1cf16d0b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="0" width="118" height="20" uuid="c1da98c5-a5f2-49b3-9f70-bf1a6366a428"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorDesconto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="0" width="86" height="20" uuid="1140f0d5-3613-4a48-a23d-f401196f2b09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="0" width="110" height="20" uuid="e05952d2-ee0e-4b9c-bab1-0dde6ac9dd93"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="227" height="20" uuid="8328af06-086e-49d4-b950-b3dd7dfe3726"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{produto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="0" width="120" height="20" uuid="77aac99a-46c5-41b8-b76c-3e8195b89654"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

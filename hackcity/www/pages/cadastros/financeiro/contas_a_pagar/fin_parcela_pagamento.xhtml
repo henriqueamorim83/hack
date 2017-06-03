@@ -1,0 +1,448 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fin_parcela_pagar_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{finParcelaPagamentoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{finParcelaPagamentoMB.state}" />
+								<t:saveState value="#{finParcelaPagamentoMB.finParcelaPagar}" />
+								<t:saveState value="#{finParcelaPagamentoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+									<t:div id="blocoDePesquisa"
+										rendered="#{finParcelaPagamentoMB.pesquisando}">
+										<div class="row"></div>
+										<p:outputPanel>
+											<div class="row">
+												<div class="col-md-7" />
+												<div class="col-xs-12 col-md-5">
+
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}" rendered="false"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{finParcelaPagamentoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{finParcelaPagamentoMB.lista}" process="@form"
+														update="@form" tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela"
+										value="#{finParcelaPagamentoMB.objetos}"
+										styleClass="ajusta_coluna" var="item" paginator="true"
+										lazy="true" rows="5"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{finParcelaPagamentoMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_numero_parcela']}">
+											<p:outputLabel value="#{item.numeroParcela}">
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}">
+											<p:outputLabel value="#{item.dataEmissao}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+										<p:outputLabel value="">
+										</p:outputLabel>
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_data_vencimento']}">
+											<p:outputLabel value="#{item.dataVencimento}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_desconto_ate']}">
+											<p:outputLabel value="#{item.descontoAte}">
+												<f:converter converterId="dataConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_valor']}">
+											<p:outputLabel value="#{item.valor}">
+												<f:converter converterId="mascaraValorBigDecimalConverter" />
+											</p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_fin_parcela_pagar_label_status']}">
+											<p:outputLabel value="#{item.finStatusParcela.descricao}">
+											</p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														<p:menuitem value="#{text['label.detalhes']}"
+															styleClass="btn btn-primary width100"
+															actionListener="#{finParcelaPagamentoMB.prepararDetalhe(item)}"
+															title="#{text['label.detalhes']}" 
+															process="tabela" update="@form messages" />
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+									<div class="col-md-4">
+										<p:commandButton value="Detalhes" tabindex="10"
+											rendered="#{finParcelaPagamentoMB.pesquisando}"
+											styleClass="btn btn-primary width100" process="@this"
+											oncomplete="PF('dialogFinParcelaPagar').show()"
+											update="@form :mensagens" />
+									</div>
+
+					
+
+
+
+									<p:dialog widgetVar="dialogFinParcelaPagar" showEffect="pop"
+										id="dialogFinParcelaPagar"
+										header="#{text['cadastro_fin_parcela_pagar_label_title']}"
+										styleClass="width70" height="300" modal="true" closable="true"
+										closeOnEscape="true">
+
+										<div class="row">
+											<div class="col-md-12">
+
+												<p:dataTable id="FinParcelaPagarDataTable"
+													value="#{finParcelaPagamentoMB.listagemFinParcelaPagarEmAberto}"
+													styleClass="ajusta_coluna " var="item" paginator="true"
+													lazy="true" rows="5" scrollable="true" rowKey="#{item.id}"
+													selection="#{finParcelaPagamentoMB.parcelasSelecionadas}"
+													paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+													currentPageReportTemplate="{currentPage} de #{finLancamentoPagarMB.objetos.pageSize}"
+													rowClasses="odd, even"
+													emptyMessage="#{text['table.empty']}">
+
+
+
+
+													<p:column selectionMode="multiple" style="width: 30px;"></p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_numero_parcela']}">
+														<p:outputLabel value="#{item.numeroParcela}">
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}">
+														<p:outputLabel value="#{item.dataEmissao}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+													<p:outputLabel value="">
+													</p:outputLabel>
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_data_vencimento']}">
+														<p:outputLabel value="#{item.dataVencimento}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_desconto_ate']}">
+														<p:outputLabel value="#{item.descontoAte}">
+															<f:converter converterId="dataConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_valor']}">
+														<p:outputLabel value="#{item.valor}">
+															<f:converter
+																converterId="mascaraValorBigDecimalConverter" />
+														</p:outputLabel>
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_fin_parcela_pagar_label_status']}">
+														<p:outputLabel value="#{item.finStatusParcela.descricao}">
+														</p:outputLabel>
+													</p:column>
+
+												</p:dataTable>
+
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-3 aDireita">
+												<p:commandButton
+													process="@this :formBody:FinParcelaPagarDataTable"
+													title="#{text['label.detalhes']}" styleClass="btn btn-primary width100"
+													value="#{text['label.detalhes']}" ajax="true"
+													actionListener="#{finParcelaPagamentoMB.alterarParcelas}"
+													onsuccess="PF('dialogFinParcelaPagar').hide();"
+													update="@form :mensagens">
+
+												</p:commandButton>
+
+											</div>
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="12"
+													oncomplete="PF('dialogFinParcelaPagar').hide();"
+													rendered="#{finParcelaPagamentoMB.pesquisando}"
+													action="#{finParcelaPagamentoMB.voltar()}"
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+										</div>
+									</p:dialog>
+
+								</t:div>
+								
+								<p:dialog widgetVar="dialogFinParcelaPagarCheque"
+										id="dialogFinParcelaPagarCheque" showEffect="pop"
+										header="#{text['cadastro_fin_parcela_pagar_label_cheque_title']}"
+										 
+										styleClass="width70" height="300" modal="true" closable="true"
+										closeOnEscape="true">
+
+
+										<div class="row">
+
+											<div class="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_pagar_label_cheque']}" />
+												<p:selectOneMenu tabindex="12" converter="chequeConverter"
+													required="true" id="cheque"
+													value="#{finParcelaPagamentoMB.finChequeEmitido.cheque}"
+													disabled="#{finParcelaPagamentoMB.visualizando}"
+													styleClass="form-control"
+													label="#{text['cadastro_fin_parcela_pagar_label_cheque']}"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_cheque']}"
+													filter="true">
+												 
+													<f:selectItems value="#{finParcelaPagamentoMB.listaCheque}"
+														var="item" itemLabel="#{item.numero}" itemValue="#{item}" />
+												</p:selectOneMenu>
+											</div>
+
+											<div class="form-group col-md-5">
+
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_pagar_label_nominal']}" />
+												<p:inputText
+													value="#{finParcelaPagamentoMB.finChequeEmitido.nominalA}"
+													tabindex="13"
+													label="#{text['cadastro_fin_parcela_pagar_label_nominal']}"
+													required="true" styleClass="form-control"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_nominal']}"
+													disabled="#{finParcelaPagamentoMB.visualizando}"
+													maxlength="200" />
+											</div>
+										</div>
+
+										<div class="row">
+
+											<div class="form-group col-md-2">
+												<p:outputLabel
+													value="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}"></p:outputLabel>
+												<p:calendar tabindex="14"
+													value="#{finParcelaPagamentoMB.finChequeEmitido.dataEmissao}"
+													converter="dataConverter" navigator="true"
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control"
+													label="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}"
+													required="true">
+												</p:calendar>
+											</div>
+
+											<div class="form-group col-md-2">
+												<p:outputLabel
+													value="#{text['cadastro_fin_parcela_pagar_label_bom_para']}"></p:outputLabel>
+												<p:calendar tabindex="15"
+													value="#{finParcelaPagamentoMB.finChequeEmitido.bomPara}"
+													converter="dataConverter" navigator="true"
+													pattern="dd/MM/yyyy" locale="pt"
+													styleClass="JSData form-control"
+													label="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_data_emissao']}"
+													required="true">
+												</p:calendar>
+											</div>
+
+											<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_pagar_label_valor']}" />
+												<p:inputText
+													value="#{finParcelaPagamentoMB.finChequeEmitido.valor}"
+													tabindex="16"
+													label="#{text['cadastro_fin_parcela_pagar_label_valor']}"
+													required="false"
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" disabled="true"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_valor']}" />
+											</p:outputPanel>
+										</div>
+
+
+										<div class="row">
+
+											<p:outputPanel styleClass="form-group col-md-12">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_fin_parcela_pagar_label_historico']}" />
+												<p:inputTextarea
+													value="#{finParcelaPagamentoMB.finChequeEmitido.historico}"
+													tabindex="17"
+													label="#{text['cadastro_fin_parcela_pagar_label_historico']}"
+													required="false" maxlength="244" styleClass="form-control"
+													disabled="#{finParcelaPagamentoMB.visualizando}"
+													requiredMessage="#{text['cadastro_fin_parcela_pagar_label_historico']}" />
+											</p:outputPanel>
+
+
+										</div>
+										
+										
+										<div class="row">
+											<div class="col-md-3 aDireita">
+												<p:commandButton
+													process="dialogFinParcelaPagarCheque"
+													title="#{text['label.salvar']}" styleClass="btn btn-primary width100"
+													value="#{text['label.salvar']}" ajax="true" tabindex="19"
+													actionListener="#{finParcelaPagamentoMB.finalizaPagamentoCheque()}"
+													onsuccess="PF('dialogFinParcelaPagarCheque').hide();"
+													update="@form :mensagens">
+												</p:commandButton>
+
+											</div>
+											<div class="col-md-3 aDireita">
+												<p:commandButton value="#{text['label.cancelar']}"
+													title="#{text['label.cancelar']}" tabindex="20"
+													oncomplete="PF('dialogFinParcelaPagarCheque').hide();"													
+													styleClass="btn btn-primary width100" process="@this"
+													update="@form :mensagens" />
+											</div>
+										</div>
+
+									</p:dialog>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not finParcelaPagamentoMB.pesquisando}">
+
+									<p:tabView id="dados">
+										<p:tab
+											title="#{text['cadastro_fin_parcela_pagar_label_dados_principais']}">
+											<ui:include
+												src="fin_parcela_pagamento_dados_principais.xhtml" />
+
+										</p:tab>
+
+										<p:tab
+											title="#{text['cadastro_fin_parcela_pagar_label_pagamento']}">
+											<ui:include src="fin_parcela_pagamentos_efetuados.xhtml"></ui:include>
+										</p:tab>
+									</p:tabView>
+
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.editar']}"
+														tabindex="40" action="#{finParcelaPagamentoMB.alterar()}"
+														rendered="#{finParcelaPagamentoMB.editando}"
+														
+														styleClass="btn btn-warning width100" process="@this :formBody:dados"
+														update="@form :mensagens" />
+												</div>
+
+
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.incluir']}"
+														tabindex="41"
+														action="#{finParcelaPagamentoMB.iniciaPagamento()}"
+														rendered="#{finParcelaPagamentoMB.editando}" ajax="true"
+														styleClass="btn btn-warning width100" process="@this :formBody:dados"
+														update=":formBody:dados :formBody:dialogFinParcelaPagarCheque :mensagens" />
+												</div>
+
+
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{finParcelaPagamentoMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100"
+														process="@form" update="@form :mensagens" />
+												</div>
+
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

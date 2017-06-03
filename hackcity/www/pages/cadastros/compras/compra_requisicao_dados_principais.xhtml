@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<div class="row">
+
+	<div class="col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_requisicao_label_data_requisicao']}" />
+		<p:calendar tabindex="10"
+			value="#{compraRequisicaoMB.compraRequisicao.dataRequisicao}"
+			converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+			locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+			requiredMessage="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+			required="true">
+		</p:calendar>
+
+	</div>
+
+	<p:outputPanel styleClass="form-group col-md-9">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_requisicao_label_compra_tipo_requisicao']}" />
+		<p:selectOneMenu
+			value="#{compraRequisicaoMB.compraRequisicao.compraTipoRequisicao}"
+			tabindex="11" styleClass="form-control width100"
+			requiredMessage="#{text['cadastro_compras_requisicao_label_compra_tipo_requisicao']}"
+			filter="true">
+
+			<f:selectItems
+				value="#{compraRequisicaoMB.listaCompraTipoRequisicao}" var="item"
+				itemLabel="#{item.nome}" itemValue="#{item}" />
+
+			<f:converter converterId="compraTipoRequisicaoConverter" />
+		</p:selectOneMenu>
+	</p:outputPanel>
+
+</div>
+
+<div class="row">
+
+	<p:outputPanel styleClass="form-group col-md-9">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_requisicao_label_colaborador']}" />
+		<p:selectOneMenu
+			value="#{compraRequisicaoMB.compraRequisicao.colaborador}"
+			tabindex="12" styleClass="form-control width100"
+			requiredMessage="#{text['cadastro_compras_requisicao_label_colaborador']}"
+			filter="true">
+			<f:selectItems value="#{compraRequisicaoMB.listaColaborador}"
+				var="item" itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+
+			<f:converter converterId="colaboradorConverter" />
+		</p:selectOneMenu>
+	</p:outputPanel>
+</div>
+
+<div class="row">
+	<div class="form-group col-md-12">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_compras_requisicao_label_observacao']}" />
+		<p:inputTextarea
+			value="#{compraRequisicaoMB.compraRequisicao.observacao}"
+			tabindex="13"
+			label="#{text['cadastro_compras_requisicao_label_observacao']}"
+			required="false" styleClass="form-control"
+			requiredMessage="#{text['cadastro_compras_requisicao_label_observacao']}"
+			disabled="#{compraRequisicaoMB.visualizando}" maxlength="100" />
+	</div>
+
+</div>
+
+</html>

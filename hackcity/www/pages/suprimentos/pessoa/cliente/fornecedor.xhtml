@@ -1,0 +1,496 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_suprimentos/template_suprimentos.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_fornecedor_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{fornecedorMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{fornecedorMB.state}" />
+								<t:saveState value="#{fornecedorMB.fornecedor}" />
+								<t:saveState value="#{fornecedorMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{fornecedorMB.pesquisando}">
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="2"  
+												converter="fornecedorConverter" 
+												value="#{fornecedorMB.fornecedor}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_pessoa']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaFornecedores}" var="item" 
+												 itemLabel="#{item.pessoa.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_atividade']}"  />
+											<p:selectOneMenu tabindex="3"  
+												converter="atividadeForCliConverter" 
+												value="#{fornecedorMB.fornecedor.atividadeForCli}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_atividade']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_atividade']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaAtividadeForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_situacao']}"  />
+											<p:selectOneMenu tabindex="4"  
+												converter="situacaoForCliConverter" 
+												value="#{fornecedorMB.fornecedor.situacaoForCli}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_situacao']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_situacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaSituacaoForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="7"
+														action="#{fornecedorMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{fornecedorMB.lista}" process="@form" update="@form"
+														tabindex="6" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{fornecedorMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="{currentPage} de #{fornecedorMB.objetos.pageSize}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_fornecedor_label_pessoa']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.pessoa.nome}"/>
+										</p:column>
+										<p:column headerText="#{text['cadastro_fornecedor_label_atividade']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.atividadeForCli.nome}"/>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fornecedor_label_situacao']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.situacaoForCli.nome}"/>
+										</p:column>
+										
+										<p:column headerText="#{text['cadastro_fornecedor_label_contabil_conta']}">
+											<p:outputLabel styleClass="bLabel" value="#{item.contabilConta.descricao}"/>
+										</p:column>
+										
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document" 
+										        actionListener="#{fornecedorMB.prepararVisualizar(item)}" process="@this" update="@form messages"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{fornecedorMB.prepararAlterar(item)}" process="@this" update="@form messages"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 
+										        
+										        actionListener="#{fornecedorMB.remove(item)}" ajax="false"
+										         process="@this" update="@form messages"/>
+										       
+										       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not fornecedorMB.pesquisando}">
+									
+									<div class="row">
+										<div class="form-group col-md-5">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_pessoa']}"  />
+											<p:selectOneMenu tabindex="10"  
+												converter="pessoaConverter" 
+												value="#{fornecedorMB.fornecedor.pessoa}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_pessoa']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_pessoa']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaPessoas}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									
+									<div class="row">
+						
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_atividade']}"  />
+											<p:selectOneMenu tabindex="11"  
+												converter="atividadeForCliConverter" 
+												value="#{fornecedorMB.fornecedor.atividadeForCli}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_atividade']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_atividade']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaAtividadeForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-6">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_situacao']}"  />
+											<p:selectOneMenu tabindex="12"  
+												converter="situacaoForCliConverter" 
+												value="#{fornecedorMB.fornecedor.situacaoForCli}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_situacao']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_situacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaSituacaoForCli}" var="item" 
+												 itemLabel="#{item.nome}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+									</div>
+									
+									<div class="row">
+				
+										<div class="form-group col-md-8">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_contabil_conta']}"  />
+											<p:selectOneMenu tabindex="13"  
+												converter="contabilContaConverter" 
+												value="#{fornecedorMB.fornecedor.contabilConta}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_contabil_conta']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_contabil_conta']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel=""/>
+												 <f:selectItems value="#{fornecedorMB.listaContabilConta}" var="item" 
+												 itemLabel="#{item.descricao}"
+												  itemValue="#{item}"/>														
+											</p:selectOneMenu>
+										</div>
+										
+										
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_desde']}"  />
+											<p:calendar   tabindex="15"	disabled="#{fornecedorMB.visualizando}" 
+												value="#{fornecedorMB.fornecedor.desde}"
+												converter="dataConverter"
+											 	navigator="true" 
+												pattern="dd/MM/yyyy" locale="pt"
+												 styleClass="JSData form-control" 											
+												label="#{text['cadastro_fornecedor_label_desde']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_desde']}"
+												 required="false">											
+											</p:calendar>									
+										
+										</div>		
+										
+										<div class="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel" 
+													value="#{text['cadastro_fornecedor_label_data_cadastro']}"  />													
+												<p:calendar   tabindex="16"	  
+												value="#{fornecedorMB.fornecedor.dataCadastro}"
+												converter="dataConverter"
+												navigator="true"  disabled="true"
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_fornecedor_label_data_cadastro']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_data_cadastro']}"
+												required="false">						
+											</p:calendar>		
+											</div>
+										
+										<!-- <div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_conta_remetente']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.contaRemetente}" tabindex="17"
+												label="#{text['cadastro_fornecedor_label_conta_remetente']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_fornecedor_label_conta_remetente']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>-->
+										
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_gerar_faturamento']}"  />
+											<p:selectOneMenu tabindex="18"  
+												
+												value="#{fornecedorMB.fornecedor.geraFaturamento}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_gerar_faturamento']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_gerar_faturamento']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Não" itemValue="Não"/>
+												  <f:selectItem itemLabel="Sim" itemValue="Sim"/>												
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_optante_simples_nacional']}"  />
+											<p:selectOneMenu tabindex="19"  
+												
+												value="#{fornecedorMB.fornecedor.optanteSimplesNacional}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_optante_simples_nacional']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_optante_simples_nacional']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Não" itemValue="Não"/>
+												  <f:selectItem itemLabel="Sim" itemValue="Sim"/>												
+											</p:selectOneMenu>
+										</div>
+																			
+									</div>								
+									
+									<div class="row">
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_localizacao']}"  />
+											<p:selectOneMenu tabindex="20"  
+												
+												value="#{fornecedorMB.fornecedor.localizacao}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_localizacao']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_localizacao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Nacional" itemValue="Nacional"/>
+												  <f:selectItem itemLabel="Exterior" itemValue="Exterior"/>												
+											</p:selectOneMenu>
+										</div>
+										
+										<div class="form-group col-md-2">
+											<p:outputLabel styleClass="bLabel"  value="#{text['cadastro_fornecedor_label_sofre_retencao']}"  />
+											<p:selectOneMenu tabindex="21"  
+												
+												value="#{fornecedorMB.fornecedor.sofreRetencao}"
+												disabled="#{fornecedorMB.visualizando}" styleClass="form-control"
+												label="#{text['cadastro_fornecedor_label_sofre_retencao']}"
+												requiredMessage="#{text['cadastro_fornecedor_label_sofre_retencao']}" 
+												 filter="true">	
+												 <f:selectItem itemLabel="Não" itemValue="Não"/>
+												  <f:selectItem itemLabel="Sim" itemValue="Sim"/>												
+											</p:selectOneMenu>
+										</div>
+													
+										<div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_prazo_medio_entrega']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.contaRemetente}" tabindex="22"
+												label="#{text['cadastro_fornecedor_label_conta_remetente']}"
+												required="false" styleClass="form-control JSSomenteNumeros"
+												requiredMessage="#{text['cadastro_fornecedor_label_conta_remetente']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.numDiasPrimeiroVencimento}" tabindex="23"
+												label="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}"
+												required="false" styleClass="form-control JSSomenteNumeros"
+												requiredMessage="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>	
+											
+									
+									</div>
+									<div class="row">
+									
+										<div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_num_dias_intervalo']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.numDiasIntervalo}" tabindex="24"
+												label="#{text['cadastro_fornecedor_label_num_dias_intervalo']}"
+												required="false" styleClass="form-control JSSomenteNumeros"
+												requiredMessage="#{text['cadastro_fornecedor_label_num_dias_intervalo']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_qtd_parcelas']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.quantidadeParcelas}" tabindex="25"
+												label="#{text['cadastro_fornecedor_label_qtd_parcelas']}"
+												required="false" styleClass="form-control JSSomenteNumeros"
+												requiredMessage="#{text['cadastro_fornecedor_label_qtd_parcelas']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>										
+										
+										
+										<div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_cheque_nominal_a']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.chequeNominalA}" tabindex="27"
+												label="#{text['cadastro_fornecedor_label_cheque_nominal_a']}"
+												required="false" styleClass="form-control "
+												requiredMessage="#{text['cadastro_fornecedor_label_cheque_nominal_a']}"												
+												disabled="#{fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>	
+										
+										<div class="form-group col-md-12">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_observacao']}"  />
+											<p:inputText 
+												value="#{fornecedorMB.fornecedor.observacao}" tabindex="28"
+												label="#{text['cadastro_fornecedor_label_observacao']}"
+												required="false" styleClass="form-control "
+												requiredMessage="#{text['cadastro_fornecedor_label_observacao']}"												
+												disabled="#{fornecedorMB.visualizando}"												
+												maxlength="244" />
+										</div>	
+									</div>
+									
+									
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="40" action="#{fornecedorMB.adiciona}"
+														rendered="#{fornecedorMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="41"
+														action="#{fornecedorMB.alterar}"
+														rendered="#{fornecedorMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="42" action="#{fornecedorMB.limpar}"
+														rendered="#{fornecedorMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{fornecedorMB.voltar}"
+														tabindex="43" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

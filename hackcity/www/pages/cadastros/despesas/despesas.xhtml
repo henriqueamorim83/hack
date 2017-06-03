@@ -1,0 +1,284 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template/template_padrao.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_despesas_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form id="formBody">
+						<p:growl id="messages" showDetail="true" />
+
+						<h:panelGrid columnClasses="value">
+							<div class="row">
+							
+							<p:outputPanel styleClass="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+										value="Data Inicial" />
+									<p:calendar tabindex="10" id="dataInicial"
+										value="#{despesasMB.dataInicial}"
+										converter="dataConverter" navigator="true"
+										pattern="dd/MM/yyyy" locale="pt"
+										styleClass="JSData form-control"
+										label="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+										requiredMessage="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+										required="false">
+									</p:calendar>
+								</p:outputPanel>
+								
+							<p:outputPanel styleClass="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+										value="Data Final" />
+									<p:calendar tabindex="11" id="dataFinal"
+										value="#{despesasMB.dataFinal}"
+										converter="dataConverter" navigator="true"
+										pattern="dd/MM/yyyy" locale="pt"
+										styleClass="JSData width15"
+										label="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+										requiredMessage="#{text['cadastro_compras_requisicao_label_data_requisicao']}"
+										required="false">
+									</p:calendar>
+								</p:outputPanel>
+							
+							
+								<p:outputPanel styleClass="form-group col-md-3">
+									<p:outputLabel styleClass="bLabel"
+										value="#{text['cadastro_despesas_label_cliente']}" />
+									<p:selectOneMenu maxlength="10" id="cliente"
+										styleClass="form-control " required="true"
+										disabled="#{despesasMB.visualizando}"
+										value="#{despesasMB.cliente}" tabindex="3"
+										requiredMessage="#{text['cadastro_despesas_label_cliente']}"
+										filter="true">
+
+										<f:selectItems value="#{despesasMB.listaClientes}"
+											var="item" itemLabel="#{item.pessoa.nome.toUpperCase()}"
+											itemValue="#{item}" />
+										<f:converter converterId="clienteConverter" />
+										<p:ajax event="change" process="@this" update="@form"
+											listener="#{despesasMB.pesquisar}"></p:ajax>
+									</p:selectOneMenu>
+								</p:outputPanel>
+								
+								
+
+							</div>
+							<div class="row">
+								<div class="form-group col-md-12">
+									<h3 style="margin-top: 0">Agenda Ripe</h3>
+									<p:schedule id="schedule" value="#{despesasMB.eventModel}"
+										widgetVar="myschedule" locale="pt" showHeader="true">
+
+										<p:ajax event="dateSelect"
+											listener="#{despesasMB.onDateSelect}" update="eventDetails"
+											oncomplete="PF('eventDialog').show();" />
+										<p:ajax event="eventSelect"
+											listener="#{despesasMB.onEventSelect}"
+											update="eventDetails" oncomplete="PF('eventDialog').show();" />
+										<p:ajax event="eventMove"
+											listener="#{despesasMB.onEventMove}" update="messages" />
+										<p:ajax event="eventResize"
+											listener="#{despesasMB.onEventResize}" update="messages" />
+
+									</p:schedule>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-2 aDireita">
+
+
+									<p:commandLink value="Download" ajax="false" 
+										styleClass="smallButton">
+										<p:fileDownload
+											value="#{despesasMB.emitirRelatorioDespesasXLS}" />
+									</p:commandLink>
+								</div>
+								
+
+							</div>
+						</h:panelGrid>
+
+						<p:dialog widgetVar="eventDialog" header="Detalhes do Evento"
+							closable="true" width="400" closeOnEscape="true"
+							showEffect="clip" hideEffect="clip" modal="true">
+							<p:outputPanel id="eventDetails">
+
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="title" value="Titulo:" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:inputText id="title" value="#{despesasMB.event.title}"
+											required="false" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="from" value="Hoje:" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:calendar id="from" value="#{despesasMB.event.startDate}"
+											timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="to" value="Para:" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:calendar id="to" value="#{despesasMB.event.endDate}"
+											timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="situacao" value="Situação:" />
+									</div>
+									<div class="form-group col-md-8">
+										<h:selectBooleanCheckbox id="situacao"
+											value="#{despesasMB.event.situacao}" />
+									</div>
+								</div>
+								<p:outputPanel rendered="#{despesasMB.event.pagamentoFixo==false}">
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="pagamentoFixo" value="Pagamento Fixo" />
+									</div>
+									<div class="form-group col-md-8">
+										<h:selectBooleanCheckbox id="pagamentoFixo"
+											value="#{despesasMB.event.pagamentoFixo}" />
+									</div>
+								</div>
+								</p:outputPanel>
+								
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="descricao" value="Descrição" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:inputText id="descricao"
+											value="#{despesasMB.event.description}" required="false" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="valor" value="Valor" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:inputText id="valor" value="#{despesasMB.event.valor}"
+											required="false" styleClass="JSvalorMoeda"
+											converter="mascaraValorBigDecimalConverter" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-4">
+										<p:outputLabel for="codigoBarras" value="Código Barras" />
+									</div>
+									<div class="form-group col-md-8">
+										<p:inputText id="codigoBarras"
+											value="#{despesasMB.event.codigoBarras}" required="false" />
+									</div>
+								</div>
+							</p:outputPanel>
+							<div class="row">
+								<div class="form-group col-md-4">
+									<p:commandButton value="Cancelar"
+										oncomplete="PF('eventDialog').hide();" process="@this" />
+								</div>
+								<div class="form-group col-md-3">
+									<p:commandButton id="addButton" value="Salvar"
+										actionListener="#{despesasMB.addEvent}" ajax="false"
+										oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+								</div>
+								<div class="form-group col-md-3">
+
+									<p:commandButton id="addRemove" value="Remover"
+										actionListener="#{despesasMB.removeEvent}" ajax="false"
+										oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+								</div>
+							</div>
+						</p:dialog>
+					</h:form>
+
+					<script type="text/javascript">
+PrimeFaces.locales['pt'] = {  
+        closeText: 'Fechar',  
+        prevText: 'Anterior',  
+        nextText: 'Próximo',  
+        currentText: 'Começo',  
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],  
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],  
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],  
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],  
+        dayNamesMin: ['D','S','T','Q','Q','S','S'],  
+        weekHeader: 'Semana',  
+        firstDay: 1,  
+        isRTL: false,  
+        showMonthAfterYear: false,  
+        yearSuffix: '',  
+        timeOnlyTitle: 'Só Horas',  
+        timeText: 'Tempo',  
+        hourText: 'Hora',  
+        minuteText: 'Minuto',  
+        secondText: 'Segundo',  
+        currentText: 'Data Atual',  
+        ampm: false,  
+        month: 'Mês',  
+        week: 'Semana',  
+        day: 'Dia',  
+        allDayText : 'Todo Dia'  
+    }; 
+</script>
+					<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

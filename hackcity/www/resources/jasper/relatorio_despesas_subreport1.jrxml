@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_despesas_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0f82e205-f977-49fa-8580-1867a7af466c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="data" class="java.lang.String"/>
+	<field name="valor" class="java.lang.String"/>
+	<field name="codigo_barras" class="java.lang.String"/>
+	<field name="situacaoPagamento" class="java.lang.String"/>
+	<field name="observacao" class="java.lang.String"/>
+	<detail>
+		<band height="127" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="31" width="111" height="20" uuid="547ec52f-9044-4564-9c82-0938157ba5c6"/>
+				<textFieldExpression><![CDATA["Data: "+$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="223" y="31" width="111" height="20" uuid="f4a633ac-243a-4db2-a610-3c5cd7913962"/>
+				<textFieldExpression><![CDATA["Valor: "+$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="89" width="555" height="20" uuid="9f70da46-33cc-49a7-94c9-553008c0a776"/>
+				<textFieldExpression><![CDATA["Oberservação: "+$F{observacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="6" width="554" height="20" uuid="70dab268-acf4-437d-afec-bc8bfa3a9331"/>
+				<textFieldExpression><![CDATA["Descrição: "+$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="51" width="334" height="20" uuid="58ac2d8d-8360-4f50-987b-6d63a2030ebc"/>
+				<textFieldExpression><![CDATA["Código de Barras: "+$F{codigo_barras}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="443" y="31" width="111" height="20" uuid="cd62935e-b741-4b42-b623-21c4fa5b4f7e"/>
+				<textFieldExpression><![CDATA["Situação: "+$F{situacaoPagamento}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="124" width="554" height="1" uuid="7b9b550b-9bdd-4f21-99be-dd2df8a9071b"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

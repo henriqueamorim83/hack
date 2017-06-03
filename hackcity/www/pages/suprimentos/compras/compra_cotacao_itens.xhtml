@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:outputPanel id="panelItens">
+
+<div class="row">
+
+	<div class="form-group col-md-12">
+		
+		<p:dataTable id="dataTableCompraCotacaoDetalhe" var="obj"
+			value="#{compraCotacaoMB.listaCompraCotacaoDetalhe}" paginator="true"
+			rows="10" rowsPerPageTemplate="5,10,15,20" resizableColumns="true">
+
+			<f:facet name="header">
+				<p:commandButton title="Novo" icon="ui-icon-plus"
+					styleClass="aEsquerda"
+					actionListener="#{compraCotacaoMB.incluirItem()}"
+					process="dataTableCompraCotacaoDetalhe" 
+					disabled="#{compraCotacaoMB.visualizando}"
+					oncomplete="PF('dialogCompraCotacaoDetalhe').show()"
+					update=":formBody:dados:panelItens :mensagens" />
+			</f:facet>
+
+			<p:column
+				headerText="#{text['cadastro_compras_cotacao_label_produto']}"
+				width="50%">
+				<h:outputLabel value="#{obj.produto.descricao.toUpperCase()}"   />
+				<h:outputLabel value="#{obj.pedidoProduto.itemPedido.produto.descricao.toUpperCase()}" rendered="#{obj.pedidoProduto.itemPedido.receita==null}" />
+				<h:outputLabel value="#{obj.pedidoProduto.itemPedido.receita.descricao.toUpperCase()}" rendered="#{obj.pedidoProduto.itemPedido.produto==null}" />
+				<h:outputLabel value="#{obj.itemPedido.descricaoItem.toUpperCase()}" rendered="#{obj.itemPedido!=null}" />
+				
+			</p:column>
+			<p:column width="20%"
+				headerText="#{text['cadastro_compras_cotacao_label_quantidade']}">
+				<h:outputLabel value="#{obj.quantidade.intValue()}" />
+			</p:column>
+			
+			<p:column width="20%"
+				headerText="#{text['cadastro_compras_cotacao_label_unidade']}">
+				<h:outputLabel value="#{obj.unidade.descricao.toUpperCase()}" />
+			</p:column>
+			
+			<p:column headerText="Ações" width="10%">
+				<div class="row col-md-12">
+					<div class="btn-group">						 		 
+							<p:commandButton value="#{text['label.remover']}" icon="ui-icon-trash"
+								actionListener="#{compraCotacaoMB.excluirItemCotacao(obj)}" disabled="#{compraCotacaoMB.visualizando}"
+								process="dataTableCompraCotacaoDetalhe" styleClass="form-control"
+								update="dataTableCompraCotacaoDetalhe :mensagens" />
+
+						 
+					</div>
+				</div>
+			</p:column>
+			
+		</p:dataTable>
+	</div>
+
+
+	<p:dialog id="dialogCompraCotacaoDetalhe"
+		header="Inclusão/Alteração de Item" rendered="#{compraCotacaoMB.dialogProdutos}"
+		widgetVar="dialogCompraCotacaoDetalhe" showEffect="slide"
+		hideEffect="slide" resizable="true" modal="true" closable="false"
+		width="800">
+
+		<div class="row">
+
+			<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_cotacao_label_produto']}" />
+				<p:selectOneMenu styleClass="form-control" id="itemProduto"
+					disabled="#{compraCotacaoMB.visualizando}" required="false"
+					value="#{compraCotacaoMB.compraRequisicaoDetalhe}" tabindex="20"
+					 
+					requiredMessage="#{text['cadastro_compras_cotacao_label_produto']}"
+					filter="true">
+					<f:selectItem itemLabel=""/>
+					<f:selectItems value="#{compraCotacaoMB.listaItensRequisicao}"
+						var="item" itemLabel="#{item.pedidoProduto!=null? item.pedidoProduto.itemPedido.produto!=null?item.pedidoProduto.itemPedido.produto.descricao.toUpperCase():item.pedidoProduto.itemPedido.receita.descricao.toUpperCase():item.itemPedido.descricaoItem.toUpperCase()}"
+						itemValue="#{item}" />
+						<f:converter converterId="compraRequisicaoDetalheConverter"/>
+						<p:ajax event="change" process="@this" update=":formBody:dados:compraRequisicaoDetalheUnidade"></p:ajax>
+				</p:selectOneMenu>
+			</p:outputPanel>
+
+
+			<p:outputPanel id="panelCompraCotacaoDetalhe"
+				styleClass="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_cotacao_label_quantidade']}" />
+				<p:inputText id="compraCotacaoDetalheQuantidade"
+					value="#{compraCotacaoMB.compraCotacaoDetalhe.quantidade}"
+					tabindex="21"
+					label="#{text['cadastro_compras_cotacao_label_quantidade']}"
+					required="false" styleClass="form-control JSsomenteNumeros"
+					converter="mascaraValorBigDecimalInteiroConverter"
+					requiredMessage="#{text['cadastro_compras_cotacao_label_quantidade']}"
+					disabled="#{compraCotacaoMB.visualizando}" maxlength="5" />
+
+			</p:outputPanel>
+			
+			<p:outputPanel  
+				styleClass="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_cotacao_label_unidade']}" />
+				<p:inputText id="compraRequisicaoDetalheUnidade"
+					value="#{compraCotacaoMB.compraRequisicaoDetalhe.unidade.descricao}"
+					tabindex="22"
+					label="#{text['cadastro_compras_cotacao_label_unidade']}"
+					required="false" styleClass="form-control"				 
+					requiredMessage="#{text['cadastro_compras_cotacao_label_unidade']}"
+					disabled="true"  />
+			</p:outputPanel>
+
+
+			<f:facet name="footer">
+				<p:commandButton value="Salvar"
+					actionListener="#{compraCotacaoMB.salvarItem}"
+					process="dialogCompraCotacaoDetalhe"
+					update=":formBody:dados:dataTableCompraCotacaoDetalhe :mensagens"
+					tabindex="23" ajax="true"
+					onsuccess="PF('dialogCompraCotacaoDetalhe').hide();" />
+				<p:commandButton value="Cancelar" tabindex="24"
+					update=":formBody:dados:dataTableCompraCotacaoDetalhe" process="@this"
+					oncomplete="PF('dialogCompraCotacaoDetalhe').hide();" />
+
+
+			</f:facet>
+
+		</div>
+	</p:dialog>
+
+
+</div>
+
+
+</p:outputPanel>
+
+
+</html>

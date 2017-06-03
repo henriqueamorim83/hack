@@ -1,0 +1,148 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<p:outputPanel id="contatos">
+<div class="row">
+
+	<div class="form-group col-md-3">
+		<p:commandButton value="#{text['label.adicionar']}" tabindex="39"
+				rendered="#{pessoaMB.pessoaContatoLista}" 
+				 ajax="true" title="#{text['label.adicionar']}"	disabled="#{pessoaMB.visualizando}" 
+				 process="@this"  action="#{pessoaMB.adicionarPessoaContato()}"
+				 update="@this :formBody:dados:contatos"
+				styleClass="botao-default">		
+		</p:commandButton>
+	</div>
+</div>	
+	
+<p:outputPanel styleClass="row" id="pessoaContatoEdicao" rendered="#{pessoaMB.pessoaContatoEdicao}">
+
+
+	
+	<p:outputPanel  styleClass="form-group col-md-4">
+	<p:focus for="contato_nome"></p:focus>
+		<p:outputLabel value="#{text['cadastro_pessoa_label_pessoa_contato_nome']}" for="contato_nome" />
+		<p:inputText   tabindex="40"	 id="contato_nome"
+			disabled="#{pessoaMB.visualizando}" 
+			label="#{text['cadastro_pessoa_label_pessoa_contato_nome']}" required="false" 
+			value="#{pessoaMB.pessoaContato.nome}" styleClass="form-control"			
+			requiredMessage="#{text['cadastro_pessoa_label_pessoa_contato_nome']}"			
+			/>
+	</p:outputPanel>
+	
+	<p:outputPanel  styleClass="form-group col-md-3">
+		<p:outputLabel value="#{text['cadastro_pessoa_label_pessoa_contato_email']}"  />
+		<p:inputText   tabindex="41"	
+			disabled="#{pessoaMB.visualizando}" 
+			label="#{text['cadastro_pessoa_label_pessoa_contato_email']}" required="false" 
+			value="#{pessoaMB.pessoaContato.email}" styleClass="form-control"			
+			requiredMessage="#{text['cadastro_pessoa_label_pessoa_contato_email']}"			
+			>
+			<f:validator  validatorId="br.com.hntecnologia.infra.validate.EmailValidator" />
+		</p:inputText>	
+	</p:outputPanel>
+	
+	<p:outputPanel  styleClass="form-group col-md-3">
+		<p:outputLabel value="#{text['cadastro_pessoa_label_pessoa_contato_fone_comercial']}"  />
+		<p:inputText   tabindex="41"	
+			disabled="#{pessoaMB.visualizando}" 
+			label="#{text['cadastro_pessoa_label_pessoa_contato_fone_comercial']}" required="false" 
+			value="#{pessoaMB.pessoaContato.foneComercial}" styleClass="form-control JSsomenteNumeros"			
+			requiredMessage="#{text['cadastro_pessoa_label_pessoa_contato_fone_comercial']}"			
+			/>
+	</p:outputPanel>
+	
+	<p:outputPanel  styleClass="form-group col-md-3">
+		<p:outputLabel value="#{text['cadastro_pessoa_label_pessoa_contato_fone_residencial']}"  />
+		<p:inputText   tabindex="42"	
+			disabled="#{pessoaMB.visualizando}" 
+			label="#{text['cadastro_pessoa_label_pessoa_contato_fone_residencial']}" required="false" 
+			value="#{pessoaMB.pessoaContato.foneResidencial}" styleClass="form-control JSsomenteNumeros"			
+			requiredMessage="#{text['cadastro_pessoa_label_pessoa_contato_fone_residencial']}"			
+			/>
+	</p:outputPanel>
+	
+	<p:outputPanel  styleClass="form-group col-md-3">
+		<p:outputLabel value="#{text['cadastro_pessoa_label_pessoa_contato_fone_celular']}"  />
+		<p:inputText   tabindex="43"	
+			disabled="#{pessoaMB.visualizando}" 
+			label="#{text['cadastro_pessoa_label_pessoa_contato_fone_celular']}" required="false" 
+			value="#{pessoaMB.pessoaContato.foneCelular}" styleClass="form-control JSsomenteNumeros"			
+			requiredMessage="#{text['cadastro_pessoa_label_pessoa_contato_fone_celular']}"			
+			/>
+	</p:outputPanel>
+
+
+
+</p:outputPanel>
+
+<div class="row">
+
+	<div class="form-group col-md-1">
+		<p:commandButton value="#{text['label.adicionar']}" tabindex="44"
+				rendered="#{pessoaMB.pessoaContatoEdicao}" 
+				 ajax="true" title="#{text['label.adicionar']}"	disabled="#{pessoaMB.visualizando}" 
+				 process=":formBody:dados:contatos"  action="#{pessoaMB.adicionandoPessoaContato()}"
+				update="@this :formBody:dados:contatos"
+				styleClass="botao-default">		
+		</p:commandButton>
+	</div>
+	<div class="form-group col-md-1">
+		<p:commandButton value="#{text['label.cancelar']}" tabindex="45"
+				rendered="#{pessoaMB.pessoaContatoEdicao}" 
+				 ajax="true" title="#{text['label.cancelar']}"	disabled="#{pessoaMB.visualizando}" 
+				 process="@this"  actionListener="#{pessoaMB.cancelarPessoaContato()}"
+				 update=":formBody:dados:contatos"
+				styleClass="botao-default">		
+		</p:commandButton>
+	</div>
+</div>
+								
+<p:outputPanel styleClass="row" id="pessoaContatoLista" rendered="#{pessoaMB.pessoaContatoLista}">
+	
+	
+	
+		<p:dataTable  value="#{pessoaMB.pessoa.listaPessoaContato}" var="item"
+		paginator="true" lazy="true" rows="5"
+		paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"  
+		currentPageReportTemplate="{currentPage} de {totalPages}" 
+		rowClasses="odd, even" emptyMessage="#{text['table.empty']}">	
+		
+		<p:column headerText="#{text['cadastro_pessoa_label_pessoa_contato_nome']}">
+			<p:outputLabel value="#{item.nome}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_pessoa_label_pessoa_contato_email']}">
+			<p:outputLabel value="#{item.email}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_pessoa_label_pessoa_contato_fone_comercial']}">
+			<p:outputLabel value="#{item.foneComercial}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_pessoa_label_pessoa_contato_fone_residencial']}">
+			<p:outputLabel value="#{item.foneResidencial}"></p:outputLabel>
+		</p:column>
+		<p:column headerText="#{text['cadastro_pessoa_label_pessoa_contato_fone_celular']}">
+			<p:outputLabel value="#{item.foneCelular}"></p:outputLabel>
+		</p:column>
+		<p:column>
+			<p:menuButton value="#{text['label.opcao']}" >		        
+		        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+		        actionListener="#{pessoaMB.prepararAlterarPessoaContato(item)}" ajax="true" process="@this" update=":formBody:dados:contatos"/>
+		         <p:separator />
+		       <p:menuitem value="#{text['label.remover']}"  icon="ui-icon-trash" 		        
+		        actionListener="#{pessoaMB.removerPessoaContato(item)}" ajax="true"
+		         process="@this" update=":formBody:dados:contatos"/>       
+		       
+		    </p:menuButton>
+	    </p:column>
+		</p:dataTable>
+		
+</p:outputPanel>
+
+</p:outputPanel>
+
+
+
+</ui:composition>	

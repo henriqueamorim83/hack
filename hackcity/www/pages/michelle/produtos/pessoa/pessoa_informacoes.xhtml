@@ -1,0 +1,549 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:outputPanel id="informacoesGerais">
+		<div class="row">
+			<div class="form-group col-md-8">
+				<p:focus for="nome"></p:focus>
+				<p:outputLabel styleClass="bLabel" for="nome"
+					value="#{text['cadastro_pessoa_label_nome']}" />
+				<p:inputText id="nome" value="#{produtoMB.pessoaMB.pessoa.nome}"
+					tabindex="15" label="#{text['cadastro_pessoa_label_nome']}"
+					required="false" styleClass="form-control"
+					requiredMessage="#{text['cadastro_pessoa_label_nome']}"
+					disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+			</div>
+			<div class="form-group col-md-3">
+				<p:outputLabel value="#{text['cadastro_pessoa_label_tipo']}"
+					styleClass="bLabel" />
+				<p:selectOneMenu value="#{produtoMB.pessoaMB.pessoa.tipo}"
+					tabindex="16" styleClass="form-control width105"
+					disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+					requiredMessage="#{text['cadastro_pessoa_label_tipo']}">
+					<f:selectItem itemLabel="Fisica" itemValue="Fisica" />
+					<f:selectItem itemLabel="Juridica" itemValue="Juridica" />
+					<p:ajax event="change" process="@this"
+						update=":formBody:dados:informacoes"></p:ajax>
+				</p:selectOneMenu>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-5">
+
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pessoa_label_email']}" />
+				<p:inputText value="#{produtoMB.pessoaMB.pessoa.email}"
+					tabindex="17" label="#{text['cadastro_pessoa_label_email']}"
+					required="false" styleClass="form-control"
+					requiredMessage="#{text['cadastro_pessoa_label_email']}"
+					disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100">
+					<f:validator validatorId="br.com.hntecnologia.infra.validate.EmailValidator" />
+
+				</p:inputText>
+			</div>
+
+			<div class="form-group col-md-5">
+
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_pessoa_label_site']}" />
+				<p:inputText value="#{produtoMB.pessoaMB.pessoa.site}" tabindex="18"
+					label="#{text['cadastro_pessoa_label_site']}" required="false"
+					styleClass="form-control"
+					requiredMessage="#{text['cadastro_pessoa_label_site']}"
+					disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+			</div>
+
+
+		</div>
+
+		<div class="row">
+
+			<div class="form-group col-md-2">
+				<p:outputLabel value="#{text['cadastro_pessoa_label_cliente']}"
+					styleClass="bLabel" />
+				<p:selectOneMenu value="#{produtoMB.pessoaMB.pessoa.cliente}"
+					tabindex="19" styleClass="form-control width105" disabled="true"
+					required="false"
+					requiredMessage="#{text['cadastro_pessoa_label_cliente']}">
+
+					<f:selectItem itemLabel="Não" itemValue="Não" />
+
+				</p:selectOneMenu>
+			</div>
+
+
+			<div class="form-group col-md-2">
+				<p:outputLabel value="#{text['cadastro_pessoa_label_fornecedor']}"
+					styleClass="bLabel" />
+				<p:selectOneMenu value="#{produtoMB.pessoaMB.pessoa.fornecedor}"
+					tabindex="19" styleClass="form-control width105"
+					disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+					requiredMessage="#{text['cadastro_pessoa_label_fornecedor']}">
+					<f:selectItem itemLabel="Sim" itemValue="Sim" />
+
+
+				</p:selectOneMenu>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel value="#{text['cadastro_pessoa_label_colaborador']}"
+					styleClass="bLabel" />
+				<p:selectOneMenu value="#{produtoMB.pessoaMB.pessoa.colaborador}"
+					tabindex="20" styleClass="form-control width105" disabled="true"
+					required="false"
+					requiredMessage="#{text['cadastro_pessoa_label_colaborador']}">
+
+					<f:selectItem itemLabel="Não" itemValue="Não" />
+
+				</p:selectOneMenu>
+			</div>
+
+
+			<div class="form-group col-md-2">
+				<p:outputLabel
+					value="#{text['cadastro_pessoa_label_transportadora']}"
+					styleClass="bLabel" />
+				<p:selectOneMenu value="#{produtoMB.pessoaMB.pessoa.transportadora}"
+					tabindex="20" styleClass="form-control width105" disabled="true"
+					required="false"
+					requiredMessage="#{text['cadastro_pessoa_label_transportadora']}">
+
+					<f:selectItem itemLabel="Não" itemValue="Não" />
+
+				</p:selectOneMenu>
+			</div>
+		</div>
+
+		<p:outputPanel id="informacoes">
+			<p:outputPanel id="pessoaFisica"
+				rendered="#{produtoMB.pessoaMB.pessoaFisica}">
+				<div class="row">
+					<!-- CPF -->
+					<p:outputPanel styleClass="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_cpf']}" />
+						<p:inputMask mask="999?.999.999-99"
+							styleClass="form-control col-md-5"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.cpf}"
+							tabindex="25" label="#{text['cadastro_pessoa_label_pessoa_cpf']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_cpf']}">
+
+						</p:inputMask>
+					</p:outputPanel>
+					<p:outputPanel styleClass="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_data_nascimento']}" />
+						<p:calendar tabindex="26"
+							disabled="#{produtoMB.pessoaMB.visualizando}"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.dataNascimento}"
+							converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+							locale="pt" styleClass="JSData form-control"
+							label="#{text['cadastro_pessoa_label_pessoa_data_nascimento']}"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_data_nascimento']}"
+							required="false">
+						</p:calendar>
+					</p:outputPanel>
+
+					<div class="form-group col-md-2">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_sexo']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.sexo}"
+							tabindex="27" styleClass="form-control width105"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_sexo']}">
+							<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+							<f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-group col-md-2">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_raca']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.raca}"
+							tabindex="28" styleClass="form-control width105"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_raca']}">
+							<f:selectItem itemLabel="Negro" itemValue="Negro" />
+							<f:selectItem itemLabel="Pardo" itemValue="Pardo" />
+							<f:selectItem itemLabel="Branco" itemValue="Branco" />
+							<f:selectItem itemLabel="Indio" itemValue="Indio" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-group col-md-2">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_tipo_sangue']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.tipoSangue}"
+							tabindex="29" styleClass="form-control width105"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_tipo_sangue']}">
+							<f:selectItem itemLabel="B+" itemValue="B+" />
+							<f:selectItem itemLabel="A+" itemValue="A+" />
+							<f:selectItem itemLabel="AB+" itemValue="AB+" />
+							<f:selectItem itemLabel="B-" itemValue="B-" />
+							<f:selectItem itemLabel="O+" itemValue="O+" />
+							<f:selectItem itemLabel="A-" itemValue="A-" />
+							<f:selectItem itemLabel="AB-" itemValue="AB-" />
+							<f:selectItem itemLabel="O-" itemValue="O-" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-group col-md-2">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_estado_civil']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.estadoCivil}"
+							tabindex="30" styleClass="form-control width105"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							converter="estadoCivilConverter"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_estado_civil']}">
+							<f:selectItems value="#{produtoMB.pessoaMB.listaEstadoCivil}"
+								var="item" itemLabel="#{item.descricao.toUpperCase()}"
+								itemValue="#{item}" />
+						</p:selectOneMenu>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_nacionalidade']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.nacionalidade}"
+							tabindex="31"
+							label="#{text['cadastro_pessoa_label_pessoa_naturalidade']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_naturalidade']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-3">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_naturalidade']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.naturalidade}"
+							tabindex="32"
+							label="#{text['cadastro_pessoa_label_pessoa_naturalidade']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_naturalidade']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+
+
+					<div class="form-group col-md-3">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_nome_mae']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.nomeMae}"
+							tabindex="33"
+							label="#{text['cadastro_pessoa_label_pessoa_nome_mae']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_nome_mae']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-3">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_nome_pai']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.nomePai}"
+							tabindex="34"
+							label="#{text['cadastro_pessoa_label_pessoa_nome_pai']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_nome_pai']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="form-group col-md-1">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_rg']}" />
+						<p:inputText value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.rg}"
+							tabindex="35" label="#{text['cadastro_pessoa_label_pessoa_rg']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_rg']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-1">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_orgao_rg']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.orgaoRg}"
+							tabindex="36"
+							label="#{text['cadastro_pessoa_label_pessoa_orgao_rg']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_orgao_rg']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<p:outputPanel styleClass="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_data_emissao']}" />
+						<p:calendar tabindex="37"
+							disabled="#{produtoMB.pessoaMB.visualizando}"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.dataEmissaoRg}"
+							converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+							locale="pt" styleClass="JSData form-control"
+							label="#{text['cadastro_pessoa_label_pessoa_data_emissao']}"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_data_emissao']}"
+							required="false">
+						</p:calendar>
+					</p:outputPanel>
+
+					<div class="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_cnh_numero']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.cnhNumero}"
+							tabindex="38"
+							label="#{text['cadastro_pessoa_label_pessoa_cnh_numero']}"
+							required="false" styleClass="form-control JSsomenteNumeros"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_cnh_numero']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_cnh_categoria']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.cnhCategoria}"
+							tabindex="39"
+							label="#{text['cadastro_pessoa_label_pessoa_cnh_categoria']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_cnh_categoria']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<p:outputPanel styleClass="form-group col-md-2">
+
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_cnh_vencimento']}" />
+						<p:calendar tabindex="40"
+							disabled="#{produtoMB.pessoaMB.visualizando}"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.cnhVencimento}"
+							converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+							locale="pt" styleClass="JSData form-control"
+							label="#{text['cadastro_pessoa_label_pessoa_cnh_vencimento']}"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_cnh_vencimento']}"
+							required="false">
+						</p:calendar>
+					</p:outputPanel>
+
+				</div>
+
+				<div class="row">
+					<div class="form-group col-md-4">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_titulo_eleitorial']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.tituloEleitoralNumero}"
+							tabindex="41"
+							label="#{text['cadastro_pessoa_label_pessoa_titulo_eleitorial']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_titulo_eleitorial']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-4">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_zona']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.tituloEleitoralZona}"
+							tabindex="42"
+							label="#{text['cadastro_pessoa_label_pessoa_zona']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_zona']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-4">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_sessao']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.tituloEleitoralSecao}"
+							tabindex="43"
+							label="#{text['cadastro_pessoa_label_pessoa_sessao']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_sessao']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+				</div>
+
+				<div class="row">
+
+					<div class="form-group col-md-4">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_reserva_numero']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.reservistaNumero}"
+							tabindex="44"
+							label="#{text['cadastro_pessoa_label_pessoa_reserva_numero']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_reserva_numero']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+					<div class="form-group col-md-4">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_reservista_categoria']}" />
+						<p:inputText
+							value="#{produtoMB.pessoaMB.pessoa.pessoaFisica.reservistaCategoria}"
+							tabindex="45"
+							label="#{text['cadastro_pessoa_label_pessoa_reservista_categoria']}"
+							required="false" styleClass="form-control"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_reservista_categoria']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" maxlength="100" />
+					</div>
+
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="pessoaJuridica"
+				rendered="#{produtoMB.pessoaMB.pessoaJuridica}">
+				<div class="row">
+					<!-- CNPJ -->
+					<p:outputPanel styleClass="form-group col-md-2">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_cnpj']}" />
+						<p:inputMask mask="99.999.999/9999-99"
+							styleClass="form-control col-md-5"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.cnpj}"
+							tabindex="25"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_cnpj']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_cnpj']}">
+
+						</p:inputMask>
+					</p:outputPanel>
+
+					<p:outputPanel styleClass="form-group col-md-7">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_fantasia']}" />
+						<p:inputText styleClass="form-control col-md-5"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.fantasia}"
+							tabindex="26"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_fantasia']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_fantasia']}" />
+					</p:outputPanel>
+				</div>
+
+				<div class="row">
+
+					<p:outputPanel styleClass="form-group col-md-3">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_municipal']}" />
+						<p:inputText styleClass="form-control JSSomenteNumeros"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.inscricaoMunicipal}"
+							tabindex="28"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_municipal']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_municipal']}" />
+					</p:outputPanel>
+
+					<p:outputPanel styleClass="form-group col-md-3">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_estadual']}" />
+						<p:inputText styleClass="form-control JSSomenteNumeros"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.inscricaoEstadual}"
+							tabindex="29"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_estadual']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_inscricao_estadual']}" />
+					</p:outputPanel>
+
+					<p:outputPanel styleClass="form-group col-md-3">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_suframa']}" />
+						<p:inputText styleClass="form-control JSSomenteNumeros"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.suframa}"
+							tabindex="30"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_suframa']}"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_suframa']}" />
+					</p:outputPanel>
+
+					<p:outputPanel styleClass="form-group col-md-3">
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_data_constiuicao']}" />
+
+						<p:calendar tabindex="31"
+							disabled="#{produtoMB.pessoaMB.visualizando}"
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.dataConstituicao}"
+							converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+							locale="pt" styleClass="JSData form-control"
+							label="#{text['cadastro_pessoa_label_pessoa_juridica_data_constiuicao']}"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_data_constiuicao']}"
+							required="false">
+						</p:calendar>
+					</p:outputPanel>
+				</div>
+
+				<div class="row">
+					<div class="form-group col-md-3">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_crt']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.crt}"
+							tabindex="32" styleClass="form-control"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_crt']}">
+							<f:selectItem itemLabel="1- Simples Nacional" itemValue="1" />
+							<f:selectItem itemLabel="2- Simples Nacional - Excesso"
+								itemValue="2" />
+							<f:selectItem itemLabel="3- Regime Normal" itemValue="3" />
+
+						</p:selectOneMenu>
+					</div>
+					<div class="form-group col-md-3">
+						<p:outputLabel
+							value="#{text['cadastro_pessoa_label_pessoa_juridica_tipo_regime']}"
+							styleClass="bLabel" />
+						<p:selectOneMenu
+							value="#{produtoMB.pessoaMB.pessoa.pessoaJuridica.tipoRegime}"
+							tabindex="33" styleClass="form-control"
+							disabled="#{produtoMB.pessoaMB.visualizando}" required="false"
+							requiredMessage="#{text['cadastro_pessoa_label_pessoa_juridica_tipo_regime']}">
+							<f:selectItem itemLabel="Simples Nacional" itemValue="1" />
+							<f:selectItem itemLabel="Lucro Real" itemValue="2" />
+							<f:selectItem itemLabel="Lucro Presumido" itemValue="3" />
+
+						</p:selectOneMenu>
+					</div>
+
+				</div>
+
+			</p:outputPanel>
+		</p:outputPanel>
+	</p:outputPanel>
+</ui:composition>

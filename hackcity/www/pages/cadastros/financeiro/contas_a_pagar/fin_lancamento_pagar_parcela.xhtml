@@ -1,0 +1,276 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<p:outputPanel id="panelFimLancamentoParcelaPagar">
+
+	<div class="row">
+
+		<div class="col-md-12">
+
+			<p:dataTable id="dataTableFinParcelaPagar"
+				value="#{finLancamentoPagarMB.finLancamentoPagar.listaFinParcelaPagar}"
+				styleClass="ajusta_coluna" var="item" paginator="true" lazy="true"
+				rows="10" scrollable="true"  			 
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+				 
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_numero_parcela']}">
+					<p:outputLabel value="#{item.numeroParcela}" />
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_emissao']}">
+					<p:outputLabel value="#{item.dataEmissao}">
+						<f:converter converterId="dataConverter" />
+					</p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_vencimento']}">
+					<p:outputLabel value="#{item.dataVencimento}">
+						<f:converter converterId="dataConverter" />
+					</p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto_ate']}">
+					<p:outputLabel value="#{item.descontoAte}">
+						<f:converter converterId="dataConverter" />
+					</p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor']}">
+					<p:outputLabel value="#{item.valor}">
+						<f:converter converterId="mascaraValorBigDecimalConverter" />
+					</p:outputLabel>
+				</p:column>
+
+				<p:column
+					headerText="#{text['cadastro_fin_lancamento_pagar_label_parcela_status']}">
+					<p:outputLabel value="#{item.finStatusParcela.descricao}" />
+
+				</p:column>
+
+	 			<p:column headerText="Ações">
+					<div class="row col-md-12">
+						<div class="btn-group">
+							<p:menuButton value="#{text['label.opcao']}">							 
+								<p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+									actionListener="#{finLancamentoPagarMB.alterarFinParcelaPagar(item)}"
+									process="dataTableFinParcelaPagar" update=" :formBody:dados:panelFimLancamentoParcelaPagar :mensagens" 
+									oncomplete="PF('dialogFinParcelaPagar').show()"/>
+									 
+						
+				
+							</p:menuButton>
+						</div>
+					</div>
+				 
+					
+				</p:column>
+
+			</p:dataTable>
+
+		</div>
+
+	</div>
+
+	<p:dialog id="dialogFinParcelaPagar"
+		header="#{text['cadastro_fin_lancamento_pagar_label_parcela_title']}"
+		widgetVar="dialogFinParcelaPagar" showEffect="slide" width="800"
+		hideEffect="slide" resizable="true" modal="true" closable="false">
+
+		<div class="row">
+
+			<div class="col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao']}" />
+				<p:selectOneMenu tabindex="30"
+					value="#{finLancamentoPagarMB.finParcelaPagar.sofreRetencao}"
+					disabled="true" styleClass="form-control"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao']}"
+					filter="true">
+					<f:selectItem
+						itemLabel="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao_nao']}"
+						itemValue="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao_nao']}" />
+					<f:selectItem
+						itemLabel="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao_sim']}"
+						itemValue="#{text['cadastro_fin_lancamento_pagar_label_parcela_sofre_retencao_sim']}" />
+				</p:selectOneMenu>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_emissao']}" />
+				<p:calendar tabindex="31"
+					value="#{finLancamentoPagarMB.finParcelaPagar.dataEmissao}"
+					converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+					locale="pt" styleClass="JSData form-control"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_emissao']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_emissao']}"
+					required="false">
+				</p:calendar>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_vencimento']}" />
+				<p:calendar tabindex="32"
+					value="#{finLancamentoPagarMB.finParcelaPagar.dataVencimento}"
+					converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+					locale="pt" styleClass="JSData form-control"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_vencimento']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_data_vencimento']}"
+					required="false">
+				</p:calendar>
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto_ate']}" />
+				<p:calendar tabindex="32"
+					value="#{finLancamentoPagarMB.finParcelaPagar.descontoAte}"
+					converter="dataConverter" navigator="true" pattern="dd/MM/yyyy"
+					locale="pt" styleClass="JSData form-control"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto_ate']}"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto_ate']}"
+					required="false">
+				</p:calendar>
+			</div>
+
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor']}" />
+				<p:inputText value="#{finLancamentoPagarMB.finParcelaPagar.valor}"
+					tabindex="33"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_juros']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.taxaJuro}"
+					tabindex="33"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_juros']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_juros']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_multa']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.taxaMulta}"
+					tabindex="34"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_multa']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_multa']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_desconto']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.taxaDesconto}"
+					tabindex="35"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_desconto']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_taxa_desconto']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_juros']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.valorJuro}"
+					tabindex="36"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_juros']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_juros']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_multa']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.valorMulta}"
+					tabindex="37"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_multa']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_valor_multa']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.valorDesconto}"
+					tabindex="38"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_desconto']}"
+					disabled="#{finLancamentoPagarMB.visualizando}" />
+			</div>
+
+			<div class="col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_fin_lancamento_pagar_label_parcela_status']}" />
+				<p:inputText
+					value="#{finLancamentoPagarMB.finParcelaPagar.finStatusParcela.descricao}"
+					tabindex="38"
+					label="#{text['cadastro_fin_lancamento_pagar_label_parcela_status']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					requiredMessage="#{text['cadastro_fin_lancamento_pagar_label_parcela_status']}"
+					disabled="true" />
+			</div>
+		</div>
+
+		<p:separator />
+
+		<f:facet name="footer">
+			<p:commandButton value="#{text['label.salvar']}"
+				actionListener="#{finLancamentoPagarMB.salvarFinParcelaPagar}"
+				process="dialogFinParcelaPagar" update="panelFimLancamentoParcelaPagar :mensagens"
+				oncomplete="if (!args.validationFailed) {PF('dialogFinParcelaPagar').hide();}" />
+			<p:commandButton value="#{text['label.cancelar']}" immediate="true"
+				ajax="true" process="@this" update="panelFimLancamentoParcelaPagar :mensagens"
+				oncomplete="PF('dialogFinParcelaPagar').hide();" />
+		</f:facet>
+	</p:dialog>
+
+
+</p:outputPanel>
+
+</html>

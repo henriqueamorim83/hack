@@ -1,0 +1,539 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	
+			<div class="row">
+					<!--REGIME TRIBUTÁRIO -->
+					<div class="form-group col-md-8">
+					
+						<p:outputLabel styleClass="bLabel"
+							value="#{text['cadastro_produto_label_icms_regime_tributario_title']}" />
+						
+					
+						<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+							value="#{produtoMB.produto.icms.regimeTributario}"
+							tabindex="60" styleClass="width100"
+							
+							requiredMessage="#{text['cadastro_produto_label_icms_regime_tributario_title']}"
+							filter="true">
+							<f:selectItem itemLabel="" />
+							<f:selectItems value="#{produtoMB.listaRegimeTributarios}"
+								var="item" itemLabel="#{item.descricao}"
+								itemValue="#{item}" />
+							<f:converter converterId="regimeTributarioConverter" />
+							<p:ajax event="change" process="@this" update="tributacao" listener="#{produtoMB.tributacaoNormal()}"></p:ajax>
+						</p:selectOneMenu>
+					</div>
+				</div>
+				
+				<p:outputPanel id="tributacao">
+				<!-- SIMPLES NACIONAL -->
+					<p:fieldset rendered="#{produtoMB.simplesNacional==1}"
+						legend="#{text['cadastro_estoque_label_fieldset_simples_nacional_title']}"
+						styleClass="form-group col-md-10 width100">
+						<div class="row">
+							<!--SITUAÇÃO TRIBUTÁRIA -->
+							<p:outputPanel styleClass="form-group col-md-4">
+								<p:outputLabel styleClass="bLabel"
+								value="#{text['cadastro_produto_label_icms_situacao_tributaria_title']}" />
+														
+								<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+									value="#{produtoMB.produto.icms.situacaoTributariaSimplesNacional}"
+									tabindex="61" styleClass="form-control width100"
+									requiredMessage="#{text['cadastro_produto_label_icms_situacao_tributaria_title']}"
+									filter="true">
+									<f:selectItem itemLabel="" />
+									<f:selectItems value="#{produtoMB.listaSituacaoTributariaSimplesNacionalIcms}"
+										var="item" itemLabel="#{item.codigo} - #{item.descricao}"
+										itemValue="#{item}" />
+									<f:converter converterId="situacaoTributariaSimplesNacionalConverter" />
+									 <p:ajax event="change" process="@this" update="aliquotaAplicavel"></p:ajax>
+								</p:selectOneMenu>
+							</p:outputPanel>
+										
+							<!--ORIGEM MERCADORIA -->		
+							<p:outputPanel styleClass="form-group col-md-3">
+								<p:outputLabel styleClass="bLabel"
+									value="#{text['cadastro_produto_label_icms_origem_mercadoria_title']}" />
+							
+							<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+								value="#{produtoMB.produto.icms.origemMercadoria}"
+								tabindex="62" style="width: 100%"
+								requiredMessage="#{text['cadastro_produto_label_icms_origem_mercadoria_title']}"
+								filter="true">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{produtoMB.listaOrigemMercadorias}"
+									var="item" itemLabel="#{item.codigo} - #{item.descricao}"
+									itemValue="#{item}" />
+								<f:converter converterId="origemMercadoriaConverter" />
+							</p:selectOneMenu>
+						</p:outputPanel>
+						</div>						
+						<p:outputPanel  styleClass="row" id="aliquotaAplicavel">
+						
+						
+						<!--aliquota aplicavel  é exibido quando o codigo simples nacional for 101 or 201 -->	
+							<p:outputPanel  styleClass="form-group col-md-10"
+								rendered="#{produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==101 or 
+								produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==201 or
+								produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==900}" 
+								>
+								<div class="row">
+									<p:outputPanel   styleClass="form-group col-md-5">
+										<p:outputLabel styleClass="bLabel"	value="#{text['cadastro_estoque_label_fieldset_simples_nacional_aliquota_aplicavel']}" />
+									
+										<p:inputMask mask="9?99.99%" placeholder=""
+												value="#{produtoMB.produto.icms.simplesNacional.aliquotaAplicavelCalculoCredito}" tabindex="64"
+												label="#{text['cadastro_estoque_label_fieldset_simples_nacional_aliquota_aplicavel']}"
+												required="false" styleClass="form-control"
+												disabled="#{produtoMB.visualizando}"
+												requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_aliquota_aplicavel']}"
+														>
+														
+										</p:inputMask>
+									</p:outputPanel>
+								</div>
+							</p:outputPanel>
+							
+							<p:outputPanel id="icms" styleClass="form-group col-md-5"
+							rendered="#{produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==900}">
+								<!-- FIELDSET ICMS -->
+								<p:fieldset legend="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_title_icms']}">
+									<div class="row">
+										<!-- modalidade banco central icms  -->
+										
+										<p:outputPanel styleClass="form-group col-md-9">
+										
+													<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_modalidade_bc_icms']}" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.icms.simplesNacional.modalidadeBCICMS}" tabindex="65"
+														styleClass="width100" required="false"	
+														converter="modalidadeBCICMSConverter"													
+														requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_modalidade_bc_icms']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listaModalidadeBCICMS}"
+															var="item" itemLabel="#{item.descricao}"
+															itemValue="#{item}" />								  
+														
+													</p:selectOneMenu>
+									
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- % redução da bc icms  -->
+										<p:outputPanel styleClass="form-group col-md-6">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.simplesNacional.reducaoBC_ICMS}"
+											tabindex="66" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms']}"
+											required="false" styleClass="form-control"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- aliquota icms  -->
+										<p:outputPanel styleClass="form-group col-md-6">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.simplesNacional.aliquotaICMS}"
+											tabindex="67" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms']}"
+											required="false" styleClass="form-control "			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+								</p:fieldset>
+								
+							
+							</p:outputPanel>
+							
+							<p:outputPanel id="icmsST" styleClass="form-group col-md-5" 
+								rendered="#{produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==201 or
+								produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==202 or
+								produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==203 or
+								produtoMB.produto.icms.situacaoTributariaSimplesNacional.codigo==900}">
+								
+								<!-- FIELDSET ICMS ST -->
+								<p:fieldset legend="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_title_icms_st']}">
+									<div class="row">
+										<!-- modalidade banco central icms st -->
+										<p:outputPanel styleClass="form-group col-md-9" >
+										
+										<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_modalidade_bc_icms_st']}" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.icms.simplesNacional.modalidadeBCICMS_ST}" tabindex="68"
+														styleClass="width100" required="false"	
+														converter="modalidadeBCICMS_STConverter"													
+														requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_modalidade_bc_icms_st']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listaModalidadeBCICMS_ST}"
+															var="item" itemLabel="#{item.descricao}"
+															itemValue="#{item}" />													  
+														
+													</p:selectOneMenu>
+									
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- % redução da bc icms st -->
+										<p:outputPanel styleClass="form-group col-md-9">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms_st']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.simplesNacional.reducaoBC_ICMS_ST}"
+											tabindex="69" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms_st']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_reducao_bc_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- margem de valor adicional icms st -->
+										<p:outputPanel styleClass="form-group col-md-9" rendered="">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_margem_valor_icms_st']}" />
+										<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.simplesNacional.magemValorAdicionalICMS_ST}"
+											tabindex="70" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_margem_valor_icms_st']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_margem_valor_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- aliquota icms st -->
+										<p:outputPanel styleClass="form-group col-md-6">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms_st']}" />
+										<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.simplesNacional.aliquotaICMS_ST}"
+											tabindex="71" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms_st']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_simples_nacional_fieldset_aliquota_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+								</p:fieldset>
+							
+							</p:outputPanel>
+									
+						</p:outputPanel>
+						
+						
+					</p:fieldset>
+					
+				<!-- TRIBUTAÇÃO NORMAL -->
+					<p:fieldset rendered="#{produtoMB.simplesNacional==2}"
+						legend="#{text['cadastro_estoque_label_fieldset_tributacao_normal']}"
+						styleClass="form-group col-md-10 width100">
+						
+						<div class="row">
+							<!--SITUAÇÃO TRIBUTÁRIA -->
+							<p:outputPanel styleClass="form-group col-md-4">
+								<p:outputLabel styleClass="bLabel"
+								value="#{text['cadastro_produto_label_icms_situacao_tributaria_title']}" />
+														
+								<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+									value="#{produtoMB.produto.icms.situacaoTributaria}"
+									tabindex="72" styleClass="form-control width100"
+									requiredMessage="#{text['cadastro_produto_label_icms_situacao_tributaria_title']}"
+									filter="true">
+									<f:selectItem itemLabel="" />
+									<f:selectItems value="#{produtoMB.listaSituacaoTributariaIcms}"
+										var="item" itemLabel="#{item.codigo} - #{item.descricao}"
+										itemValue="#{item}" />
+									<f:converter converterId="situacaoTributariaConverter" />
+									<p:ajax event="change" process="@this" update="aliquotaTributoNormal"></p:ajax>
+								</p:selectOneMenu>
+							</p:outputPanel>
+										
+							<!--ORIGEM MERCADORIA -->		
+							<p:outputPanel styleClass="form-group col-md-3">
+								<p:outputLabel styleClass="bLabel"
+									value="#{text['cadastro_produto_label_icms_origem_mercadoria_title']}" />
+							
+							<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+								value="#{produtoMB.produto.icms.origemMercadoria}"
+								tabindex="73" style="width: 100%"
+								requiredMessage="#{text['cadastro_produto_label_icms_origem_mercadoria_title']}"
+								filter="true">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{produtoMB.listaOrigemMercadorias}"
+									var="item" itemLabel="#{item.descricao}"
+									itemValue="#{item}" />
+								<f:converter converterId="origemMercadoriaConverter" />
+							</p:selectOneMenu>
+						</p:outputPanel>
+						</div>					
+						
+						<p:outputPanel  styleClass="row" id="aliquotaTributoNormal">
+							<p:outputLabel value="#{produtoMB.produto.icms.situacaoTributaria.id}" ></p:outputLabel>
+							
+							<p:outputPanel id="tributacaoNormalICMS" styleClass="form-group col-md-5"
+									rendered="#{produtoMB.produto.icms.situacaoTributaria.id==1 or 
+									produtoMB.produto.icms.situacaoTributaria.id==2 or
+									produtoMB.produto.icms.situacaoTributaria.id==3 or										
+									produtoMB.produto.icms.situacaoTributaria.id==4 or
+									produtoMB.produto.icms.situacaoTributaria.id==6 or
+									produtoMB.produto.icms.situacaoTributaria.id==7 or
+									produtoMB.produto.icms.situacaoTributaria.id==9 or
+									produtoMB.produto.icms.situacaoTributaria.id==10 or
+									produtoMB.produto.icms.situacaoTributaria.id==12 or
+									produtoMB.produto.icms.situacaoTributaria.id==13 or
+									produtoMB.produto.icms.situacaoTributaria.id==14}">
+								<!-- FIELDSET ICMS -->
+								<p:fieldset legend="#{text['cadastro_estoque_label_fieldset_tributacao_normal_icms_title']}"
+									>
+									<div class="row">
+										<!-- modalidade banco central icms  -->
+										
+										<p:outputPanel styleClass="form-group col-md-9" 
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==1 or 
+														produtoMB.produto.icms.situacaoTributaria.id==2 or
+														produtoMB.produto.icms.situacaoTributaria.id==3 or
+														produtoMB.produto.icms.situacaoTributaria.id==4 or
+														produtoMB.produto.icms.situacaoTributaria.id==6 or
+														produtoMB.produto.icms.situacaoTributaria.id==7 or
+														produtoMB.produto.icms.situacaoTributaria.id==9 or
+														produtoMB.produto.icms.situacaoTributaria.id==10 or
+														produtoMB.produto.icms.situacaoTributaria.id==12 or
+														produtoMB.produto.icms.situacaoTributaria.id==13 or
+														produtoMB.produto.icms.situacaoTributaria.id==14}">
+										<!-- Modalidade  -->
+										<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_modalidade_bc_icms']}" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.icms.tributacaoNormal.modalidadeBCICMS}" tabindex="74"
+														styleClass="width100" required="false"	
+														converter="modalidadeBCICMSConverter"													
+														requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_modalidade_bc_icms']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listaModalidadeBCICMS}"
+															var="item" itemLabel="#{item.descricao}"
+															itemValue="#{item}" />	
+													</p:selectOneMenu>
+									
+										</p:outputPanel>
+										
+										
+										<!-- % redução da bc icms  -->
+										<p:outputPanel styleClass="form-group col-md-9" 
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==3 or 
+											produtoMB.produto.icms.situacaoTributaria.id==4 or
+											produtoMB.produto.icms.situacaoTributaria.id==10 or
+											produtoMB.produto.icms.situacaoTributaria.id==12 or
+											produtoMB.produto.icms.situacaoTributaria.id==13 or
+											produtoMB.produto.icms.situacaoTributaria.id==14}">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.reducaoBC_ICMS}"
+											tabindex="75" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms']}"
+											maxlength="6" />
+									</p:outputPanel>
+									
+									
+									
+									<!-- aliquota icms  -->
+										<p:outputPanel styleClass="form-group col-md-6"
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==1 or 
+												produtoMB.produto.icms.situacaoTributaria.id==2 or
+												produtoMB.produto.icms.situacaoTributaria.id==3 or
+												produtoMB.produto.icms.situacaoTributaria.id==4 or
+												produtoMB.produto.icms.situacaoTributaria.id==10 or
+												produtoMB.produto.icms.situacaoTributaria.id==12 or
+												produtoMB.produto.icms.situacaoTributaria.id==13 or
+												produtoMB.produto.icms.situacaoTributaria.id==14}">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.aliquotaICMS}"
+											tabindex="78" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms']}"
+											required="false" styleClass="form-control "			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms']}"
+											maxlength="6" />
+									</p:outputPanel>
+									
+									<!-- % operação propria-->
+										<p:outputPanel styleClass="form-group col-md-9" 
+										rendered="#{produtoMB.produto.icms.situacaoTributaria.id==3 or
+										produtoMB.produto.icms.situacaoTributaria.id==13}">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_bc_operacao_propria']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.bcOperacaoPropria}"
+											tabindex="79" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_bc_operacao_propria']}"
+											required="false" styleClass="form-control"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_bc_operacao_propria']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+								</p:fieldset>								
+							
+							</p:outputPanel>
+							
+							<p:outputPanel id="tributacaoNormalICMS_ST"  styleClass="form-group col-md-5" 
+								rendered="#{produtoMB.produto.icms.situacaoTributaria.id==2 or
+								produtoMB.produto.icms.situacaoTributaria.id==3 or
+								produtoMB.produto.icms.situacaoTributaria.id==5 or
+								produtoMB.produto.icms.situacaoTributaria.id==12 or
+								produtoMB.produto.icms.situacaoTributaria.id==13 or
+								produtoMB.produto.icms.situacaoTributaria.id==14}">
+								
+								<!-- FIELDSET ICMS ST -->
+								<p:fieldset legend="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_title_icms_st']}">
+									<div class="row">
+										<!-- modalidade banco central icms st -->
+										<p:outputPanel styleClass="form-group col-md-9"
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==2 or
+												produtoMB.produto.icms.situacaoTributaria.id==3 or												
+												produtoMB.produto.icms.situacaoTributaria.id==5 or
+												produtoMB.produto.icms.situacaoTributaria.id==12 or
+												produtoMB.produto.icms.situacaoTributaria.id==13 or
+												produtoMB.produto.icms.situacaoTributaria.id==14}">
+										
+										<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_modalidade_bc_icms_st']}" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.icms.tributacaoNormal.modalidadeBCICMS_ST}" tabindex="80"
+														styleClass="width100" required="false"	
+														converter="modalidadeBCICMS_STConverter" 													
+														requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_modalidade_bc_icms_st']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listaModalidadeBCICMS_ST}"
+															var="item" itemLabel="#{item.descricao}"
+															itemValue="#{item}" />		  
+													</p:selectOneMenu>
+									
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- % redução da bc icms st -->
+										<p:outputPanel styleClass="form-group col-md-9" 
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==2 or
+												produtoMB.produto.icms.situacaoTributaria.id==3 or												
+												produtoMB.produto.icms.situacaoTributaria.id==5 or
+												produtoMB.produto.icms.situacaoTributaria.id==12 or
+												produtoMB.produto.icms.situacaoTributaria.id==13 or
+												produtoMB.produto.icms.situacaoTributaria.id==14}">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms_st']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.reducaoBC_ICMS_ST}"
+											tabindex="48" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms_st']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_reducao_bc_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+									<div class="row">
+										<!-- % margem da bc icms st -->
+										<p:outputPanel styleClass="form-group col-md-9" 
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==2 or
+											produtoMB.produto.icms.situacaoTributaria.id==5 or
+											produtoMB.produto.icms.situacaoTributaria.id==12 or
+											produtoMB.produto.icms.situacaoTributaria.id==13 or
+											produtoMB.produto.icms.situacaoTributaria.id==14}">		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_margem_valor_icms_st']}" />
+											<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.magemValorAdicionalICMS_ST}"
+											tabindex="81" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_margem_valor_icms_st']}"
+											required="false" styleClass="form-control JSPercentual"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_margem_valor_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									
+									
+									</div>
+									
+								
+									<div class="row">
+										<!-- aliquota icms st -->
+										<p:outputPanel styleClass="form-group col-md-6"
+											rendered="#{produtoMB.produto.icms.situacaoTributaria.id==2 or
+												produtoMB.produto.icms.situacaoTributaria.id==3 or												
+												produtoMB.produto.icms.situacaoTributaria.id==5 or
+												produtoMB.produto.icms.situacaoTributaria.id==12 or
+												produtoMB.produto.icms.situacaoTributaria.id==13 or
+												produtoMB.produto.icms.situacaoTributaria.id==14}">
+		
+										<p:outputLabel styleClass="bLabel"
+											value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms_st']}" />
+										<p:inputMask mask="9?99.99%" placeholder="" value="#{produtoMB.produto.icms.tributacaoNormal.aliquotaICMS_ST}"
+											tabindex="82" disabled="#{produtoMB.visualizando}"
+											converter="mascaraValorDecimalConverter"
+											label="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms_st']}"
+											required="false" styleClass="form-control"			
+											requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_aliquota_icms_st']}"
+											maxlength="6" />
+									</p:outputPanel>
+									</div>
+									
+									<div class="row">
+										<!-- Estado -->
+										<p:outputPanel styleClass="form-group col-md-9" 
+										rendered="#{produtoMB.produto.icms.situacaoTributaria.id==3 or
+												produtoMB.produto.icms.situacaoTributaria.id==13}">
+										
+										<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_estado']}" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.icms.tributacaoNormal.UF_ICMS_ST_devidoOperacao}" 
+														tabindex="83"
+														styleClass="width100" required="false"	
+														converter="estadoConverter"													
+														requiredMessage="#{text['cadastro_estoque_label_fieldset_tributacao_normal_fieldset_estado']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listaEstado}"
+															var="item" itemLabel="#{item.sigla}"
+															itemValue="#{item}" />		  
+													</p:selectOneMenu>
+									
+									</p:outputPanel>
+									</div>
+									
+								</p:fieldset>
+							
+							</p:outputPanel>
+							
+						</p:outputPanel>
+					</p:fieldset>
+				</p:outputPanel>
+	
+	
+	</ui:composition>

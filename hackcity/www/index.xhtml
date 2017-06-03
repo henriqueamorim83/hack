@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>p:dataTable - Scroll to Selected Row</title>
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+	
+	<script>
+
+	function getNewItemPos() {
+	
+		var noOfItems = $("#fm\\:hiddenSizeId").val();
+		var itemIx = $("#fm\\:hiddenIxId").val();
+		var bucketHt = $("#fm\\:table .ui-datatable-scrollable-body").height();
+		var scrollHt = $("#fm\\:table .ui-datatable-scrollable-body").prop("scrollHeight");
+			
+		var itemHt = parseInt(scrollHt) / parseInt(noOfItems);
+		var noItemsInBucket = parseInt(bucketHt) / parseFloat(itemHt);
+
+		var itemNo = parseInt(itemIx) + 1;
+		var targetBucket = parseInt(itemNo) / parseFloat(noItemsInBucket);
+		var halfBucketHt = parseInt(bucketHt) / 2;
+		
+		var scrollPos = 
+			(parseInt(bucketHt) * (parseFloat(targetBucket) - 1)) + parseFloat(halfBucketHt);
+		var scrollPosInt = Math.round(parseFloat(scrollPos));
+		
+		$('#fm\\:table .ui-datatable-scrollable-body').animate({scrollTop:scrollPosInt});
+	}
+
+	</script>	
+	
+</h:head>
+	
+<h:body>
+
+	<h2 style="color:blue;">p:dataTable - Scroll to Selected Row</h2>
+	<p style="color:blue;">Scrolls to selected item on add, update or delete.</p>
+<h:form id="fm">
+
+	<h:inputHidden id="hiddenSizeId" value="#{bean.itemsSize}" />
+	<h:inputHidden id="hiddenIxId" value="#{bean.newItemIx}" />
+		
+    <p:dataTable id="table"
+			var="item" value="#{bean.items}" 
+			selectionMode="single" 
+			selection="#{bean.selectedItem}" 
+			rowKey="#{item.name}"
+			scrollable="true" scrollHeight="200"
+			style="width:250px; margin-top:30px; margin-left:30px; border:1px solid black;"
+			height="250">
+			
+		<p:ajax event="rowSelect"
+			listener="#{bean.onRowSelect}"
+			update=":fm:msg"/>
+
+        <p:column headerText="ITEMS">
+            <h:outputText value="#{item.name}"/>
+        </p:column>
+
+    </p:dataTable>
+ 
+	<br />
+	<p:commandButton value="Add" style="margin-left:30px;">
+		<p:ajax update=":fm:table :fm:msg :fm:hiddenSizeId :fm:hiddenIxId"
+				listener="#{bean.addListener}"
+				oncomplete="getNewItemPos()"/>
+	</p:commandButton>
+	<p:commandButton value="Update">
+		<p:ajax update=":fm:table :fm:msg :fm:hiddenSizeId :fm:hiddenIxId"
+				listener="#{bean.updateListener}"
+				oncomplete="getNewItemPos()"/>
+	</p:commandButton>
+	<p:commandButton value="Delete">
+		<p:ajax update=":fm:table :fm:msg :fm:hiddenSizeId :fm:hiddenIxId"
+				listener="#{bean.deleteListener}"
+				oncomplete="getNewItemPos()"/>
+	</p:commandButton>
+	<br /><br />
+ 
+	<h:outputText id="msg" style="margin-left:30px; color:red;" value="#{bean.msg}" />
+
+</h:form>
+</h:body>
+</html>

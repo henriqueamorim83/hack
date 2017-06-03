@@ -1,0 +1,446 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_cliente/template_cliente.xhtml">
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="true">
+							<p:growl id="messages1" showDetail="false" life="5000"
+								autoUpdate="true" globalOnly="true" />
+						
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_pedido_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<h:form binding="#{pedidoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{pedidoMB.state}" />
+								<t:saveState value="#{pedidoMB.pedido}" />
+								<t:saveState value="#{pedidoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{pedidoMB.pesquisando}">
+									
+										<!-- Numero do Pedido -->
+									<div class="row">
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_pedido_label_numero_pedido']}" />
+											<p:inputText value="#{pedidoMB.pedido.numeroPedido}"
+												tabindex="5"
+												label="#{text['cadastro_pedido_label_numero_pedido']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_pedido_label_numero_pedido']}"
+											 />
+										</div>
+									
+										
+									
+										<p:outputPanel  styleClass="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_pedido_label_forma_situacao']}" />
+											<p:selectOneMenu 
+												disabled="#{pedidoMB.visualizando}"
+												value="#{pedidoMB.pedido.situacaoPedido}" tabindex="7"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_pedido_label_forma_situacao']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{pedidoMB.listaSituacaoPedido}" var="item"
+													itemLabel="#{item.descricao}" itemValue="#{item}" />
+												
+												<f:converter converterId="situacaoPedidoConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+									
+									</div>
+									
+									<div class="row">
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_pedido_label_data_inicial']}"></p:outputLabel>
+											<p:calendar   tabindex="8"	  
+												value="#{pedidoMB.pedido.dataInicio}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_pedido_label_data_inicial']}"
+												requiredMessage="#{text['cadastro_pedido_label_data_inicial']}"
+												required="false">						
+											</p:calendar>										
+										</div>
+										
+										<div class="form-group col-md-3">
+											<p:outputLabel value="#{text['cadastro_pedido_label_data_final']}"></p:outputLabel>
+											<p:calendar   tabindex="9"	  
+												value="#{pedidoMB.pedido.dataFinal}"
+												converter="dataConverter"
+												navigator="true"  
+												pattern="dd/MM/yyyy" locale="pt"
+												styleClass="JSData form-control" 	
+												label="#{text['cadastro_pedido_label_data_final']}"
+												requiredMessage="#{text['cadastro_pedido_label_data_final']}"
+												 required="false">						
+											</p:calendar>										
+										</div>
+									</div>
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												
+												<div class="col-md-5">
+													<p:commandButton value="#{text['label.adicionar']}"
+														ajax="false" process="@form" update="@form" tabindex="10"
+														action="#{pedidoMB.prepararParaAdicionar}"
+														styleClass="btn btn-block btn-success width100">
+													</p:commandButton>
+												</div>
+												<div class="col-md-7">
+													<p:commandButton value="#{text['label.consultar']}"
+														action="#{pedidoMB.lista}" process="@form" update="@form"
+														tabindex="11" ajax="false"
+														styleClass="btn btn-block btn-primary width100">
+													</p:commandButton>
+												</div>
+											</div>
+										</div>
+									</p:outputPanel>	
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{pedidoMB.objetos}" styleClass="ajusta_coluna"
+										var="item" paginator="true" lazy="true" rows="10" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="Página {currentPage} de {totalPages}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column headerText="#{text['cadastro_pedido_label_numero_pedido']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.numeroPedido}" />
+										</p:column>
+
+										<p:column headerText="#{text['cadastro_pedido_label_data_venda']}" styleClass="texto-align-center width10">
+											<p:outputLabel value="#{item.dataVenda}" >
+												<f:converter converterId="dataConverter"></f:converter>
+											</p:outputLabel>
+										</p:column>
+										<p:column headerText="#{text['cadastro_pedido_label_forma_situacao']}" styleClass="texto-align-center">
+											<p:outputLabel value="#{item.situacaoPedido.descricao}" />
+										</p:column>
+										 
+
+
+
+										<p:column headerText="Ações" styleClass="texto-align-center">
+											<div class="row col-md-12">
+											<div class="btn-group">
+											<p:menuButton value="#{text['label.opcao']}" >
+										        <p:menuitem value="#{text['label.visualizar']}"  icon="ui-icon-document"  
+										        actionListener="#{pedidoMB.prepararVisualizar(item)}" process="@this" update="@form :mensagens"/>
+										       	 <p:separator />
+										        <p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+										        actionListener="#{pedidoMB.prepararAlterar(item)}" process="@this" update="@form :mensagens"/>
+										         <p:separator />
+										       <p:menuitem value="#{text['label.cancelar']}"  icon="ui-icon-trash" 										        
+										        actionListener="#{pedidoMB.cancelar(item)}" ajax="false"
+										         process="@this" update="@form :mensagens"/>	
+										         
+										         									       
+										       
+										    </p:menuButton>
+											</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+									<div class="row">
+										<div class="form-group col-md-2 aDireita">
+												<p:commandButton value="#{text['label.relatorio_sintetico']}"
+													title="#{text['label.relatorio']}"  tabindex="99"
+													process="@this"	ajax="false"										
+													update=":mensagens "
+													oncomplete="PrimeFaces.monitorDownload(showStatus,hideStatus)"												
+													styleClass="botao-default">												
+													<p:fileDownload	value="#{pedidoMB.emitirRelatorioVendasSintetico}">
+														
+													</p:fileDownload>
+												</p:commandButton>
+										</div>		
+											<div class="form-group col-md-2 aDireita">
+												<p:commandButton value="#{text['label.relatorio_analitico']}"
+													title="#{text['label.relatorio']}"  tabindex="100"
+													process="@this"	ajax="false"										
+													update=":mensagens "
+													oncomplete="PrimeFaces.monitorDownload(showStatus,hideStatus)"												
+													styleClass="botao-default">												
+													<p:fileDownload	value="#{pedidoMB.emitirRelatorioVendas}">
+														
+													</p:fileDownload>
+												</p:commandButton>
+	
+										
+											</div>
+								</div>
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not pedidoMB.pesquisando}">
+									<div class="row">
+										
+										
+									</div>
+								
+										<!-- Numero do Pedido -->
+									<div class="row">
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_pedido_label_numero_pedido']}" />
+											<p:inputText value="#{pedidoMB.pedido.numeroPedido}"
+												disabled="true"
+												label="#{text['cadastro_pedido_label_numero_pedido']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_pedido_label_numero_pedido']}"
+											 />
+										</div>
+									</div>
+									
+									<div class="row">
+										<p:outputPanel  styleClass="form-group col-md-5">
+										<p:focus for="clienteSelect"></p:focus>
+											<p:outputLabel styleClass="bLabel" for="clienteSelect"
+												value="#{text['cadastro_pedido_label_cliente']}" />
+											<p:selectOneMenu  id="clienteSelect"
+												disabled="#{pedidoMB.visualizando or pedidoMB.clienteAtivo or pedidoMB.clienteAtivo}"
+												value="#{pedidoMB.pedido.cliente}" tabindex="12"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_pedido_label_cliente']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{pedidoMB.listaClientes}" var="item"
+													itemLabel="#{item.pessoa.nome}" itemValue="#{item}" />
+												<p:ajax event="change" update=" :mensagens" 
+												process="@this" listener="#{pedidoMB.buscarClientePorDocumento}" />
+												<f:converter converterId="clienteConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+										<p:outputPanel  styleClass="form-group col-md-3" rendered="#{pedidoMB.editando or pedidoMB.visualizando}">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_pedido_label_forma_situacao']}" />
+											<p:selectOneMenu 
+												disabled="true"
+												value="#{pedidoMB.pedido.situacaoPedido}" tabindex="7"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_pedido_label_forma_situacao']}"
+												filter="true">
+												
+												<f:selectItems value="#{pedidoMB.listaSituacaoPedido}" var="item"
+													itemLabel="#{item.descricao}" itemValue="#{item}" />
+												
+												<f:converter converterId="situacaoPedidoConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+									
+									</div>
+									
+									<p:outputPanel id="clientenome" styleClass="row">
+										<div class="form-group col-md-7">
+											<p:outputLabel styleClass="bLabel" 
+												value="#{text['cadastro_pedido_label_cliente_razao_social']}" />
+											<p:inputText id="nome"
+												value="#{pedidoMB.pedido.cliente.pessoa.nome}" tabindex="13"
+												label="#{text['cadastro_pedido_label_cliente_razao_social']}"
+												 styleClass="form-control"
+												requiredMessage="#{text['cadastro_pedido_label_cliente_razao_social']}"												
+												disabled="true"												
+												maxlength="100" />
+										</div>
+									
+									</p:outputPanel>
+								
+									
+									<p:outputPanel id="enderecoEntrega" styleClass="row">
+										<!-- <ui:include src="enderecoEntrega.xhtml"></ui:include>-->
+									
+									</p:outputPanel>
+									
+									<div class="row">
+									
+									</div>
+									
+									
+									
+									
+									<div class="row">
+									<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5"/>
+									</div>
+									
+									<p:outputPanel id="enderecoFaturamento" styleClass="row">
+										<!-- 	<ui:include src="enderecoFaturamento.xhtml"></ui:include>-->
+									</p:outputPanel>
+									
+									<p:outputPanel id="receitasPedido" styleClass="row">
+											<ui:include src="receitas.xhtml"></ui:include>
+									</p:outputPanel>
+									
+									 <p:outputPanel styleClass="row" id="valores" >
+											
+										<!--
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_pedido_label_receita_subtotal']}" />
+												<p:inputText  id="subTotal"
+													value="#{pedidoMB.pedido.subTotal}" tabindex="60"
+													label="#{text['cadastro_pedido_label_receita_subtotal']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" disabled="true"
+													requiredMessage="#{text['cadastro_pedido_label_receita_subtotal']}"
+													/>		 
+										</p:outputPanel>
+									
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_pedido_label_receita_desconto']}" />
+												<p:inputText  id="descontoPedido"
+													value="#{pedidoMB.pedido.desconto}" tabindex="65"
+													label="#{text['cadastro_pedido_label_receita_desconto']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" disabled="#{pedidoMB.visualizando or pedidoMB.clienteAtivo}"
+													requiredMessage="#{text['cadastro_pedido_label_receita_desconto']}"
+													/>
+													
+													 
+										</p:outputPanel>-->
+									
+										<!--
+									 	<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_pedido_label_receita_frete']}" />
+												<p:inputText  
+													value="#{pedidoMB.pedido.frete}" tabindex="71"
+													label="#{text['cadastro_pedido_label_receita_frete']}"
+													required="false" 
+													converter="mascaraValorBigDecimalConverter"
+													styleClass="form-control JSvalorMoeda" disabled="#{pedidoMB.visualizando or pedidoMB.clienteAtivo}"
+													requiredMessage="#{text['cadastro_pedido_label_receita_frete']}"													 >
+													<p:ajax event="change" process="@this" />
+												</p:inputText>	 		 
+										</p:outputPanel>
+										
+									
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_pedido_label_receita_outros']}" />
+												<p:inputText  
+													converter="mascaraValorBigDecimalConverter"
+													value="#{pedidoMB.pedido.outros}" tabindex="72"
+													label="#{text['cadastro_pedido_label_receita_outros']}"
+													required="false" 
+													styleClass="form-control JSvalorMoeda" disabled="#{pedidoMB.visualizando or pedidoMB.clienteAtivo}"
+													requiredMessage="#{text['cadastro_pedido_label_receita_outros']}"
+													 >
+													 <p:ajax event="change" process="@this :formBody:valores" update=":formBody:valores :mensagens" 
+													listener="#{pedidoMB.efetuarDescontoExtras}"></p:ajax>
+													</p:inputText> 		 
+										</p:outputPanel>
+										
+										
+										 <p:outputPanel styleClass="form-group col-md-2">
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_pedido_label_valor']}" />
+												
+												<p:outputLabel styleClass="bLabel"
+													value="#{pedidoMB.pedido.valor}"  >
+													 <f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+												</p:outputLabel>
+										</p:outputPanel>-->
+										
+									</p:outputPanel> 
+									 
+									<p:outputPanel>
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="100" action="#{pedidoMB.adicionaPedidoCliente()}"
+														rendered="#{pedidoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+												
+													<p:commandButton value="Atualizar" tabindex="101"
+														action="#{pedidoMB.alterar}"
+														rendered="#{pedidoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="102" action="#{pedidoMB.prepararParaAdicionar()}"
+														rendered="#{pedidoMB.adicionando}"
+														styleClass="btn btn-primary width100" process="@this"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">		
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{pedidoMB.voltar}"
+														tabindex="103" styleClass="btn btn-primary width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												
+											</div>
+										</div>
+									</p:outputPanel>
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,297 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+
+<div class="row">
+	<div class="form-group col-md-5">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_pessoa']}" />
+		<p:selectOneMenu tabindex="10" converter="pessoaConverter"
+			value="#{produtoMB.fornecedorMB.fornecedor.pessoa}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_pessoa']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_pessoa']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{produtoMB.fornecedorMB.listaPessoas}" var="item"
+				itemLabel="#{item.nome}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-6">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_atividade']}" />
+		<p:selectOneMenu tabindex="11" converter="atividadeForCliConverter"
+			value="#{produtoMB.fornecedorMB.fornecedor.atividadeForCli}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_atividade']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_atividade']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{produtoMB.fornecedorMB.listaAtividadeForCli}"
+				var="item" itemLabel="#{item.nome}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+
+	<div class="form-group col-md-6">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_situacao']}" />
+		<p:selectOneMenu tabindex="12" converter="situacaoForCliConverter"
+			value="#{produtoMB.fornecedorMB.fornecedor.situacaoForCli}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_situacao']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_situacao']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{produtoMB.fornecedorMB.listaSituacaoForCli}" var="item"
+				itemLabel="#{item.nome}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-8">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_contabil_conta']}" />
+		<p:selectOneMenu tabindex="13" converter="contabilContaConverter"
+			value="#{produtoMB.fornecedorMB.fornecedor.contabilConta}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_contabil_conta']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_contabil_conta']}"
+			filter="true">
+			<f:selectItem itemLabel="" />
+			<f:selectItems value="#{produtoMB.fornecedorMB.listaContabilConta}" var="item"
+				itemLabel="#{item.descricao}" itemValue="#{item}" />
+		</p:selectOneMenu>
+	</div>
+
+
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_desde']}" />
+		<p:calendar tabindex="15" disabled="#{produtoMB.fornecedorMB.visualizando}"
+			value="#{produtoMB.fornecedorMB.fornecedor.desde}" converter="dataConverter"
+			navigator="true" pattern="dd/MM/yyyy" locale="pt"
+			styleClass="JSData form-control"
+			label="#{text['cadastro_fornecedor_label_desde']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_desde']}"
+			required="false">
+		</p:calendar>
+
+	</div>
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_data_cadastro']}" />
+		<p:calendar tabindex="16"
+			value="#{produtoMB.fornecedorMB.fornecedor.dataCadastro}"
+			converter="dataConverter" navigator="true" disabled="true"
+			pattern="dd/MM/yyyy" locale="pt" styleClass="JSData form-control"
+			label="#{text['cadastro_fornecedor_label_data_cadastro']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_data_cadastro']}"
+			required="false">
+		</p:calendar>
+	</div>
+
+	<!-- <div class="form-group col-md-2">
+										
+											<p:outputLabel styleClass="bLabel" value="#{text['cadastro_fornecedor_label_conta_remetente']}"  />
+											<p:inputText 
+												value="#{produtoMB.fornecedorMB.fornecedor.contaRemetente}" tabindex="17"
+												label="#{text['cadastro_fornecedor_label_conta_remetente']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_fornecedor_label_conta_remetente']}"												
+												disabled="#{produtoMB.fornecedorMB.visualizando}"
+												
+												maxlength="100" />
+										</div>-->
+
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_gerar_faturamento']}" />
+		<p:selectOneMenu tabindex="18"
+			value="#{produtoMB.fornecedorMB.fornecedor.geraFaturamento}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_gerar_faturamento']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_gerar_faturamento']}"
+			filter="true">
+			<f:selectItem itemLabel="Não" itemValue="Não" />
+			<f:selectItem itemLabel="Sim" itemValue="Sim" />
+		</p:selectOneMenu>
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_optante_simples_nacional']}" />
+		<p:selectOneMenu tabindex="19"
+			value="#{produtoMB.fornecedorMB.fornecedor.optanteSimplesNacional}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_optante_simples_nacional']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_optante_simples_nacional']}"
+			filter="true">
+			<f:selectItem itemLabel="Não" itemValue="Não" />
+			<f:selectItem itemLabel="Sim" itemValue="Sim" />
+		</p:selectOneMenu>
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="form-group col-md-2">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_localizacao']}" />
+		<p:selectOneMenu tabindex="20"
+			value="#{produtoMB.fornecedorMB.fornecedor.localizacao}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_localizacao']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_localizacao']}"
+			filter="true">
+			<f:selectItem itemLabel="Nacional" itemValue="Nacional" />
+			<f:selectItem itemLabel="Exterior" itemValue="Exterior" />
+		</p:selectOneMenu>
+	</div>
+
+	<div class="form-group col-md-3">
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_sofre_retencao']}" />
+		<p:selectOneMenu tabindex="21"
+			value="#{produtoMB.fornecedorMB.fornecedor.sofreRetencao}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" styleClass="form-control"
+			label="#{text['cadastro_fornecedor_label_sofre_retencao']}"
+			requiredMessage="#{text['cadastro_fornecedor_label_sofre_retencao']}"
+			filter="true">
+			<f:selectItem itemLabel="Não" itemValue="Não" />
+			<f:selectItem itemLabel="Sim" itemValue="Sim" />
+		</p:selectOneMenu>
+	</div>
+
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_prazo_medio_entrega']}" />
+		<p:inputText value="#{produtoMB.fornecedorMB.fornecedor.contaRemetente}"
+			tabindex="22"
+			label="#{text['cadastro_fornecedor_label_conta_remetente']}"
+			required="false" styleClass="form-control JSSomenteNumeros"
+			requiredMessage="#{text['cadastro_fornecedor_label_conta_remetente']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="100" />
+	</div>
+
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}" />
+		<p:inputText
+			value="#{produtoMB.fornecedorMB.fornecedor.numDiasPrimeiroVencimento}"
+			tabindex="23"
+			label="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}"
+			required="false" styleClass="form-control JSSomenteNumeros"
+			requiredMessage="#{text['cadastro_fornecedor_label_num_dias_1_vencimento']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="100" />
+	</div>
+
+
+</div>
+<div class="row">
+
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_num_dias_intervalo']}" />
+		<p:inputText value="#{produtoMB.fornecedorMB.fornecedor.numDiasIntervalo}"
+			tabindex="24"
+			label="#{text['cadastro_fornecedor_label_num_dias_intervalo']}"
+			required="false" styleClass="form-control JSSomenteNumeros"
+			requiredMessage="#{text['cadastro_fornecedor_label_num_dias_intervalo']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="100" />
+	</div>
+
+	<div class="form-group col-md-2">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_qtd_parcelas']}" />
+		<p:inputText value="#{produtoMB.fornecedorMB.fornecedor.quantidadeParcelas}"
+			tabindex="25"
+			label="#{text['cadastro_fornecedor_label_qtd_parcelas']}"
+			required="false" styleClass="form-control JSSomenteNumeros"
+			requiredMessage="#{text['cadastro_fornecedor_label_qtd_parcelas']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="100" />
+	</div>
+
+
+	<div class="form-group col-md-3">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_cheque_nominal_a']}" />
+		<p:inputText value="#{produtoMB.fornecedorMB.fornecedor.chequeNominalA}"
+			tabindex="27"
+			label="#{text['cadastro_fornecedor_label_cheque_nominal_a']}"
+			required="false" styleClass="form-control "
+			requiredMessage="#{text['cadastro_fornecedor_label_cheque_nominal_a']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="100" />
+	</div>
+
+	<div class="form-group col-md-12">
+
+		<p:outputLabel styleClass="bLabel"
+			value="#{text['cadastro_fornecedor_label_observacao']}" />
+		<p:inputText value="#{produtoMB.fornecedorMB.fornecedor.observacao}"
+			tabindex="28" label="#{text['cadastro_fornecedor_label_observacao']}"
+			required="false" styleClass="form-control "
+			requiredMessage="#{text['cadastro_fornecedor_label_observacao']}"
+			disabled="#{produtoMB.fornecedorMB.visualizando}" maxlength="244" />
+	</div>
+</div>
+
+
+<p:outputPanel>
+	<div class="row">
+		<div class="col-md-7" />
+		<div class="col-xs-12 col-md-6">
+			<div class="col-md-4">
+				<p:commandButton value="#{text['label.salvar']}" tabindex="40"
+					action="#{produtoMB.salvarFornecedor}"
+					onsuccess="PF('dialogFornecedor').hide();" 
+					styleClass="btn btn-success width100" process=":formBody:cadastrarFornecedor"
+					update=":formBody:fornecedor :mensagens" />
+
+				 
+			</div>
+
+			 
+			<div class="col-md-4">
+				<p:commandButton value="#{text['label.cancelar']}"  
+					action="#{produtoMB.cancelarCadastroFornecedor}" tabindex="43"
+					onsuccess="PF('dialogFornecedor').hide();" 
+					styleClass="btn btn-primary width100" process=":formBody:cadastrarFornecedor"
+					update=":formBody:fornecedor :mensagens" />
+			</div>
+
+		</div>
+	</div>
+</p:outputPanel>
+
+
+
+
+
+
+
+</html>

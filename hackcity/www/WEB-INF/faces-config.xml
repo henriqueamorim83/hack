@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+	<application>
+	<!-- Spring EL Resolver -->
+		
+		<el-resolver>
+			org.springframework.web.jsf.el.SpringBeanFacesELResolver
+		</el-resolver>
+		
+		<!-- Internacionalização -->
+		
+		<resource-bundle>
+			<base-name>
+				br.com.hntecnologia.resources.AppMensagens
+			</base-name>
+			<var>text</var>
+		</resource-bundle>
+		
+		<message-bundle>
+			br.com.hntecnologia.resources.Mensagens
+		</message-bundle>
+		
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+			<supported-locale>pt</supported-locale>
+			<supported-locale>en_US</supported-locale> 
+		</locale-config>
+		
+		<!-- aqui é utilizado caso precise de internacionalização padrão
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>bundle</var>
+		</resource-bundle>
+		<message-bundle>messages</message-bundle>-->
+		
+		
+	</application>
+
+	
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/auth/login.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+    </navigation-rule>
+    
+    
+    
+</faces-config>

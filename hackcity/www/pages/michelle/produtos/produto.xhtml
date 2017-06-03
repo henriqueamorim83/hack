@@ -1,0 +1,911 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/template_michelle/template_michelle.xhtml" >
+		<ui:define name="conteudo">
+			<p:outputPanel autoUpdate="true">
+				<h:panelGroup id="mensagens" layout="block">
+					<p:messages id="messages" showDetail="false" autoUpdate="true" />
+					<p:outputPanel id="divMensagemErro" autoUpdate="false">
+						<p:growl id="messages1" showDetail="false" life="5000"
+							autoUpdate="true" globalOnly="true" />
+
+					</p:outputPanel>
+				</h:panelGroup>
+			</p:outputPanel>
+			<section class="content">
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">#{text['cadastro_produto_label_title']}</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove"
+								data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+
+
+
+					<h:form binding="#{produtoMB.form}" id="formBody">
+						<div class="box-body">
+							<p:panel>
+								<t:saveState value="#{produtoMB.state}" />
+								<t:saveState value="#{produtoMB.produto}" />
+								<t:saveState value="#{produtoMB.objetos}" />
+								<!-- CONSULTAR CADASTROS -->
+								<t:div id="blocoDePesquisa" rendered="#{produtoMB.pesquisando}">
+									<!-- Pesquisa -->
+
+									<div class="row">
+
+
+										<div class="form-group col-md-4">
+											<p:focus for="descricaoPesquisa"></p:focus>
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_descricao']}"
+												for="descricaoPesquisa" />
+											<p:inputText value="#{produtoMB.descricao}" tabindex="2"
+												id="descricaoPesquisa"
+												label="#{text['cadastro_produto_label_descricao']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_produto_label_descricao']}"
+												maxlength="120" />
+										</div>
+
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_codigo_do_produto']}" />
+											<p:inputText value="#{produtoMB.codigoProduto}" tabindex="3"
+												label="#{text['cadastro_produto_label_codigo_do_produto']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_codigo_do_produto']}"
+												maxlength="20" />
+										</div>
+
+
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_codigo_barras']}" />
+											<p:inputText value="#{produtoMB.ean}" tabindex="3"
+												label="#{text['cadastro_produto_label_codigo_barras']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_codigo_barras']}"
+												maxlength="20" />
+										</div>
+
+									</div>
+
+									<div class="row">
+										<p:outputPanel styleClass="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_fornecedor']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.fornecedor}" tabindex="4"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_produto_label_fornecedor']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaFornecedores}"
+													var="item" itemLabel="#{item.nome.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="pessoaConverter" />
+												<p:ajax event="change" process="@this" update="@this"></p:ajax>
+											</p:selectOneMenu>
+										</p:outputPanel>
+										<!-- GRUPO-->
+										<p:outputPanel styleClass="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_grupo']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.grupoProdutos}" tabindex="5"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_produto_label_grupo']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaGrupoProdutos}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="grupoProdutoConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+
+
+
+										<p:outputPanel styleClass="form-group col-md-3">
+											<!--CATEGORIA -->
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_categoria']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.categoriaProduto}" tabindex="6"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_produto_label_categoria']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaCategoriaProdutos}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="categoriaProdutoConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+
+
+										<!-- SUB CATEGORIA-->
+										<p:outputPanel styleClass="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_sub_categoria']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.subCategoria}" tabindex="7"
+												styleClass="form-control width100"
+												requiredMessage="#{text['cadastro_produto_label_sub_categoria']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaSubCategorias}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="subCategoriaConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+
+									</div>
+
+									<div class="row" />
+
+									<div class="row">
+										<div class="col-md-7" />
+										<div class="col-md-5">
+
+											<div class="col-md-5">
+												<p:commandButton value="#{text['label.adicionar']}"
+													ajax="false" process="@form" update="@form" tabindex="8"
+													action="#{produtoMB.prepararParaAdicionar}"
+													styleClass="btn btn-block btn-success width100">
+												</p:commandButton>
+											</div>
+											<div class="col-md-7">
+												<p:commandButton value="#{text['label.consultar']}"
+													action="#{produtoMB.lista}" process="@form" update="@form"
+													tabindex="9" ajax="false"
+													styleClass="btn btn-block btn-primary width100">
+												</p:commandButton>
+											</div>
+
+										</div>
+									</div>
+									<p:outputPanel styleClass="clear" />
+									<hr />
+
+									<p:dataTable id="tabela" value="#{produtoMB.objetos}"
+										styleClass="ajusta_coluna" var="item" paginator="true"
+										lazy="true" rows="5" scrollable="true"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										currentPageReportTemplate="Página {currentPage} de {totalPages}"
+										rowClasses="odd, even" emptyMessage="#{text['table.empty']}">
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_codigo_do_produto']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.codigoProduto}" />
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_descricao']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.descricao}" />
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_codigo_barras']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.ean}" />
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_fornecedor']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.fornecedor.nome}" />
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_preco_compra']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.precoCompra}"
+												converter="mascaraValorBigDecimalConverter" />
+										</p:column>
+
+										<p:column
+											headerText="#{text['cadastro_produto_label_preco_venda']}"
+											styleClass="texto-align-center">
+											<h:outputText value="#{item.precoVenda}"
+												converter="mascaraValorBigDecimalConverter" />
+										</p:column>
+
+
+
+										<p:column headerText="Ações">
+											<div class="row col-md-12">
+												<div class="btn-group">
+													<p:menuButton value="#{text['label.opcao']}">
+														<p:menuitem value="#{text['label.visualizar']}"
+															icon="ui-icon-document"
+															actionListener="#{produtoMB.prepararVisualizar(item)}"
+															process="@this" update="@form mensagens" />
+														<p:separator />
+														<p:menuitem value="#{text['label.editar']}"
+															icon="ui-icon-disk"
+															actionListener="#{produtoMB.prepararAlterar(item)}"
+															process="@this" update="@form mensagens" />
+														<p:separator />
+														<!-- <p:menuitem value="#{text['label.remover']}"
+															icon="ui-icon-trash"
+															onclick="return confirm('#{text['cadastro_produto_label_exclusao']}');"
+															actionListener="#{produtoMB.remove(item)}"
+															process="@this" update="@form mensagens" />-->
+
+
+													</p:menuButton>
+												</div>
+											</div>
+										</p:column>
+									</p:dataTable>
+
+
+									<div class="row">
+										<div class="form-group col-md-2 aDireita">
+											<p:commandButton value="#{text['label.relatorio']}"
+												title="#{text['label.relatorio']}" tabindex="100"
+												process="@this" ajax="false" update=":mensagens "
+												oncomplete="PrimeFaces.monitorDownload(showStatus,hideStatus)"
+												styleClass="botao-default">
+												<p:fileDownload value="#{produtoMB.emitirRelatorioProdutos}">
+
+												</p:fileDownload>
+											</p:commandButton>
+
+
+										</div>
+									</div>
+								</t:div>
+								<!-- FIM CONSULTAR CADASTROS -->
+								<!-- EDICAO DE CADASTROS -->
+								<t:div id="blocoDeEdicao"
+									rendered="#{not produtoMB.pesquisando}">
+									<!-- CODIGO DO PRODUTO -->
+									<div class="row">
+										<div class="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_codigo_do_produto']}" />
+											<p:inputText value="#{produtoMB.produto.codigoProduto}"
+												disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_codigo_do_produto']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_codigo_do_produto']}"
+												maxlength="30" />
+										</div>
+
+										<div class="form-group col-md-3" />
+
+										<p:outputPanel styleClass="form-group col-md-3 ">
+											<p:fileUpload fileUploadListener="#{produtoMB.upload}"
+												mode="advanced" disabled="#{produtoMB.visualizando}"
+												label="Adicionar" update=":mensagens :formBody:imagem"
+												auto="true" sizeLimit="1000000"
+												allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+											</p:fileUpload>
+										</p:outputPanel>
+
+										<div class="form-group col-md-2">
+											<p:graphicImage id="imagem" cache="false"
+												styleClass="position: absolute;"
+												value="#{produtoMB.produto.caminhoImagem}" height="100px"
+												width="100px" />
+										</div>
+									</div>
+
+
+									<div class="row" />
+									<div class="row" />
+									<div class="row" />
+
+
+									<div class="row">
+										<!-- DESCRIÇÃO -->
+										<div class="form-group col-md-7">
+											<p:focus for="descricao"></p:focus>
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_descricao']}"
+												for="descricao" />
+											<p:inputText value="#{produtoMB.produto.descricao}"
+												tabindex="10" id="descricao"
+												label="#{text['cadastro_produto_label_descricao']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_produto_label_descricao']}"
+												disabled="#{produtoMB.visualizando}" maxlength="120" />
+										</div>
+										<!-- DESCRIÇÃO REDUZIDA -->
+										<div class="form-group col-md-4">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_descricao_reduzida']}*" />
+											<p:inputText value="#{produtoMB.produto.descricaoReduzida}"
+												tabindex="11"
+												label="#{text['cadastro_produto_label_descricao_reduzida']}"
+												required="true" styleClass="form-control"
+												requiredMessage="#{text['cadastro_produto_label_descricao_reduzida']}"
+												disabled="#{produtoMB.visualizando}" maxlength="30" />
+										</div>
+
+									</div>
+
+
+
+									<div class="row">
+										<!-- fORNECEDOR -->
+										<p:outputPanel styleClass="form-group col-md-3">
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_fornecedor']}*" />
+											<p:selectOneMenu id="fornecedor"
+											 	disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.produto.fornecedor}" tabindex="12"
+												style="width: 100%" required="true"
+												converter="pessoaConverter"
+												requiredMessage="#{text['cadastro_produto_label_fornecedor']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaFornecedores}"
+													var="item" itemLabel="#{item.nome}" itemValue="#{item}" />
+
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+										<p:spacer width="10" height="10"></p:spacer>
+										<div class="form-group col-md-1">
+											<p:commandButton icon="ui-icon-check"
+												actionListener="#{produtoMB.cadastrarPessoa}"
+												styleClass="btn btn-success width50" process="@this"
+												tabindex="4"
+												update=":formBody:cadastrarPessoa :mensagens"
+												oncomplete="PF('dialogPessoa').show();" />
+										</div>
+										<!-- GRUPO-->
+										<p:outputPanel styleClass="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_grupo']}*" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.produto.grupoProdutos}" tabindex="13"
+												style="width: 100%" required="true"
+												requiredMessage="#{text['cadastro_produto_label_grupo']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaGrupoProdutos}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="grupoProdutoConverter" />
+												<p:ajax event="change" process="@this"
+													update=":formBody:grupoDeProdutos :mensagens"></p:ajax>
+											</p:selectOneMenu>
+										</p:outputPanel>
+										<!--CATEGORIA -->
+										<p:outputPanel styleClass="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_categoria']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.produto.categoriaProduto}" tabindex="14"
+												style="width: 100%" id="grupoDeProdutos"
+												requiredMessage="#{text['cadastro_produto_label_categoria']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaCategoriaPorGrupos}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="categoriaProdutoConverter" />
+												<p:ajax event="change" process="@this"
+													update=":formBody:subCategoria :mensagens"></p:ajax>
+											</p:selectOneMenu>
+										</p:outputPanel>
+									
+									</div>
+									<div class="row">	
+										
+										<!-- SUB CATEGORIA-->
+										<p:outputPanel styleClass="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_sub_categoria']}" />
+											<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.produto.subCategoria}" tabindex="15"
+												style="width: 100%" id="subCategoria"
+												requiredMessage="#{text['cadastro_produto_label_sub_categoria']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaPorCategorias}"
+													var="item" itemLabel="#{item.descricao.toUpperCase()}"
+													itemValue="#{item}" />
+												<f:converter converterId="subCategoriaConverter" />
+											</p:selectOneMenu>
+										</p:outputPanel>
+										
+										<p:outputPanel styleClass="form-group col-md-2">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_fornece_as_lojas']}" />
+											  <p:selectBooleanCheckbox value="#{produtoMB.produto.forneceALojas}" />	
+										</p:outputPanel>		
+
+
+									</div>
+
+
+
+									<div class="row">
+
+										<!--CODIGO DE BARRAS -->
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_codigo_barras']}*" />
+											<p:inputText value="#{produtoMB.produto.ean}" tabindex="16"
+												label="#{text['cadastro_produto_label_codigo_barras']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												disabled="#{produtoMB.visualizando}"
+												requiredMessage="#{text['cadastro_produto_label_codigo_barras']}"
+												maxlength="30">
+												<p:ajax event="change" process="@this" update=":mensagens"
+													listener="#{produtoMB.validarCodigoBarras}"></p:ajax>
+											</p:inputText>
+										</div>
+										<!-- QUANTIDADE MINIMA -->
+										<div class="form-group col-md-2">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_quantidade_minima']}*" />
+											<p:inputText value="#{produtoMB.produto.quantidadeMinima}"
+												tabindex="17" disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_quantidade_minima']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_quantidade_minima']}"
+												maxlength="30" />
+										</div>
+
+										<!-- QUANTIDADE maxima -->
+										<div class="form-group col-md-2">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_quantidade_maxima']}*" />
+											<p:inputText value="#{produtoMB.produto.quantidadeMaxima}"
+												tabindex="17" disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_quantidade_maxima']}"
+												required="true" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_quantidade_maxima']}"
+												maxlength="30" />
+										</div>
+
+										<!-- CODIGO BALANÇA-->
+										<div class="form-group col-md-2">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_codigo_balanca']}" />
+											<p:inputText value="#{produtoMB.produto.codigoBalanca}"
+												tabindex="18" disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_codigo_balanca']}"
+												required="false" styleClass="form-control JSsomenteNumeros"
+												requiredMessage="#{text['cadastro_produto_label_codigo_balanca']}"
+												maxlength="30" />
+										</div>
+
+
+									</div>
+
+
+
+									<div class="row">
+										<!-- UNIDADE DE COMPRA-->
+										<p:outputPanel id="undCompra">
+
+											<div class="form-group col-md-3">
+
+												<p:outputLabel styleClass="bLabel"
+													value="#{text['cadastro_produto_label_entrada']}" />
+												<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+													value="#{produtoMB.unidadeCompra}" tabindex="19"
+													styleClass="width100" required="false" id="unidadeCompra"
+													requiredMessage="#{text['cadastro_produto_label_entrada']}"
+													filter="true">
+													<f:selectItem itemLabel="" />
+													<f:selectItems value="#{produtoMB.listaUnidadesCompras}"
+														var="item"
+														itemLabel="#{item.descricao.toUpperCase()} - #{item.abreviatura.toUpperCase()} "
+														itemValue="#{item}" />
+													<f:converter converterId="unidadeConverter" />
+													<p:ajax event="change"
+														process="@this :formBody:tableUnidadeCompra"
+														update="@this :formBody:tableUnidadeCompra :mensagens"
+														listener="#{produtoMB.addUndCompra}"></p:ajax>
+												</p:selectOneMenu>
+
+											</div>
+
+										</p:outputPanel>
+										<div class="form-group col-md-3">
+											<p:commandButton icon="ui-icon-check"
+												actionListener="#{produtoMB.cadastrarUnidade}"
+												styleClass="btn btn-success width15" process="@this"
+												tabindex="20"
+												update=":formBody:unidadeCompra :formBody:panelUnidade :mensagens"
+												oncomplete="PF('dialogUnidade').show();" />
+										</div>
+
+
+
+
+										<div class="row">
+											<p:outputPanel id="panelUnidade"
+												styleClass="form-group col-md-11">
+												<p:outputPanel id="cadastroUnidade"	rendered="#{produtoMB.cadastroUnidade==true}">
+
+													<!-- Dialog Pesquisa produtos -->
+													<p:dialog widgetVar="dialogUnidade" showEffect="pop"
+														header="#{text['cadastro_estoque_label_produto_descricao']}"
+														modal="true" closable="true" closeOnEscape="true">
+														<ui:include src="cad_unidade.xhtml"></ui:include>
+													</p:dialog>											
+													
+												</p:outputPanel>
+												
+											</p:outputPanel>
+											
+											<p:outputPanel id="cadastrarPessoa" styleClass="form-group col-md-11">
+												<p:outputPanel  	rendered="#{produtoMB.cadastroPessoa==true}">
+												
+													<p:dialog widgetVar="dialogPessoa" showEffect="pop"	
+															 width="900" height="800"
+															 resizable="false"
+															  
+															header="#{text['cadastro_pessoa_label_title']}"												 
+															modal="true" closable="true" closeOnEscape="true">	
+															<ui:include src="pessoa/pessoa.xhtml"></ui:include>
+	
+														</p:dialog>
+													</p:outputPanel>	
+											</p:outputPanel>
+											
+											<p:outputPanel id="cadastrarFornecedor" styleClass="form-group col-md-11">
+												<p:outputPanel  	rendered="#{produtoMB.cadastroFornecedor==true}">
+												
+													<p:dialog widgetVar="dialogFornecedor" showEffect="pop"	
+															 width="800"
+															header="#{text['cadastro_fornecedor_label_title']}"												 
+															modal="true" closable="true" closeOnEscape="true">	
+															<ui:include src="pessoa/fornecedor.xhtml"></ui:include>
+	
+														</p:dialog>
+													</p:outputPanel>	
+											</p:outputPanel>
+											
+										</div>
+
+										<div class="form-group col-md-12">
+											<p:fieldset
+												legend="#{text['cadastro_produto_label_entrada']}"
+												styleClass="form-group col-md-12">
+
+												<p:dataTable id="tableUnidadeCompra"
+													value="#{produtoMB.produto.listaUnidadesCompra}" var="item"
+													emptyMessage="#{text['table.empty']}">
+													 
+													<p:column
+														headerText="#{text['cadastro_unidade_label_descricao']}">
+														<h:outputText value="#{item.unidade.descricao}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_abreveatura']}">
+														<h:outputText value="#{item.unidade.abreviatura}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_embalagem']}">
+														<h:outputText value="#{item.unidade.embalagem}" />
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_unidade_label_peso_bruto']}"
+														styleClass="texto-align-center">
+														<h:outputText
+															value="  #{item.unidade.pesoBruto} - #{item.unidade.medidaBruta}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_peso_liquido']}"
+														styleClass="texto-align-center">
+														<h:outputText
+															value="#{item.unidade.pesoLiquido} -  #{item.unidade.medidaLiquido}" />
+													</p:column>
+													<p:column>
+														<p:commandButton value="#{text['label.remover']}"
+															process="@this"
+															update=":formBody:undCompra :formBody:tableUnidadeCompra"
+															ajax="true" action="#{produtoMB.removeUndCompra(item)}"
+															disabled="#{produtoMB.visualizando}" tabindex="22"></p:commandButton>
+													</p:column>
+												</p:dataTable>
+
+											</p:fieldset>
+
+
+										</div>
+
+									</div>
+
+
+									<div class="row">
+										<!-- UNIDADE SAIDA-->
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_saida']}" />
+											<p:selectOneMenu id="unidadeSaida"
+												disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.unidadeSaida}" tabindex="40"
+												styleClass="width100"
+												requiredMessage="#{text['cadastro_produto_label_saida']}"
+												filter="true">
+												<f:selectItem itemLabel="" />
+												<f:selectItems value="#{produtoMB.listaUnidadesSaidas}"
+													var="item"
+													itemLabel="#{item.descricao.toUpperCase()} - #{item.abreviatura.toUpperCase()} "
+													itemValue="#{item}" />
+												<f:converter converterId="unidadeConverter" />
+												<p:ajax event="change"
+													process="@this :formBody:tableUnidadeSaida"
+													update="@this :formBody:tableUnidadeSaida"
+													listener="#{produtoMB.addUndSaida}"></p:ajax>
+											</p:selectOneMenu>
+
+										</div>
+
+
+										<div class="form-group col-md-12">
+											<p:fieldset legend="#{text['cadastro_produto_label_saida']}"
+												styleClass="form-group col-md-12">
+
+												<p:dataTable id="tableUnidadeSaida"
+													value="#{produtoMB.produto.listaUnidadesSaida}" var="item"
+													emptyMessage="#{text['table.empty']}">
+
+
+													<p:column
+														headerText="#{text['cadastro_unidade_label_descricao']}">
+														<h:outputText value="#{item.unidade.descricao}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_abreveatura']}">
+														<h:outputText value="#{item.unidade.abreviatura}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_embalagem']}">
+														<h:outputText value="#{item.unidade.embalagem}" />
+													</p:column>
+
+													<p:column
+														headerText="#{text['cadastro_unidade_label_peso_bruto']}"
+														styleClass="texto-align-center">
+														<h:outputText
+															value="  #{item.unidade.pesoBruto} - #{item.unidade.medidaBruta}" />
+													</p:column>
+													<p:column
+														headerText="#{text['cadastro_unidade_label_peso_liquido']}"
+														styleClass="texto-align-center">
+														<h:outputText
+															value="#{item.unidade.pesoLiquido} -  #{item.unidade.medidaLiquido}" />
+													</p:column>
+													<p:column>
+														<p:commandButton value="#{text['label.remover']}"
+															process="@this"
+															update=":formBody:unidadeSaida :formBody:tableUnidadeSaida"
+															ajax="true" action="#{produtoMB.removeUndSaida(item)}"
+															disabled="#{produtoMB.visualizando}" tabindex="41"></p:commandButton>
+													</p:column>
+												</p:dataTable>
+
+											</p:fieldset>
+
+
+										</div>
+
+
+
+									</div>
+
+
+									<div class="row">
+										<!-- PRECO COMPRA -->
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_preco_compra']}" />
+											<p:inputText value="#{produtoMB.produto.precoCompra}"
+												tabindex="42" id="preco_compra"
+												disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_preco_compra']}"
+												required="true" styleClass="form-control JSvalorMoeda"
+												converter="mascaraValorBigDecimalConverter"
+												requiredMessage="#{text['cadastro_produto_label_preco_compra']}"
+												maxlength="30" />
+
+
+										</div>
+										<!-- MARGEM DE LUCRO -->
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_margem_lucro']}" />
+											<p:inputMask mask="99?.99%" placeholder=""
+												disabled="#{produtoMB.visualizando}"
+												value="#{produtoMB.produto.margemLucro}" tabindex="43"
+												label="#{text['cadastro_produto_label_margem_lucro']}"
+												required="false" styleClass="form-control"
+												requiredMessage="#{text['cadastro_produto_label_margem_lucro']}"
+												maxlength="30">
+												<p:ajax event="change" process="@this formBody:preco_compra"
+													listener="#{produtoMB.calcularMargemDeLucro}"
+													update=":formBody:preco_venda"></p:ajax>
+											</p:inputMask>
+										</div>
+										<!-- PRECO VENDA-->
+										<div class="form-group col-md-3">
+
+											<p:outputLabel styleClass="bLabel"
+												value="#{text['cadastro_produto_label_preco_venda']}" />
+											<p:inputText value="#{produtoMB.produto.precoVenda}"
+												tabindex="44" id="preco_venda"
+												disabled="#{produtoMB.visualizando}"
+												label="#{text['cadastro_produto_label_preco_venda']}"
+												required="true" styleClass="form-control JSvalorMoeda"
+												converter="mascaraValorBigDecimalConverter"
+												requiredMessage="#{text['cadastro_produto_label_preco_venda']}"
+												maxlength="30" />
+										</div>
+
+									</div>
+
+
+									<div class="row">
+										<p:fieldset
+											legend="#{text['cadastro_produto_label_fieldset_title']}"
+											tyleClass="form-group col-md-12">
+
+
+											<div class="row">
+												<!--NCM-->
+												<div class="form-group col-md-3">
+
+													<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_produto_label_ncm']}*" />
+													<p:inputText value="#{produtoMB.produto.ncm}" tabindex="45"
+														label="#{text['cadastro_produto_label_ncm']}"
+														required="false" styleClass="form-control JSsomenteNumeros"
+														requiredMessage="#{text['cadastro_produto_label_ncm']}"
+														maxlength="30" />
+												</div>
+
+												<!--CFOP-->
+												<!-- <div class="form-group col-md-3">
+
+													<p:outputLabel styleClass="bLabel"
+														value="#{text['cadastro_produto_label_cfop']}*" />
+													<p:selectOneMenu disabled="#{produtoMB.visualizando}"
+														value="#{produtoMB.produto.cfop}" tabindex="46"
+														styleClass="width100" required="true"
+														requiredMessage="#{text['cadastro_produto_label_cfop']}"
+														filter="true">
+														<f:selectItem itemLabel="" />
+														<f:selectItems value="#{produtoMB.listagemCFOP}"
+															var="item" itemLabel="#{item.cfop} - #{item.descricao}"
+															itemValue="#{item}" />
+														<f:converter converterId="cfopConverter" />
+
+													</p:selectOneMenu>
+
+												</div>-->
+
+
+											</div>
+
+											<!--ICMS -->
+											<!-- <p:outputPanel id="icms" styleClass="row width100">
+												<p:tabView tabindex="47" styleClass="form-group width100">
+													<p:tab title="#{text['cadastro_produto_label_icms_title']}">
+														<ui:include src="icms.xhtml"></ui:include>
+													</p:tab>
+
+													<p:tab
+														title="#{text['cadastro_produto_label_ipi_title_fieldset']}">
+														<ui:include src="ipi.xhtml"></ui:include>
+													</p:tab>
+
+
+												</p:tabView>
+											</p:outputPanel>-->
+
+
+										</p:fieldset>
+
+									</div>
+
+
+
+									<p:outputPanel>
+
+
+										<div class="row">
+											<div class="col-md-7" />
+											<div class="col-xs-12 col-md-5">
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.salvar']}"
+														tabindex="100" action="#{produtoMB.adiciona}" ajax="true"
+														rendered="#{produtoMB.adicionando==true}"
+														styleClass="btn btn-success width100" process="@form"
+														update="@form :mensagens" />
+
+													<p:commandButton value="Atualizar" tabindex="101"
+														action="#{produtoMB.alterar}"
+														rendered="#{produtoMB.editando}"
+														styleClass="btn btn-warning width100" process="@form"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.limpar']}"
+														tabindex="102" action="#{produtoMB.limpar}"
+														rendered="#{produtoMB.adicionando}" ajax="true"
+														styleClass="btn btn-primary width100" process="@this"
+														update="@form :mensagens" />
+												</div>
+												<div class="col-md-4">
+													<p:commandButton value="#{text['label.voltar']}"
+														immediate="true" action="#{produtoMB.voltar}"
+														tabindex="103" styleClass="btn btn-primary width100"
+														process="@form" update="@form :mensagens" />
+												</div>
+
+											</div>
+										</div>
+									</p:outputPanel>
+
+								</t:div>
+								<!-- FIM EDICAO DE CADASTROS -->
+							</p:panel>
+						</div>
+						<!-- /.box-body -->
+					</h:form>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

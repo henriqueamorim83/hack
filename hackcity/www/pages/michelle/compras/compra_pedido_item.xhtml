@@ -1,0 +1,324 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<div class="row">
+
+	<p:dataTable id="dataTableCompraPedidoDetalhe" var="obj"
+		value="#{compraPedidoMB.compraPedido.listaCompraPedidoDetalhe}"
+		paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20"
+		resizableColumns="true">
+
+		<f:facet name="header">
+			<p:commandButton title="Novo" icon="ui-icon-plus"
+				styleClass="aEsquerda"
+				actionListener="#{compraPedidoMB.incluirItem}"
+				oncomplete="PF('dialogPedidoDetalhe').show()"
+				update="@this dataTableCompraPedidoDetalhe" />
+
+		</f:facet>
+
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto']}"
+			width="30%">
+			<h:outputLabel value="#{obj.produto.descricao}" />
+		</p:column>
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto_quantidade']}"
+			width="10%">
+			<h:outputLabel value="#{obj.quantidade}" />
+		</p:column>
+		
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto_unidade']}"
+			width="10%">
+			<h:outputLabel value="#{obj.unidade.embalagem}" />
+		</p:column>
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto_valor_unitario']}"
+			width="10%">
+			<p:outputLabel value="#{obj.valorUnitario}">
+				<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+			</p:outputLabel>
+		</p:column>
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto_valor_desconto']}"
+			width="10%">
+			<p:outputLabel value="#{obj.valorDesconto}">
+				<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+			</p:outputLabel>
+		</p:column>
+		<p:column
+			headerText="#{text['cadastro_compras_pedido_label_produto_valor_total']}"
+			width="10%">
+			<p:outputLabel value="#{obj.valorTotal}">
+				<f:converter converterId="mascaraValorBigDecimalConverter"></f:converter>
+			</p:outputLabel>
+		</p:column>
+
+		<p:column headerText="Ações">
+			<div class="row col-md-12">
+				<div class="btn-group">
+					<p:menuButton value="#{text['label.opcao']}">						 
+					 
+						<p:menuitem value="#{text['label.editar']}" icon="ui-icon-disk"
+							actionListener="#{compraPedidoMB.alterarItem(obj)}" update=":formBody:dados:panelPedidoDetalhe, :formBody:dados:compraPedidoDetalheProduto"
+							process="@this" oncomplete="PF('dialogPedidoDetalhe').show()"
+							  />
+						<p:separator />
+						<p:menuitem value="#{text['label.remover']}" icon="ui-icon-trash"
+							actionListener="#{compraPedidoMB.excluirItem(obj)}"  
+							process="@this"  
+							update="dataTableCompraPedidoDetalhe :mensagens" />
+
+					</p:menuButton>
+				</div>
+			</div>
+		</p:column>
+
+	</p:dataTable>
+</div>
+
+
+
+<p:dialog id="dialogPedidoDetalhe" header="Inclusão/Alteração de item"
+	widgetVar="dialogPedidoDetalhe" showEffect="slide" hideEffect="slide"
+	resizable="true" modal="true" closable="false" width="800">
+
+	<p:outputPanel id="panelPedidoDetalhe">
+
+		<div class="row">
+			<p:outputPanel styleClass="form-group col-md-5">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto']}" />
+				<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+					id="compraPedidoDetalheProduto"
+					value="#{compraPedidoMB.compraPedidoDetalhe.produto}" tabindex="29"
+					styleClass="form-control  " required="false"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto']}"
+					filter="true">
+					 
+					<f:selectItems value="#{compraPedidoMB.listaProdutos}" var="item"
+						itemLabel="#{item.descricao.toUpperCase()}" itemValue="#{item}" />
+					<f:converter converterId="produtoConverter" />
+					<p:ajax event="change" process="@this" update="panelPedidoDetalhe"
+						listener="#{compraPedidoMB.iniciarProdutos}"></p:ajax>
+				</p:selectOneMenu>
+			</p:outputPanel>
+
+			<p:outputPanel styleClass="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_quantidade']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.quantidade}"
+					disabled="#{compraPedidoMB.visualizando}" tabindex="30"
+					label="#{text['cadastro_compras_pedido_label_local_entrega']}"
+					required="false" styleClass="form-control JSsomenteNumeros"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_quantidade']}"
+					maxlength="10" >
+					 <p:ajax event="change" process="panelPedidoDetalhe" update="panelPedidoDetalhe" listener="#{compraPedidoMB.iniciarProdutos}"></p:ajax>
+					</p:inputText>
+			</p:outputPanel>
+
+			<p:outputPanel styleClass="form-group col-md-3">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_unidade']}" />
+				<p:selectOneMenu disabled="#{compraPedidoMB.visualizando}"
+					value="#{compraPedidoMB.compraPedidoDetalhe.unidade}" tabindex="31"
+					styleClass="form-control" required="false"
+					requiredMessage="#{text['cadastro_produto_label_entrada']}"
+					filter="true">
+
+					<f:selectItems
+						value="#{compraPedidoMB.listaUnidadesEntradaPorProduto}"
+						var="item"
+						itemLabel="#{item.descricao.toUpperCase()} - #{item.abreviatura.toUpperCase()} "
+						itemValue="#{item}" />
+					<f:converter converterId="unidadeConverter" />
+					<p:ajax event="change" process="panelPedidoDetalhe" update="panelPedidoDetalhe" listener="#{compraPedidoMB.iniciarProdutos}"></p:ajax>
+				</p:selectOneMenu>
+			</p:outputPanel>
+
+		</div>
+
+		<div class="row">
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_unitario']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.valorUnitario}"
+					tabindex="32" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_unitario']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_unitario']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_sub_total']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.valorSubtotal}"
+					tabindex="33" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_sub_total']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_sub_total']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_taxa_desconto']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.taxaDesconto}"
+					tabindex="34" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_taxa_desconto']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_taxa_desconto']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_desconto']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.valorDesconto}"
+					tabindex="35" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_desconto']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_desconto']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_total']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.valorTotal}"
+					tabindex="36" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_total']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_total']}"
+					maxlength="30" />
+			</div>
+		</div>
+
+		<div class="row">
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_cst_csosn']}" />
+				<p:inputText value="#{compraPedidoMB.compraPedidoDetalhe.cstCsosn}"
+					tabindex="37" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_cst_csosn']}"
+					required="false" styleClass="form-control JSsomenteNumeros"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_cst_csosn']}"
+					maxlength="3" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_cfop']}" />
+				<p:inputText value="#{compraPedidoMB.compraPedidoDetalhe.cfop}"
+					tabindex="38" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_cfop']}"
+					required="false" styleClass="form-control JSsomenteNumeros"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_cfop']}"
+					maxlength="6" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_base_calculo_icms']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.baseCalculoIcms}"
+					tabindex="39" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_base_calculo_icms']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_base_calculo_icms']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_icms']}" />
+				<p:inputText value="#{compraPedidoMB.compraPedidoDetalhe.valorIcms}"
+					tabindex="40" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_icms']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_icms']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_valor_ipi']}" />
+				<p:inputText value="#{compraPedidoMB.compraPedidoDetalhe.valorIpi}"
+					tabindex="41" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_valor_ipi']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_valor_ipi']}"
+					maxlength="30" />
+			</div>
+		</div>
+
+		<div class="row">
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_aliquota_icms']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.aliquotaIcms}"
+					tabindex="42" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_aliquota_icms']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_aliquota_icms']}"
+					maxlength="30" />
+			</div>
+
+			<div class="form-group col-md-2">
+				<p:outputLabel styleClass="bLabel"
+					value="#{text['cadastro_compras_pedido_label_produto_aliquota_ipi']}" />
+				<p:inputText
+					value="#{compraPedidoMB.compraPedidoDetalhe.aliquotaIpi}"
+					tabindex="43" disabled="#{compraPedidoMB.visualizando}"
+					label="#{text['cadastro_compras_pedido_label_produto_aliquota_ipi']}"
+					required="false" styleClass="form-control JSvalorMoeda"
+					converter="mascaraValorBigDecimalConverter"
+					requiredMessage="#{text['cadastro_compras_pedido_label_produto_aliquota_ipi']}"
+					maxlength="30" />
+			</div>
+
+		</div>
+
+
+
+	</p:outputPanel>
+	<f:facet name="footer">
+		<p:commandButton value="Salvar" tabindex="44"
+			actionListener="#{compraPedidoMB.salvarItem}"
+			update=":formBody:dados:panelPedidoDetalhe,:mensagens, :formBody:dados:dataTableCompraPedidoDetalhe, :formBody:dados"
+			oncomplete="if (!args.validationFailed) {PF('dialogPedidoDetalhe').hide();}" />
+		<p:commandButton value="Cancelar" tabindex="45"
+			update=":formBody:dados:dataTableCompraPedidoDetalhe" process="@this"
+			oncomplete="PF('dialogPedidoDetalhe').hide();" />
+
+	</f:facet>
+
+</p:dialog>
+
+</html>
